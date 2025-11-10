@@ -1,0 +1,10 @@
+# Define que arquivos de texto devem ser normalizados para LF no repositório.
+* text=auto
+
+# Arquivos que DEVEM ter CRLF (ex: scripts DOS/Batch, se existirem).
+*.bat text eol=crlf
+
+# Arquivos binários que NÃO devem sofrer NENHUMA alteração.
+# É crucial para arquivos de lock!
+*.lock binary
+package-lock.json binary

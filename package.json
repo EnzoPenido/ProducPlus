@@ -1,0 +1,31 @@
+{
+  "name": "producplus",
+  "version": "1.0.0",
+  "description": "ProducPlus project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnzoPenido/ProducPlus.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mysql",
+    "jwt",
+    "upload",
+    "produtos"
+  ],
+  "author": "EnzoPenido",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EnzoPenido/ProducPlus/issues"
+  },
+  "homepage": "https://github.com/EnzoPenido/ProducPlus#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
