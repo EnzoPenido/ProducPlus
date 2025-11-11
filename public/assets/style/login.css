@@ -13,6 +13,25 @@ main{
     align-items: center;
 }
 
+h4{
+    width: 50%;
+    color: rgba(0, 0, 0, 0.359);
+
+    text-align: justify;
+    font-size: 10pt;
+
+    margin: 0;
+}
+
+h3{
+    width: 50%;
+    color: rgba(0, 0, 0, 0.57);
+    font-size: 12pt;
+    margin: 0;
+
+    text-align: center;
+}
+
 .main-content-login{
     display: flex;
     width: 80%;
