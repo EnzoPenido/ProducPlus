@@ -7,101 +7,73 @@
 
 
 .roboto-uniquifier {
-  font-family: "Roboto", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: weight;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
 }
 
+.margem-top {
+    margin-top: 100px;
+}
 
-body{
+body {
     background-color: white;
     margin: 0;
+    width: 100%;
 
 }
 
-main{
-    display: flex;
+main {
+    padding-top: 93.06px ;
     width: auto;
     height: 100dvh;
-    
+
     justify-content: center;
     align-items: center;
 }
-.teste{
-    width: 50%;
-    height: 500px;
-    background-color: aqua;
-    border: 5px solid violet;
-}
-
-/* HEADER */
-header{
-    background-color: #ffffff;
-    position: fixed    ;
-    width: 100%;
-    box-shadow: 0px 3px 9px 0px #0000001c;
-}
-@media (max-width: 992px){
-    ul{
-    
-    border-top: 1px solid #1700ad75;
-    margin-top: 15px;
-    padding-top: 10px;
-    
-
-}
-}
 
 
-.navbar-brand{
-    img{
-        width: 50px;
-    }
-}
-.nav-item{
-    border-radius: 5px;
-    padding: 0px 0.5rem;
-    width: fit-content;
-    transition: ease-in-out 0.3s;
-    border: 1px solid transparent;
-}
-.nav-item:hover{
-    border: #5964ff 1px solid;
-}
 
-.btn-destaque{
-    background-color: #1800ad;
-    width: fit-content;
-    transition: ease-in-out 0.3s;
-    a{
-        color: white !important;
-    }
-}
-.btn-destaque:hover{
-    background-color: #5964ff;
-}
-
-/* HEADER */
-
-h1{
-    font-family: Roboto;
+h1 {
+    font-family: Lovelo;
     font-weight: normal;
+    font-size: 40pt;
 
-    line-height: 28px;
+
 }
 
-span{
+p {
+    font-family: Roboto;
+    color: rgb(0, 0, 0);
+    text-align: justify;
+    margin-left: 5px;
+    margin-bottom: 4rem;
+}
+/* Coloca o texto do hero alinhado pro centro */
+@media (max-width: 1200px) {
+    h1 {
+        text-align: center;
+    }
+
+    p {
+        text-align: center;
+        margin-left: 0px;
+    }
+
+}
+
+span {
     font-family: Roboto;
 }
 
-label{
+label {
     font-family: Roboto;
 }
 
-h4{
+h4 {
     width: 50%;
     color: rgba(0, 0, 0, 0.359);
 
@@ -113,7 +85,7 @@ h4{
     margin: 0;
 }
 
-h3{
+h3 {
     width: 50%;
     color: rgba(0, 0, 0, 0.57);
     font-size: 12pt;
@@ -123,3 +95,177 @@ h3{
     font-family: Roboto;
     font-weight: normal;
 }
+
+/* HEADER */
+header {
+    background-color: #ffffff;
+    position: fixed;
+    width: 100%;
+    box-shadow: 0px 3px 9px 0px #0000001c;
+}
+/* Faz o risco apareer quando a tela é pequena */
+@media (max-width: 992px) {
+    ul {
+
+        border-top: 1px solid #1700ad75;
+        margin-top: 15px;
+        padding-top: 10px;
+
+
+    }
+}
+
+
+.navbar-brand {
+    img {
+        width: 50px;
+    }
+}
+
+.nav-item {
+    border-radius: 5px;
+    padding: 0px 0.5rem;
+    width: fit-content;
+    transition: ease-in-out 0.3s;
+    border: 1px solid transparent;
+}
+
+.nav-item:hover {
+    border: #5964ff 1px solid;
+}
+
+.btn-destaque {
+    background-color: #1800ad;
+    width: fit-content;
+    transition: ease-in-out 0.3s;
+    color: white;
+
+    a {
+        color: white !important;
+    }
+}
+
+.btn-destaque:hover {
+    background-color: #5964ff;
+    color: white;
+}
+
+/* HEADER */
+
+
+/* Conteúdo Home */
+
+.titulo-home {
+    font-family: Lovelo;
+    font-size: 3rem;
+    font-weight: normal;
+    color: #000000;
+
+    span {
+        color: #1700ad;
+        font-family: Lovelo;
+    }
+
+}
+
+.imagem-home {
+    width: 100%;
+    height: auto;
+    display: flex;
+
+    img {
+        width: 80%;
+        height: auto;
+    }
+}
+.altura{
+    display: flex;
+    height: 80vh;
+    justify-content: center;
+}
+.largura{
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+
+}
+/* ajusta o tamanho da imagem e botôes (LOGO e IMG)  */
+@media (max-width: 1200px) {
+    .hero-home {
+        
+        margin-bottom: 100px;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            margin: auto;
+        }
+
+        img {
+            
+            margin: auto;
+        }
+    }
+
+}
+
+
+@media (max-width: 1200px) {
+    .imagem-home {
+        width: 100%;
+        height: auto;
+        display: flex;
+
+        img {
+            width: 40%;
+            height: auto;
+        }
+    }
+
+}
+@media (max-width: 992px) {
+    .imagem-home {
+        width: 100%;
+        height: auto;
+        display: flex;
+
+        img {
+        
+           width: 50%;
+        }
+    }
+
+}
+@media (max-width: 768px) {
+    .imagem-home {
+        width: 100%;
+        height: auto;
+        display: flex;
+
+        img {
+            width: 70%;
+            height: auto;
+        }
+    }
+
+}
+
+.btn{
+    font-family: Roboto;
+    font-weight: 500;
+    padding: 5px 78px ;
+    font-size: 14pt;
+    margin-bottom: 10px;
+
+}
+
+/* ----------------------  */
+
+.marquee {
+    width: 100%;
+    height: 80px;
+    margin-top: 50px;
+    background-color: #1700ad5d;
+    
+}
+    
