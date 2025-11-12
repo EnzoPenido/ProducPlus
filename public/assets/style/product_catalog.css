@@ -54,6 +54,8 @@ header{
     position: fixed    ;
     width: 100%;
     box-shadow: 0px 3px 9px 0px #0000001c;
+
+    z-index: 200;
 }
 @media (max-width: 992px){
     ul{
@@ -152,6 +154,8 @@ h3{
     justify-content: center;
     position: sticky;
     top: 120px;
+
+    z-index: 300;
 }
 
 .filter-search-bar{
@@ -198,6 +202,7 @@ h3{
     border: none;
 
     font-size: 10pt;
+    cursor: pointer;
 }
 
 .filter-search-bar select:focus{
@@ -219,10 +224,10 @@ h3{
 }
 
 .search-bar{
-    width: 40%;
+    width: 20%;
     height: 100%;
 
-    border: white 2px solid;
+    border: rgba(255, 255, 255, 0.541) 2px solid;
     border-radius: 10px;
 
     background-color: rgba(245, 222, 179, 0);
@@ -232,6 +237,7 @@ h3{
     font-size: 11pt;
 
     margin-left: auto;
+    transition: width 0.3s, border 0.3s;
 }
 
 .search-bar::placeholder{
@@ -240,6 +246,9 @@ h3{
 
 .search-bar:focus{
     outline: none;
+    width: 40%;
+
+    border: rgb(255, 255, 255) 2px solid;
 
     background-color: rgba(245, 222, 179, 0);
 }
@@ -299,6 +308,12 @@ h3{
     font-family: Roboto;
 
     border-radius: 13px;
+
+    transition: background-color 0.1s;
+}
+
+.text-button-catalog a:hover{
+    background-color: #130188;
 }
 
 .text-svg-catalog{
@@ -309,3 +324,109 @@ h3{
 .text-svg-catalog img{
     margin-left: 7px;
 }
+
+.img-block-catalog{
+    width: 50%;
+}
+
+.img-block-catalog img{
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+/* Blur*/
+
+.blur{
+    position: fixed;
+    width: 85%;
+    height: 150px;
+
+    z-index: 100;
+
+    backdrop-filter: blur(11px) saturate(162%);
+    -webkit-backdrop-filter: blur(11px) saturate(162%);
+    background-color: rgba(17, 25, 40, 0);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+/* Blur */
+
+/*Footer*/
+footer{
+    display: flex;
+    width: 100%;
+    height: 300px;
+
+    background-color: #1811AC;
+    border-radius: 10px 10px 0px 0px;
+
+    padding: 35px 35px 35px 55px;
+}
+
+.svg-footer-content{
+    width: 40%;
+    height: 100%;
+
+    background-color: #2a20dd00;
+}
+
+.svg-logo-footer{
+    width: 150px;
+}
+
+.svg-logo-footer img{
+    width: 100%;
+    height: 100%;
+
+
+    filter: brightness(0) invert(100%);
+}
+
+.svg-social-footer{
+    display: flex;
+    width: 150px;
+    height: 30px;
+
+    background-color: #1e15ce00;
+
+    column-gap: 10px;
+}
+
+.svg-social-footer img{
+    height: 100%;
+    filter: invert();
+}
+
+.link-footer{
+    display: flex;
+    width: 60%;
+    height: 100%;
+
+    background-color: rgba(250, 235, 215, 0);
+
+    column-gap: 45px;
+}
+
+ul{
+    list-style: none;
+    margin-top: 20px;
+}
+
+ul h1{
+    font-family: Roboto;
+    font-size: 15pt;
+    color: white;
+}
+
+li{
+    font-family: Roboto;
+    font-size: 11pt;
+}
+
+li a{
+    color: white;
+    text-decoration: none;
+}
+/*Footer*/
