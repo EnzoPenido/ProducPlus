@@ -426,7 +426,12 @@ li{
 }
 
 li a{
-    color: white;
+    color: rgba(255, 255, 255, 0.653);
     text-decoration: none;
+}
+
+li a:hover{
+    color: rgb(255, 255, 255);
+    text-decoration: underline;
 }
 /*Footer*/
