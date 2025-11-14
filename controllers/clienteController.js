@@ -1,4 +1,6 @@
 import Cliente from "../models/clienteModel.js";
+import bcrypt from "bcrypt";
+import Cliente from "../models/clienteModel.js"
 
 export const listarClientes = async (req, res) => {
     try {
@@ -30,8 +32,16 @@ export const criarCliente = async (req, res) => {
 
 export const atualizarCliente = async (req, res) => {
     try {
-        await Cliente.update(req.params.cnpj, req.body);
-        res.json({ message: "Cliente atualizado" });
+        const dadosAtualizados = req.body;
+
+        // se o usuário enviou senha, hash novamente
+        if (dadosAtualizados.senha) {
+            dadosAtualizados.senha = await bcrypt.hash(dadosAtualizados.senha, 10);
+        }
+
+        await Cliente.update(req.params.cnpj, dadosAtualizados);
+
+        res.json({ message: "Cliente atualizado com sucesso" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

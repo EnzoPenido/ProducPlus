@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.get("/", listarCompras);
-router.get("/:id", buscarCompra);
-router.post("/", criarCompra);
-router.put("/:id", atualizarCompra);
-router.delete("/:id", excluirCompra);
+router.get("/", autenticarJWT, permitirRoles("ADMIN", "CLIENTE"), listarCompras);
+router.get("/:id", autenticarJWT, permitirRoles("ADMIN", "CLIENTE"), buscarCompra);
+router.post("/", autenticarJWT, permitirRoles("ADMIN", "CLIENTE"), criarCompra);
+router.put("/:id", autenticarJWT, permitirRoles("ADMIN", "CLIENTE"), atualizarCompra);
+router.delete("/:id", autenticarJWT, permitirRoles("ADMIN", "CLIENTE"), excluirCompra);
 
 export default router;

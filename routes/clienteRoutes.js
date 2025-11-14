@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.get("/", listarClientes);
-router.get("/:cnpj", buscarCliente);
+router.get("/",autenticarJWT, permitirRoles("ADMIN"), listarClientes);
+router.get("/:cnpj", autenticarJWT, permitirRoles("ADMIN"), buscarCliente);
 router.post("/", criarCliente);
 router.put("/:cnpj", atualizarCliente);
 router.delete("/:cnpj", excluirCliente);

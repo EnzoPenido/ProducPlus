@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.get("/", listarProdutos);
 router.get("/:id", buscarProduto);
-router.post("/", criarProduto);
-router.put("/:id", atualizarProduto);
-router.delete("/:id", excluirProduto);
+router.post("/", autenticarJWT, permitirRoles("ADMIN"), criarProduto);
+router.put("/:id", autenticarJWT, permitirRoles("ADMIN"), atualizarProduto);
+router.delete("/:id", autenticarJWT, permitirRoles("ADMIN"), excluirProduto);
 
 export default router;
