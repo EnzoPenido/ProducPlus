@@ -741,3 +741,21 @@ li a:hover{
                 grid-template-columns: 1fr;
             }
         }
+
+@media (max-width: 646px){
+    .link-footer{
+        flex-direction: column;
+    }
+
+    footer{
+        height: auto;
+    }
+}
+
+@media (max-width: 512px){
+    footer{
+        flex-direction: column;
+        align-items: start;
+    }
+}
+    
