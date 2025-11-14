@@ -459,8 +459,8 @@ li a:hover{
 
 .container-products-item{
     display: flex;
-    width: 250px;
-    height: 350px;
+    width: 200px;
+    height: 320px;
 
     background-color: white;
     border-radius: 7px;
