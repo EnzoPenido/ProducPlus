@@ -612,7 +612,7 @@ li a:hover{
 
 .text-svg-catalog{
     display: flex;
-    margin-top: 60px;
+    margin-top: 50px;
     align-items: center;
 
     margin-bottom: 12px !important;
@@ -628,6 +628,12 @@ li a:hover{
 
 .text-svg-catalog img{
     width: 20px;
+
+    transition: rotate 0.4s ease-in-out;
+}
+
+.text-svg-catalog img:hover{
+    rotate: 225deg;
 }
 
 /* Dashboard */
