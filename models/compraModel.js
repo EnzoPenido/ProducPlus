@@ -11,27 +11,25 @@ const Compra = {
         return rows[0];
     },
 
-    async create({ cnpjCliente, data, valorTotal }) {
+    async create({ cnpjCliente, dataCompra, valorTotal, statusCompra }) {
         const [result] = await db.query(
-            `INSERT INTO Compra (cnpjCliente, data, valorTotal)
-       VALUES (?, ?, ?)`,
-            [cnpjCliente, data, valorTotal]
+            `INSERT INTO Compra (cnpjCliente, dataCompra, valorTotal, statusCompra)
+       VALUES (?, ?, ?, ?)`,
+            [cnpjCliente, dataCompra, valorTotal, statusCompra]
         );
-        return result.insertId; // retorna o ID da nova compra
+        return result.insertId;
     },
 
-    async update(idCompra, { cnpjCliente, data, valorTotal }) {
+    async update(idCompra, { cnpjCliente, dataCompra, valorTotal, statusCompra }) {
         await db.query(
-            `UPDATE Compra
-       SET cnpjCliente = ?, data = ?, valorTotal = ?
-       WHERE idCompra = ?`,
-            [cnpjCliente, data, valorTotal, idCompra]
+            `UPDATE Compra SET cnpjCliente = ?, dataCompra = ?, valorTotal = ?, statusCompra = ? WHERE idCompra = ?`,
+            [cnpjCliente, dataCompra, valorTotal, statusCompra, idCompra]
         );
     },
 
     async delete(idCompra) {
         await db.query("DELETE FROM Compra WHERE idCompra = ?", [idCompra]);
-    },
+    }
 };
 
 export default Compra;

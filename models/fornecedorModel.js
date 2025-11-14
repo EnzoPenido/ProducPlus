@@ -11,26 +11,24 @@ const Fornecedor = {
         return rows[0];
     },
 
-    async create({ cnpjFornecedor, nome, email, telefoneFixo, endereco }) {
+    async create({ cnpjFornecedor, nome, email, telefone, endereco }) {
         await db.query(
-            `INSERT INTO Fornecedor (cnpjFornecedor, nome, email, telefoneFixo, endereco)
+            `INSERT INTO Fornecedor (cnpjFornecedor, nome, email, telefone, endereco)
        VALUES (?, ?, ?, ?, ?)`,
-            [cnpjFornecedor, nome, email, telefoneFixo, endereco]
+            [cnpjFornecedor, nome, email, telefone, endereco]
         );
     },
 
-    async update(cnpjFornecedor, { nome, email, telefoneFixo, endereco }) {
+    async update(cnpjFornecedor, { nome, email, telefone, endereco }) {
         await db.query(
-            `UPDATE Fornecedor
-       SET nome = ?, email = ?, telefoneFixo = ?, endereco = ?
-       WHERE cnpjFornecedor = ?`,
-            [nome, email, telefoneFixo, endereco, cnpjFornecedor]
+            `UPDATE Fornecedor SET nome = ?, email = ?, telefone = ?, endereco = ? WHERE cnpjFornecedor = ?`,
+            [nome, email, telefone, endereco, cnpjFornecedor]
         );
     },
 
     async delete(cnpjFornecedor) {
         await db.query("DELETE FROM Fornecedor WHERE cnpjFornecedor = ?", [cnpjFornecedor]);
-    },
+    }
 };
 
 export default Fornecedor;

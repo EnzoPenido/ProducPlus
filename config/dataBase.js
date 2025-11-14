@@ -8,7 +8,8 @@ const pool = mysql.createPool({
     name: process.env.DB_NAME,
 
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 console.log('Pool de conexões criado com segurança.')

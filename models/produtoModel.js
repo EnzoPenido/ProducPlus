@@ -11,26 +11,31 @@ const Produto = {
         return rows[0];
     },
 
-    async create({ cnpjFornecedor, nome, categoria, precoUnitario, quantidadeEstoque }) {
-        await db.query(
-            `INSERT INTO Produto (cnpjFornecedor, nome, categoria, precoUnitario, quantidadeEstoque)
-       VALUES (?, ?, ?, ?, ?)`,
-            [cnpjFornecedor, nome, categoria, precoUnitario, quantidadeEstoque]
+    async create({ cnpjFornecedor, idCategoria, nome, descricao, url_imagem, preco_unitario, quantidadeEstoque }) {
+        const [result] = await db.query(
+            `INSERT INTO Produto (cnpjFornecedor, idCategoria, nome, descricao, url_imagem, preco_unitario, quantidadeEstoque)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [cnpjFornecedor, idCategoria, nome, descricao, url_imagem, preco_unitario, quantidadeEstoque]
         );
+        return result.insertId;
     },
 
-    async update(idProduto, { nome, categoria, precoUnitario, quantidadeEstoque }) {
+    async update(idProduto, { cnpjFornecedor, idCategoria, nome, descricao, url_imagem, preco_unitario, quantidadeEstoque }) {
         await db.query(
-            `UPDATE Produto
-       SET nome = ?, categoria = ?, precoUnitario = ?, quantidadeEstoque = ?
+            `UPDATE Produto SET cnpjFornecedor = ?, idCategoria = ?, nome = ?, descricao = ?, url_imagem = ?, preco_unitario = ?, quantidadeEstoque = ?
        WHERE idProduto = ?`,
-            [nome, categoria, precoUnitario, quantidadeEstoque, idProduto]
+            [cnpjFornecedor, idCategoria, nome, descricao, url_imagem, preco_unitario, quantidadeEstoque, idProduto]
         );
     },
 
     async delete(idProduto) {
         await db.query("DELETE FROM Produto WHERE idProduto = ?", [idProduto]);
     },
+
+    // método utilitário para atualizar estoque (incremento negativo para retirada)
+    async changeStock(idProduto, delta) {
+        await db.query("UPDATE Produto SET quantidadeEstoque = quantidadeEstoque + ? WHERE idProduto = ?", [delta, idProduto]);
+    }
 };
 
 export default Produto;
