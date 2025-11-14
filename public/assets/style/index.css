@@ -102,6 +102,7 @@ header {
     position: fixed;
     width: 100%;
     box-shadow: 0px 3px 9px 0px #0000001c;
+    z-index: 2;
 }
 /* Faz o risco apareer quando a tela é pequena */
 @media (max-width: 992px) {
@@ -113,6 +114,21 @@ header {
 
 
     }
+}
+
+#logo{
+    display: none !important;
+}
+
+.hide-button{
+    display: flex;
+    position: absolute;
+    width: 20%;
+    bottom: 50px;
+    height: 70px;
+    z-index: 5;
+    background-color: rgb(255, 255, 255);
+    justify-self: end;
 }
 
 .navbar-brand {
@@ -166,11 +182,15 @@ header {
     }
 
 }
+.camada-1{
+    z-index: 1;
+}
 
 .imagem-home {
     width: 100%;
     height: auto;
     display: flex;
+    z-index: 5;
 
     img {
         width: 80%;
@@ -187,6 +207,17 @@ header {
     padding: 0px;
     display: flex;
 
+}
+
+video {
+          
+    height: 700px;
+    border-radius: 15px;
+}
+
+spline-viewer{
+    height: 700px;
+    z-index: 200;
 }
 /* ajusta o tamanho da imagem e botôes (LOGO e IMG)  */
 @media (max-width: 1200px) {
@@ -219,6 +250,7 @@ header {
             width: 40%;
             height: auto;
         }
+       
     }
 
 }
@@ -280,6 +312,32 @@ footer{
     border-radius: 10px 10px 0px 0px;
 
     padding: 35px 35px 35px 55px;
+    
+ul{
+    list-style: none;
+    margin-top: 20px;
+}
+
+ul h1{
+    font-family: Roboto;
+    font-size: 15pt;
+    color: white;
+}
+
+li{
+    font-family: Roboto;
+    font-size: 11pt;
+}
+
+li a{
+    color: rgba(255, 255, 255, 0.653);
+    text-decoration: none;
+}
+
+li a:hover{
+    color: rgb(255, 255, 255);
+    text-decoration: underline;
+}
 }
 
 .svg-footer-content{
@@ -326,29 +384,4 @@ footer{
     column-gap: 45px;
 }
 
-ul{
-    list-style: none;
-    margin-top: 20px;
-}
-
-ul h1{
-    font-family: Roboto;
-    font-size: 15pt;
-    color: white;
-}
-
-li{
-    font-family: Roboto;
-    font-size: 11pt;
-}
-
-li a{
-    color: rgba(255, 255, 255, 0.653);
-    text-decoration: none;
-}
-
-li a:hover{
-    color: rgb(255, 255, 255);
-    text-decoration: underline;
-}
 /*Footer*/
