@@ -21,8 +21,8 @@ export const buscarProduto = async (req, res) => {
 
 export const criarProduto = async (req, res) => {
     try {
-        await Produto.create(req.body);
-        res.status(201).json({ message: "Produto criado com sucesso" });
+        const id = await Produto.create(req.body);
+        res.status(201).json({ message: "Produto criado", idProduto: id });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

@@ -22,7 +22,7 @@ export const buscarCliente = async (req, res) => {
 export const criarCliente = async (req, res) => {
     try {
         await Cliente.create(req.body);
-        res.status(201).json({ message: "Cliente criado com sucesso" });
+        res.status(201).json({ message: "Cliente criado" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
