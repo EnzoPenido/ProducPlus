@@ -614,6 +614,9 @@ li a:hover{
     display: flex;
     margin-top: 60px;
     align-items: center;
+
+    margin-bottom: 12px !important;
+    margin-left: 12px;
 }
 
 .text-svg-catalog h1{
