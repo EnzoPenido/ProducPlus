@@ -124,13 +124,18 @@ header {
 .hide-button{
     display: flex;
     position: absolute;
-    width: 20%;
+    width: 100%;
     height: 700px;
     z-index: 5;
     background-color: rgba(255, 255, 255, 0);
     justify-self: end;
     justify-content: end;
     align-items: end;
+    z-index: 10;
+}
+
+.camada{
+    z-index: 13;
 }
 
 .hide{
