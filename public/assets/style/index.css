@@ -138,6 +138,10 @@ header {
     z-index: 13;
 }
 
+.camada-nav{
+    z-index: 900;
+}
+
 .hide{
     position: static;
     width: 100%;
