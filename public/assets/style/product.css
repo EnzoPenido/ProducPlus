@@ -763,9 +763,9 @@ li a:hover{
 .back-button-section{
     display: flex;
     width: 100%;
-    height: 20%;
+    height: 18%;
 
-    background-color: #b1aee7;
+    background-color: #b1aee700;
 
     align-items: end;
 }
@@ -791,12 +791,13 @@ li a:hover{
     width: 100%;
     height: 80dvh;
 
-    background-color: #e1b0b0;
+    background-color: #e1b0b000;
     padding-top: 8px;
+    margin-bottom: 40px;
 }
 
 .product-img-content{
-    width: 60%;
+    width: 55%;
     height: 100%;
 
     background-color: #ECECEC;
@@ -807,7 +808,66 @@ li a:hover{
     width: 40%;
     height: 100%;
 
-    background-color: #cf8686;
+    background-color: #cf868600;
     padding: 30px;
+}
+
+.product-txt-content h1{
+    font-size: 19pt;
+    font-family: Roboto;
+    font-weight: bold;
+
+    margin: 0
+}
+
+.product-txt-content h3{
+    width: auto;
+    height: 140px;
+
+    margin-bottom: 15px;
+}
+
+.product-action-txt{
+    display: flex;
+    width: auto;
+    height: auto;
+
+    flex-direction: column;
+}
+
+.product-action-txt h4{
+    color: #1800ad;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.product-action-txt a{
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background-color: #1800ad;
+
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+
+    align-items: center;
+    justify-self: center;
+    justify-items: center;
+    justify-content: center;
+    text-align: center !important;
+
+    padding-left: auto;
+    padding-right: auto;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.product-action-txt h1{
+    font-size: 13pt;
+    font-family: Lovelo;
+
+    line-height: 17px;
 }
 /*Product */
