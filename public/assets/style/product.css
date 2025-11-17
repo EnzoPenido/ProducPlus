@@ -776,14 +776,30 @@ li a:hover{
     color: #1811AC;
     text-decoration: none;
     font-weight: normal;
-    transition: font-weight 0.2s;
+    transition: font-weight 0.2s, background-color 0.2s;
 }
 
 .back-button a, span:hover{
     font-family: Roboto;
     color: #1811AC;
-    text-decoration:  underline;
+    text-decoration: underline;
     font-weight: bolder;
+}
+
+.product-action-txt a img{
+    height: 100%;
+    filter: brightness(0) invert(1);
+
+    padding: 12px;
+    transition: transform 0.2s ease-in-out, background-color 0.2s;
+}
+
+.product-action-txt a img:hover{
+    transform: translateX(10px);
+}
+
+.product-action-txt a:hover{
+    background-color: #130188;
 }
 
 .product-all-content{
