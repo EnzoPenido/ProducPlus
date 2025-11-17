@@ -13,7 +13,7 @@ create table Cliente(
     senha varchar(255) not null,
     telefone varchar(15) not null,
     endereco varchar(255) not null,
-    
+    role varchar(20) not null default 'CLIENTE',
     primary key(cnpjCliente)
 );
 

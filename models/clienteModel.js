@@ -2,7 +2,7 @@ import db from "../config/dataBase.js";
 
 const Cliente = {
     async getAll() {
-        const [rows] = await db.query("SELECT * FROM Cliente");
+        const [rows] = await db.query("SELECT cnpjCliente, nome, email, telefone, endereco FROM Cliente");
         return rows;
     },
 
@@ -19,11 +19,15 @@ const Cliente = {
         );
     },
 
-    async update(cnpjCliente, { nome, email, senha, telefone, endereco }) {
-        await db.query(
-            `UPDATE Cliente SET nome = ?, email = ?, senha = ?, telefone = ?, endereco = ? WHERE cnpjCliente = ?`,
-            [nome, email, senha, telefone, endereco, cnpjCliente]
-        );
+    async update(cnpjCliente, data) {
+        const fields = [];
+        const vals = [];
+        ["nome", "email", "senha", "telefone", "endereco"].forEach(k => {
+            if (data[k] !== undefined) { fields.push(`${k} = ?`); vals.push(data[k]); }
+        });
+        if (!fields.length) return;
+        vals.push(cnpjCliente);
+        await db.query(`UPDATE Cliente SET ${fields.join(", ")} WHERE cnpjCliente = ?`, vals);
     },
 
     async delete(cnpjCliente) {

@@ -4,12 +4,12 @@ dotenv.config();
 
 import clienteRoutes from "./routes/clienteRoutes.js";
 import fornecedorRoutes from "./routes/fornecedorRoutes.js";
-import categoriaRoutes from "./routes/categoriaRoutes.js";
+import categoriaRoutes from "./routes/categoriasRoutes.js";
 import produtoRoutes from "./routes/produtoRoutes.js";
 import compraRoutes from "./routes/compraRoutes.js";
 import itemCompraRoutes from "./routes/itemCompraRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import { autenticarJWT } from "../middlewares/authMiddleware.js";
+import { autenticarJWT } from "./middlewares/authMiddleware.js";
 
 const app = express();
 app.use(express.json());
