@@ -554,14 +554,22 @@ li a:hover{
 .profile-block-section{
     display: flex;
     width: 100%;
-    height: 200px;
+    height: auto;
 
     background-color: #EEEEEE;
 
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
 
     border-radius: 10px;
+}
+
+.profile-block-section img{
+    padding: 10px;
+}
+
+.img-profile-hero{
+    padding: 30px !important;
 }
 
 .dashboard-block-section{
