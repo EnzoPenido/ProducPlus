@@ -48,7 +48,7 @@ h1 {
 
 p {
     font-family: Roboto;
-    color: rgb(0, 0, 0);
+    color: #313131;
     text-align: justify;
     margin-left: 5px;
     margin-bottom: 4rem;
@@ -294,6 +294,17 @@ spline-viewer{
         }
     }
 
+}
+.a-bonito{
+    color: #1700ad;
+    text-decoration: none;
+}
+
+.a-bonito:hover{
+    color: #5964ff;
+    text-decoration: underline;
+    cursor: pointer;
+    
 }
 
 .btn{
