@@ -54,21 +54,21 @@
                     <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="">
                     <div class="text-content-profile">
                         <h1 style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
-                        <h2>Administrador</h2>
+                        <h2>Usuário</h2>
                     </div>
                 </div>
-                <img class="img-profile-hero" src="../assets/images/svg/adm_profile_hero_ProducPlus.svg" alt="">
+                <img class="img-profile-hero" src="../assets/images/svg/user_profile_hero_ProducPlus.svg" alt="">
             </section>
             <div class="text-svg-catalog">
-                <h1>DASHBOARD <br> ADMINISTRADOR</h1>
+                <h1>SEUS <br> PEDIDOS</h1>
                 <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
             </div>
 
             <div class="dashboard-container">
-                <!-- Card Fornecedores -->
+                <!-- Card Pedidos -->
                 <div class="dashboard-card">
                     <div class="card-header">
-                        <div class="card-title">FORNECEDORES</div>
+                        <div class="card-title">Seus pedidos</div>
                         <div class="card-value">30</div>
                         <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de fornecedores</div>
                     </div>
@@ -77,17 +77,6 @@
                     </div>
                 </div>
 
-                <!-- Card Estoque -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title">ESTOQUE</div>
-                        <div class="card-value">500</div>
-                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de produtos em estoque</div>
-                    </div>
-                    <div class="chart-container" style="position: relative;">
-                        <canvas id="stockChart"></canvas>
-                    </div>
-                </div>
             </div>
 
             <footer>
@@ -126,118 +115,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-    <script>
-        // Gráfico de Fornecedores (Barras)
-        const suppliersCtx = document.getElementById('suppliersChart').getContext('2d');
-        const suppliersChart = new Chart(suppliersCtx, {
-            type: 'bar',
-            data: {
-                labels: ['', '', '', '', '', ''],
-                datasets: [{
-                    data: [8, 12, 15, 18, 13, 16],
-                    backgroundColor: '#1800ad',
-                    borderRadius: 5,
-                    barThickness: 40
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 20,
-                        ticks: {
-                            stepSize: 5,
-                            font: {
-                                size: 10
-                            }
-                        },
-                        grid: {
-                            display: true,
-                            color: '#e0e0e0'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Estoque (Donut)
-        const stockCtx = document.getElementById('stockChart').getContext('2d');
-        const stockChart = new Chart(stockCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Marca 1', 'Marca 2', 'Marca 3', 'Marca 4'],
-                datasets: [{
-                    data: [35, 25, 25, 15],
-                    backgroundColor: [
-                        '#1800ad',
-                        '#5964ff',
-                        '#8b94ff',
-                        '#b8bfff'
-                    ],
-                    borderWidth: 0,
-                    cutout: '70%'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 15,
-                            font: {
-                                size: 11
-                            }
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                        callbacks: {
-                            label: function (context) {
-                                return context.label + ': ' + context.parsed + '%';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        //Para integrar com banco de dados
-
-        /*
-        // Exemplo para atualizar o gráfico de fornecedores
-        suppliersChart.data.datasets[0].data = dadosDoBanco;
-        suppliersChart.update();
-
-        // Exemplo para atualizar o gráfico de estoque
-        stockChart.data.datasets[0].data = percentuaisDoBanco;
-        stockChart.data.labels = categoriasDoBanco;
-        stockChart.update(); 
-        */
+        crossorigin="anonymous">
     </script>
-
 </body>
 
 </html>

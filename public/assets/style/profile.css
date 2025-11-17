@@ -565,7 +565,11 @@ li a:hover{
 }
 
 .profile-block-section img{
-    padding: 30px;
+    padding: 10px;
+}
+
+.img-profile-hero{
+    padding: 30px !important;
 }
 
 .dashboard-block-section{
