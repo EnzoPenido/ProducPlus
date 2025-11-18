@@ -1,15 +1,14 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-dotenv.config();
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES = "2h";
+dotenv.config();
 
 export function gerarToken(payload) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES || "2h"
+  });
 }
 
 export function verificarToken(token) {
-  return jwt.verify(token, JWT_SECRET);
+  return jwt.verify(token, process.env.JWT_SECRET);
 }

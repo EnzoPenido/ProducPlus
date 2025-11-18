@@ -1,27 +1,26 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+
 import cors from "cors";
 
-import authRoutes from "./app/routes/authRoutes.js";
-import adminAuthRoutes from "./app/routes/adminAuthRoutes.js";
-import adminRoutes from "./app/routes/adminRoutes.js";
-import clienteRoutes from "./app/routes/clienteRoutes.js";
-import fornecedorRoutes from "./app/routes/fornecedorRoutes.js";
-import categoriaRoutes from "./app/routes/categoriaRoutes.js";
-import produtoRoutes from "./app/routes/produtoRoutes.js";
-import compraRoutes from "./app/routes/compraRoutes.js";
-import itemCompraRoutes from "./app/routes/itemCompraRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import adminAuthRoutes from "./routes/adminAuthRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import clienteRoutes from "./routes/clienteRoutes.js";
+import fornecedorRoutes from "./routes/fornecedorRoutes.js";
+import categoriaRoutes from "./routes/categoriasRoutes.js";
+import produtoRoutes from "./routes/produtoRoutes.js";
+import compraRoutes from "./routes/compraRoutes.js";
+import itemCompraRoutes from "./routes/itemCompraRoutes.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// públicas
+// ROTAS
 app.use("/auth", authRoutes);
 app.use("/admin/auth", adminAuthRoutes);
-
-// rotas administrativas (aplicam seus próprios middlewares)
 app.use("/admin", adminRoutes);
 app.use("/clientes", clienteRoutes);
 app.use("/fornecedores", fornecedorRoutes);
@@ -31,4 +30,4 @@ app.use("/compras", compraRoutes);
 app.use("/itenscompra", itemCompraRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor rodando em: http://localhost:${PORT}`));

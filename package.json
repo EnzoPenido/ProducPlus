@@ -1,6 +1,7 @@
 {
   "name": "producplus",
   "version": "1.0.0",
+  "type": "module",
   "description": "ProducPlus project",
   "main": "app.js",
   "scripts": {

@@ -1,4 +1,6 @@
 import express from "express";
+import { autenticarJWT } from "../middlewares/authMiddleware.js";
+import { permitirRoles } from "../middlewares/roleMiddleware.js";
 import {
     listarProdutos,
     buscarProduto,
