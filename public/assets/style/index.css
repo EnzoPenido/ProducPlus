@@ -191,6 +191,19 @@ header {
 
 /* Conteúdo Home */
 
+.arrow{
+    display: flex;
+    margin: auto;
+
+    justify-content: center;
+}
+
+.arrow img{
+    position: relative;
+    top: -88px;
+    z-index: 880;
+}
+
 .titulo-home {
     font-family: Lovelo;
     font-size: 3rem;
