@@ -722,3 +722,101 @@ footer {
   }
 }
 /* Marquee de marcas*/
+
+
+/* Animação fade*/
+.fade-in-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Estilo quando elemento está visível */
+.fade-in-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Variações de delay para criar efeito cascata */
+.informacoes .info-img {
+    transition-delay: 0.1s;
+}
+
+.informacoes .info-text {
+    transition-delay: 0.2s;
+}
+
+.informacoes2 .info-text {
+    transition-delay: 0.1s;
+}
+
+.informacoes2 .info-img {
+    transition-delay: 0.2s;
+}
+
+/* Hero section com fade mais suave - removido opacity inicial */
+.hero-home {
+    animation: heroFadeIn 1s ease-out;
+}
+
+@keyframes heroFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efeito especial para elementos dentro do hero */
+.hero-home .titulo-home,
+.hero-home p,
+.hero-home .buttons-home {
+    animation: heroFadeIn 1s ease-out;
+}
+
+.hero-home .titulo-home {
+    animation-delay: 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.hero-home p {
+    animation-delay: 0.4s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.hero-home .buttons-home {
+    animation-delay: 0.6s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+/* Marquee com fade lateral */
+.marquee.fade-in-element {
+    transform: translateX(-30px);
+}
+
+.marquee.fade-in-visible {
+    transform: translateX(0);
+}
+
+/* Responsivo - reduz movimento em telas menores */
+@media (max-width: 768px) {
+    .fade-in-element {
+        transform: translateY(20px);
+    }
+}
+
+/* Respeita preferências de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-element,
+    .hero-home {
+        transform: none;
+        transition: opacity 0.3s ease-out;
+    }
+}
+/*Animação fade*/
