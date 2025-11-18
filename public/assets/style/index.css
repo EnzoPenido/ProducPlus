@@ -170,14 +170,6 @@ header {
     border: #5964ff 1px solid;
 }
 
-
-/* HEADER */
-
-
-/* Conteúdo Home */
-
-
-/* Botoes Home Inicio */
 .btn-destaque {
     background-color: #1D00D1;
     border: 1px solid #1D00D1;
@@ -199,6 +191,16 @@ header {
         color: #1D00D1 !important;
     }
 }
+
+
+/* HEADER */
+
+
+/* Conteúdo Home */
+
+
+/* Botoes Home Inicio */
+
 
 .dif {
     background-color: transparent;
