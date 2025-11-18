@@ -204,6 +204,27 @@ header {
     z-index: 880;
 }
 
+/*Floating animação */
+.floating {
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+/*Floating animação */
+
 .titulo-home {
     font-family: Lovelo;
     font-size: 3rem;
