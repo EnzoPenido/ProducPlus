@@ -38,7 +38,7 @@
                 <div class="content-size-login">
                     <div class="inputs-login">
                         <div class="wave-group">
-                            <input required="" type="email" class="input">
+                            <input required="" type="email" class="input" id="emailLogin">
                             <span class="bar"></span>
                             <label class="label">
                                 <span class="label-char" style="--index: 0">E</span>
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="wave-group">
-                            <input required="" type="password" class="input">
+                            <input required="" type="password" class="input" id="senhaLogin">
                             <span class="bar"></span>
                             <label class="label">
                                 <span class="label-char" style="--index: 0">S</span>
@@ -65,7 +65,7 @@
                         <input type="checkbox" name="checkbox" id="checkbox">
                         <label for="checkbox"> Lembrar de mim</label>
                     </div>
-                    <a class="btn-action" href="">
+                    <a class="btn-action" id="btnEntrar">
                         Entrar
                     </a>
                     <h3>Ainda não tem uma conta? <a href="register.html" target="_parent" style="color: #1714A8;">Crie
@@ -83,6 +83,50 @@
     <footer>
 
     </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+
+        document.getElementById('btnEntrar').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const username = document.getElementById('usernameInput').value;
+            const senha = document.getElementById('senhaInput').value;
+
+            if (!username || !senha) {
+                alert("Por favor, preencha todos os campos!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, senha })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // SUCESSO!
+                    // 1. Salva o token no navegador
+                    localStorage.setItem('token', data.token);
+
+                    // 2. Redireciona para o Dashboard (Profile)
+                    alert('Login realizado com sucesso!');
+                    window.location.href = 'profile.html';
+                } else {
+                    // ERRO (Senha errada ou usuário não encontrado)
+                    alert('Erro: ' + (data.message || 'Falha no login'));
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
+            }
+        });
+    </script>
 
 </body>
 
