@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProducPlus - Perfil</title>
+    <link rel="shortcut icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../assets/style/profile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+
+<body>
+    <header class="d-flex justify-content-center">
+        <div class="container container-navbar m-sm-0 p-sm-0 ">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid ms-5 me-5 p-2">
+                    <a class="navbar-brand m-0 " href="index.html" target="_self"><img
+                            src="../assets/images/logo/LogoPequena.png"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav gap-3 ">
+                            <li class="nav-item">
+                                <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="profile.html"><img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt=""></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </header>
+    <main>
+        <div class="container-fluid filter ms-6 me-6 p-2">
+            <div style=" margin-top: 120px;" class="text-svg-catalog">
+                <h1>PERFIL</h1>
+                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+            </div>
+            <section class="profile-block-section">
+                <div class="svg-text-profile">
+                    <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="">
+                    <div class="text-content-profile">
+                        <h1 style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
+                        <h2>Administrador</h2>
+                    </div>
+                </div>
+                <img class="img-profile-hero" src="../assets/images/svg/adm_profile_hero_ProducPlus.svg" alt="">
+            </section>
+            <div class="text-svg-catalog">
+                <h1>DASHBOARD <br> ADMINISTRADOR</h1>
+                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+            </div>
+
+            <div class="dashboard-container">
+                <!-- Card Fornecedores -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div class="card-title">FORNECEDORES</div>
+                        <div class="card-value">30</div>
+                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de fornecedores</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="suppliersChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Card Estoque -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div class="card-title">ESTOQUE</div>
+                        <div class="card-value">500</div>
+                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de produtos em estoque</div>
+                    </div>
+                    <div class="chart-container" style="position: relative;">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <div class="svg-footer-content">
+                    <div class="svg-logo-footer">
+                        <img src="../assets/images/svg/logo_extensa_ProducPlus.svg" alt="">
+                    </div>
+                    <div class="svg-social-footer">
+                        <a href=""><img src="../assets/images/svg/github-142-svgrepo-com (1).svg" alt=""></a>
+                        <a href=""><img src="../assets/images/svg/instagram-svgrepo-com.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="link-footer">
+                    <ul>
+                        <h1>Info</h1>
+                        <li> <a href="">Home</a></li>
+                        <li> <a href="">Sobre-nós</a></li>
+                        <li> <a href="">Contato</a></li>
+                        <li> <a href="">Entrar</a></li>
+                        <li> <a href="">Ajuda</a></li>
+                    </ul>
+                    <ul>
+                        <h1>Insumos</h1>
+                        <li> <a href="">Todos os produtos</a></li>
+                        <li> <a href="">Materiais</a></li>
+                        <li> <a href="">Ferramentas</a></li>
+                        <li> <a href="">Eletrônica</a></li>
+                        <li> <a href="">Mecânica</a></li>
+                    </ul>
+
+                </div>
+            </footer>
+        </div>
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script>
+        // Gráfico de Fornecedores (Barras)
+        const suppliersCtx = document.getElementById('suppliersChart').getContext('2d');
+        const suppliersChart = new Chart(suppliersCtx, {
+            type: 'bar',
+            data: {
+                labels: ['', '', '', '', '', ''],
+                datasets: [{
+                    data: [8, 12, 15, 18, 13, 16],
+                    backgroundColor: '#1800ad',
+                    borderRadius: 5,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 20,
+                        ticks: {
+                            stepSize: 5,
+                            font: {
+                                size: 10
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            color: '#e0e0e0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Estoque (Donut)
+        const stockCtx = document.getElementById('stockChart').getContext('2d');
+        const stockChart = new Chart(stockCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Marca 1', 'Marca 2', 'Marca 3', 'Marca 4'],
+                datasets: [{
+                    data: [35, 25, 25, 15],
+                    backgroundColor: [
+                        '#1800ad',
+                        '#5964ff',
+                        '#8b94ff',
+                        '#b8bfff'
+                    ],
+                    borderWidth: 0,
+                    cutout: '70%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function (context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        //Para integrar com banco de dados
+
+        /*
+        // Exemplo para atualizar o gráfico de fornecedores
+        suppliersChart.data.datasets[0].data = dadosDoBanco;
+        suppliersChart.update();
+
+        // Exemplo para atualizar o gráfico de estoque
+        stockChart.data.datasets[0].data = percentuaisDoBanco;
+        stockChart.data.labels = categoriasDoBanco;
+        stockChart.update(); 
+        */
+    </script>
+
+</body>
+
+</html>

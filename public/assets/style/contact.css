@@ -272,3 +272,87 @@ header{
 .btn-destaque:hover{
     background-color: #5964ff;
 }
+
+/*Footer*/
+footer{
+    display: flex;
+    margin: auto;
+    width: 85%;
+    height: 300px;
+
+    background-color: #1811AC;
+    border-radius: 10px 10px 0px 0px;
+
+    padding: 35px 35px 35px 55px;
+}
+
+.svg-footer-content{
+    width: 40%;
+    height: 100%;
+
+    background-color: #2a20dd00;
+}
+
+.svg-logo-footer{
+    width: 150px;
+}
+
+.svg-logo-footer img{
+    width: 100%;
+    height: 100%;
+
+
+    filter: brightness(0) invert(100%);
+}
+
+.svg-social-footer{
+    display: flex;
+    width: 150px;
+    height: 30px;
+
+    background-color: #1e15ce00;
+
+    column-gap: 10px;
+}
+
+.svg-social-footer img{
+    height: 100%;
+    filter: invert();
+}
+
+.link-footer{
+    display: flex;
+    width: 60%;
+    height: 100%;
+
+    background-color: rgba(250, 235, 215, 0);
+
+    column-gap: 45px;
+}
+
+ul{
+    list-style: none;
+    margin-top: 20px;
+}
+
+ul h1{
+    font-family: Roboto;
+    font-size: 15pt;
+    color: white;
+}
+
+li{
+    font-family: Roboto;
+    font-size: 11pt;
+}
+
+li a{
+    color: rgba(255, 255, 255, 0.653);
+    text-decoration: none;
+}
+
+li a:hover{
+    color: rgb(255, 255, 255);
+    text-decoration: underline;
+}
+/*Footer*/
