@@ -11,9 +11,9 @@ export const listarFornecedores = async (req, res) => {
 
 export const buscarFornecedor = async (req, res) => {
     try {
-        const fornecedor = await Fornecedor.getByCnpj(req.params.cnpj);
-        if (!fornecedor) return res.status(404).json({ message: "Fornecedor não encontrado" });
-        res.json(fornecedor);
+        const f = await Fornecedor.getByCnpj(req.params.cnpj);
+        if (!f) return res.status(404).json({ message: "Fornecedor não encontrado" });
+        res.json(f);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -22,7 +22,7 @@ export const buscarFornecedor = async (req, res) => {
 export const criarFornecedor = async (req, res) => {
     try {
         await Fornecedor.create(req.body);
-        res.status(201).json({ message: "Fornecedor criado com sucesso" });
+        res.status(201).json({ message: "Fornecedor criado" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
