@@ -55,7 +55,6 @@ header {
 @media (max-width: 992px) {
     ul {
 
-        border-top: 1px solid #1700ad75;
         margin-top: 15px;
         padding-top: 10px;
 
@@ -542,3 +541,84 @@ li a:hover {
 }
 
 /*Footer*/
+
+/*Offcanvas*/
+.offcanvas{
+    width: 100% !important;
+    z-index: 1050;
+}
+.offcanvas-body{
+    justify-content: end;
+}
+
+.offcanvas-header{
+    height: 100px;
+}
+
+.btn-close{
+    margin-right: 20px !important;
+}
+
+/*Offcanvas*/
+
+.navbar-brand {
+    position: relative; /* Necessário para o z-index e transform */
+    z-index: 1051; /* Garante que a logo fique acima do offcanvas */
+    transition: transform 0.3s ease; /* Adiciona uma animação suave */
+}
+
+.navbar-brand.offcanvas-open {
+    transform: translateX(-80%); /* Move a logo 50px para a esquerda */
+}
+
+.navbar-nav-alternative{
+    display: none;
+}
+
+.navbar-nav-alternative a{
+    color: #1800ad;
+}
+
+@media (max-width: 991px){
+    .navbar-nav{
+        display: none;
+    }    
+
+    .navbar-nav-alternative{
+        display: flex;
+        padding: 25px;
+        flex-direction: column;
+    }
+    .navbar-nav-alternative a{
+        height: auto;
+        width: auto;
+        color: #1800ad;
+        font-size: 17pt;
+    }
+    .navbar-nav-alternative a:hover{
+        color: #150291;
+        text-decoration: none;
+    }
+
+    .navbar-nav-alternative li{
+        display: flex;
+        width: 100%;
+        padding: 40px;
+
+        border-bottom: 2px solid #15029163;
+
+        border-radius: 0px;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .navbar-nav-alternative li:hover{
+        background-color: rgba(128, 128, 128, 0.178);
+        cursor: pointer;
+    }
+
+    .navbar-nav-alternative img{
+        margin-left: auto;
+        height: 20px;
+    }
+}

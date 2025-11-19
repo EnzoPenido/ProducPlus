@@ -22,22 +22,53 @@
                 <div class="container-fluid ms-5 me-5 p-2">
                     <a class="navbar-brand m-0 " href="index.html" target="_self"><img
                             src="../assets/images/logo/LogoPequena.png"></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav gap-3 ">
-                            <li class="nav-item">
-                                <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="profile_user.html"><img src="../assets/images/svg/user-circle-svgrepo-com.svg"
-                                        alt=""></a>
-                            </li>
-
-                        </ul>
-                    </div>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                            aria-controls="offcanvasRight">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="profile.html"><img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt=""></a>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav-alternative">
+                                    <a href="">
+                                        <li class="nav-item">
+                                            <a href="">Catálogo</a>
+                                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                        </li>
+                                    </a>
+                                    <a href="">
+                                        <li class="nav-item">
+                                            <a href="">Carrinho</a>
+                                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                        </li>
+                                    </a>
+                                    <a href="">
+                                        <li class="nav-item">
+                                            <a href="profile.html">Perfil</a>
+                                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                        </li>
+                                    </a>
+                                    <a href="">
+                                        <li class="nav-item">
+                                            <a href="profile.html">Sair</a>
+                                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                        </li>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>
                 </div>
             </nav>
         </div>
@@ -221,6 +252,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    
+    <script>
+        const offcanvasElement = document.getElementById('offcanvasRight');
+        const navbarBrand = document.querySelector('.navbar-brand');
+    
+        offcanvasElement.addEventListener('show.bs.offcanvas', function () {
+            navbarBrand.classList.add('offcanvas-open');
+        });
+    
+        offcanvasElement.addEventListener('hide.bs.offcanvas', function () {
+            navbarBrand.classList.remove('offcanvas-open');
+        });
+    </script>
 
 </body>
 
