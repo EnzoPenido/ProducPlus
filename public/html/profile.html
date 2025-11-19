@@ -240,25 +240,38 @@
     </script>
 
     <script>
-    window.addEventListener('load', () => {
-        const token = localStorage.getItem('token');
-
-        if (!token) {
-            alert('Você precisa estar logado para acessar esta página.');
-            window.location.href = 'login.html';
-        } else {
-            console.log("Usuário autenticado.");
-            // Aqui futuramente colocaremos o código para puxar dados do admin
+        function parseJwt(token) {
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
-    });
 
-    // Função para o botão "Sair" (Logout)
-    // Você deve adicionar id="btnSair" no seu link de logout no menu
-    function logout() {
-        localStorage.removeItem('token');
-        window.location.href = 'login.html';
-    }
-</script>
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+
+            // 1. Se não tem token, tchau
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // 2. Ler o que tem dentro do token
+            const user = parseJwt(token);
+
+            // 3. SEGURANÇA: Se não for ADMIN, chuta ele para o perfil de usuário
+            if (user.tipo !== 'ADMIN') {
+                alert("Você não tem permissão para acessar a área administrativa.");
+                window.location.href = 'profile_user.html';
+            }
+            
+            console.log("Admin logado:", user.nome);
+        });
+
+        // Função para o botão "Sair" (Logout)
+        // Lembrete: Adicionar id="btnSair" no link de logout quando tiver
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+    </script>
 
 </body>
 
