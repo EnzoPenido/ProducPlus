@@ -22,26 +22,70 @@
                 <div class="container-fluid ms-5 me-5 p-2">
                     <a class="navbar-brand m-0 " href="index.html" target="_self"><img
                             src="../assets/images/logo/LogoPequena.png"></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav gap-3 ">
-                            <li class="nav-item">
-                                <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="profile_user.html"><img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt=""></a>
-                            </li>
 
-                        </ul>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                        data-bs-offset="10,20"><img
+                                            src="../assets/images/svg/user-circle-svgrepo-com.svg" alt=""></a>
+                                    <div class="dropdown-center me-1">
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
+                                            <li><a class="dropdown-item" href="#">Sair</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            </ul>
+                            <ul class="navbar-nav-alternative">
+                                <a href="product_catalog.html">
+                                    <li class="nav-item" onclick="location.href = 'product_catalog.html'">
+                                        <a href="">Catálogo</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li class="nav-item" onclick="location.href = 'carrinho.html'">
+                                        <a href="">Carrinho</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li class="nav-item" onclick="location.href = 'profile.html'">
+                                        <a href="profile.html">Perfil</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li class="nav-item" onclick="sair()">
+                                        <a href="profile.html">Sair</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
         </div>
 
     </header>
+    
     <main>
         <div class="container-fluid filter ms-6 me-6 p-2">
             <div class="blur"></div>
@@ -62,102 +106,127 @@
                 </div>
             </section>
             <div class="separator"></div>
-            <section class="catalog-block">
-                <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>INSUMOS</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                        </div>
-                        <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
-                    </div>
 
-                    <a href="../html/products.html">Ver mais</a>
-                </div>
-                <div class="img-block-catalog">
-                    <img src="../assets/images/svg/insumos-catalog-ProducPlus.svg" alt="">
-                </div>
-            </section>
-            <section class="catalog-block">
-                <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>MATERIAIS</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                        </div>
-                        <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
-                    </div>
 
-                    <a href="../html/products.html">Ver mais</a>
-                </div>
-                <div class="img-block-catalog">
-                    <img src="../assets/images/svg/materiais-catalog-ProducPlus.svg" alt="">
-                </div>
-            </section>
-            <section class="catalog-block">
-                <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>FERRAMENTAS</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+            <div class="container d-flex catalog-block">
+                <div class="row m-auto flex-direcion-catalog w-100">
+                    <div class="col-sm-12 col-md-5 text-button-catalog gap-5">
+                        <div class="text-catalog ms-1">
+                            <div class="text-svg-catalog">
+                                <h1>Insumos</h1>
+                                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                            </div>
+                            <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
                         </div>
-                        <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
-                    </div>
 
-                    <a href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html">Ver mais</a>
+                    </div>
+                    <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
+                        <img src="../assets/images/svg/insumos-catalog-ProducPlus.svg" alt="">
+                    </div>
                 </div>
-                <div class="img-block-catalog">
-                    <img src="../assets/images/svg/ferramentas-catalog-ProducPlus.svg" alt="">
-                </div>
-            </section>
-            <section class="catalog-block">
-                <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>ELETRONICA</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+
+            </div>
+
+            <div class="container d-flex catalog-block">
+                <div class="row m-auto flex-direcion-catalog w-100">
+                    <div class="col-sm-12 col-md-5 text-button-catalog gap-5">
+                        <div class="text-catalog ms-1">
+                            <div class="text-svg-catalog">
+                                <h1>Materiais</h1>
+                                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                            </div>
+                            <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
                         </div>
-                        <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
-                    </div>
 
-                    <a href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html">Ver mais</a>
+                    </div>
+                    <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
+                        <img src="../assets/images/svg/materiais-catalog-ProducPlus.svg" alt="">
+                    </div>
                 </div>
-                <div class="img-block-catalog">
-                    <img src="../assets/images/svg/eletronica-catalog-ProducPlus.svg" alt="">
-                </div>
-            </section>
-            <section class="catalog-block">
-                <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>MECÂNICA</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+
+            </div>
+            <div class="container d-flex catalog-block">
+                <div class="row m-auto flex-direcion-catalog w-100">
+                    <div class="col-sm-12 col-md-5 text-button-catalog gap-5">
+                        <div class="text-catalog ms-1">
+                            <div class="text-svg-catalog">
+                                <h1>Ferramentas</h1>
+                                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                            </div>
+                            <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
                         </div>
-                        <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
-                    </div>
 
-                    <a href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html">Ver mais</a>
+                    </div>
+                    <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
+                        <img src="../assets/images/svg/ferramentas-catalog-ProducPlus.svg" alt="">
+                    </div>
                 </div>
-                <div class="img-block-catalog">
-                    <img src="../assets/images/svg/mecanica-catalog-ProducPlus.svg" alt="">
-                </div>
-            </section>
-            <section class="catalog-block">
-                <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>EMBALAGEM</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+
+            </div>
+            <div class="container d-flex catalog-block">
+                <div class="row m-auto flex-direcion-catalog w-100">
+                    <div class="col-sm-12 col-md-5 text-button-catalog gap-5">
+                        <div class="text-catalog ms-1">
+                            <div class="text-svg-catalog">
+                                <h1>Eletrônica</h1>
+                                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                            </div>
+                            <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
                         </div>
-                        <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
-                    </div>
 
-                    <a href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html">Ver mais</a>
+                    </div>
+                    <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
+                        <img style="transform: rotate(180deg);"
+                            src="../assets/images/svg/eletronica-catalog-ProducPlus.svg" alt="">
+                    </div>
                 </div>
-                <div class="img-block-catalog">
-                    <img src="../assets/images/svg/embalagem-catalog-ProducPlus.svg" alt="">
+
+            </div>
+            <div class="container d-flex catalog-block">
+                <div class="row m-auto flex-direcion-catalog w-100">
+                    <div class="col-sm-12 col-md-5 text-button-catalog gap-5">
+                        <div class="text-catalog ms-1">
+                            <div class="text-svg-catalog">
+                                <h1>Mecânica</h1>
+                                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                            </div>
+                            <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
+                        </div>
+
+                        <a class="" href="../html/products.html">Ver mais</a>
+                    </div>
+                    <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
+                        <img src="../assets/images/svg/mecanica-catalog-ProducPlus.svg" alt="">
+                    </div>
                 </div>
-            </section>
+
+            </div>
+            <div class="container d-flex catalog-block">
+                <div class="row m-auto flex-direcion-catalog w-100">
+                    <div class="col-sm-12 col-md-5 text-button-catalog gap-5">
+                        <div class="text-catalog ms-1">
+                            <div class="text-svg-catalog">
+                                <h1>Embalagem</h1>
+                                <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                            </div>
+                            <span>Ao entrar você concorda com os termos de condição da ProducPlus</span>
+                        </div>
+
+                        <a class="" href="../html/products.html">Ver mais</a>
+                    </div>
+                    <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
+                        <img src="../assets/images/svg/embalagem-catalog-ProducPlus.svg" alt="">
+                    </div>
+                </div>
+
+            </div>
+
+
+
 
             <footer>
                 <div class="svg-footer-content">
@@ -170,22 +239,22 @@
                     </div>
                 </div>
                 <div class="link-footer">
-                        <ul>
-                            <h1>Info</h1>
-                            <li> <a href="">Home</a></li>
-                            <li> <a href="">Sobre-nós</a></li>
-                            <li> <a href="">Contato</a></li>
-                            <li> <a href="">Entrar</a></li>
-                            <li> <a href="">Ajuda</a></li>
-                        </ul>
-                        <ul>
-                            <h1>Insumos</h1>
-                            <li> <a href="">Todos os produtos</a></li>
-                            <li> <a href="">Materiais</a></li>
-                            <li> <a href="">Ferramentas</a></li>
-                            <li> <a href="">Eletrônica</a></li>
-                            <li> <a href="">Mecânica</a></li>
-                        </ul>
+                    <ul>
+                        <h1>Info</h1>
+                        <li> <a href="">Home</a></li>
+                        <li> <a href="">Sobre-nós</a></li>
+                        <li> <a href="">Contato</a></li>
+                        <li> <a href="">Entrar</a></li>
+                        <li> <a href="">Ajuda</a></li>
+                    </ul>
+                    <ul>
+                        <h1>Insumos</h1>
+                        <li> <a href="">Todos os produtos</a></li>
+                        <li> <a href="">Materiais</a></li>
+                        <li> <a href="">Ferramentas</a></li>
+                        <li> <a href="">Eletrônica</a></li>
+                        <li> <a href="">Mecânica</a></li>
+                    </ul>
 
                 </div>
             </footer>
@@ -196,6 +265,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+
+    <script>
+        const offcanvasElement = document.getElementById('offcanvasRight');
+        const navbarBrand = document.querySelector('.navbar-brand');
+
+        offcanvasElement.addEventListener('show.bs.offcanvas', function () {
+            navbarBrand.classList.add('offcanvas-open');
+        });
+
+        offcanvasElement.addEventListener('hide.bs.offcanvas', function () {
+            navbarBrand.classList.remove('offcanvas-open');
+        });
+    </script>
 
 </body>
 

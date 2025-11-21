@@ -172,24 +172,49 @@ header {
 
 .btn-destaque {
     background-color: #1D00D1;
+    border: 1px solid #1D00D1;
     width: fit-content;
     transition: ease-in-out 0.3s;
     color: white;
 
     a {
+        transition: ease-in-out 0.3s;
         color: white !important;
     }
 }
 
 .btn-destaque:hover {
-    background-color: #1D00D1;
-    color: white;
+    border: 1px solid #1D00D1;
+    background-color: #ffffff;
+    color: #1D00D1;
+    a {
+        color: #1D00D1 !important;
+    }
 }
+
 
 /* HEADER */
 
 
 /* Conteúdo Home */
+
+
+/* Botoes Home Inicio */
+
+
+.dif {
+    background-color: transparent;
+    width: fit-content;
+    border: 1px solid #ffffff;
+    transition: ease-in-out 0.3s;
+    color: #1D00D1;
+}
+
+.dif:hover {
+    border: 1px solid #1D00D1;
+    background-color: #ffffff;
+}
+/* Botoes Home Inicio */
 
 .arrow{
     display: flex;
@@ -255,11 +280,6 @@ header {
     text-align: center !important;
 }
 
-.dif{
-    border: #1D00D1 2px solid;
-    background-color: transparent;
-    color: #1D00D1;
-}
 
 .container p{
     opacity: 80%;
