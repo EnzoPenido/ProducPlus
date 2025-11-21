@@ -22,26 +22,70 @@
                 <div class="container-fluid ms-5 me-5 p-2">
                     <a class="navbar-brand m-0 " href="index.html" target="_self"><img
                             src="../assets/images/logo/LogoPequena.png"></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav gap-3 ">
-                            <li class="nav-item">
-                                <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="profile.html"><img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt=""></a>
-                            </li>
 
-                        </ul>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                        data-bs-offset="10,20"><img
+                                            src="../assets/images/svg/user-circle-svgrepo-com.svg" alt=""></a>
+                                    <div class="dropdown-center me-1">
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
+                                            <li><a class="dropdown-item" href="#">Sair</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            </ul>
+                            <ul class="navbar-nav-alternative">
+                                <a href="">
+                                    <li class="nav-item">
+                                        <a href="">Catálogo</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li class="nav-item">
+                                        <a href="">Carrinho</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li class="nav-item">
+                                        <a href="profile.html">Perfil</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="">
+                                    <li class="nav-item">
+                                        <a href="profile.html">Sair</a>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
         </div>
 
     </header>
+    
     <main>
         <div class="container-fluid filter ms-6 me-6 p-2">
             <div class="blur"></div>
