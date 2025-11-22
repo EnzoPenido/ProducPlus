@@ -70,16 +70,6 @@
                                 <span class="label-char" style="--index: 4">l</span>
                             </label>
                         </div>
-                         <div class="wave-group">
-                            <input required="" type="cnpj" class="input">
-                            <span class="bar"></span>
-                            <label class="label">
-                                <span class="label-char" style="--index: 0">C</span>
-                                <span class="label-char" style="--index: 1">N</span>
-                                <span class="label-char" style="--index: 2">P</span>
-                                <span class="label-char" style="--index: 3">J</span>
-                            </label>
-                        </div>
 
                         <div class="wave-group">
                             <input required type="text" class="input" id="telReg">
@@ -146,7 +136,7 @@
 
         const cnpjInput = document.getElementById("cnpjReg");
         const cnpjMask = IMask(cnpjInput, {
-            mask: '000.000.000/0000-00'
+            mask: '00.000.000/0000-00'
         });
 
         const telInput = document.getElementById("telReg");
@@ -160,21 +150,25 @@
         document.getElementById('btnRegistrar').addEventListener('click', async (event) => {
             event.preventDefault();
 
-            // 1. Captura os valores dos inputs
-            const cnpjCliente = document.getElementById('cnpjReg').value;
+            const cnpjFormatado = document.getElementById('cnpjReg').value;
+            const telefoneFormatado = document.getElementById('telReg').value;
+            const cnpjCliente = cnpjFormatado.replace(/\D/g, '');
+            const telefone = telefoneFormatado.replace(/\D/g, '');
             const nome = document.getElementById('nomeReg').value;
             const email = document.getElementById('emailReg').value;
-            const telefone = document.getElementById('telReg').value;
             const endereco = document.getElementById('endReg').value;
             const senha = document.getElementById('senhaReg').value;
 
-            // 2. Validação simples
             if (!cnpjCliente || !nome || !email || !senha || !telefone || !endereco) {
                 alert("Por favor, preencha TODOS os campos.");
                 return;
             }
 
-            // 3. Monta o objeto para enviar
+            if (cnpjCliente.length !== 14) {
+                alert("O CNPJ deve conter 14 números.");
+                return;
+            }
+
             const dadosCliente = {
                 cnpjCliente,
                 nome,
@@ -187,24 +181,22 @@
             try {
                 const response = await fetch(`${API_URL}/auth/register`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosCliente)
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert("Conta criada com sucesso! Faça login.");
+                    alert("Conta criada com sucesso!");
                     window.location.href = 'login.html';
                 } else {
-                    alert("Erro no cadastro: " + (data.message || "Verifique os dados"));
+                    // Mostra o erro real se houver
+                    alert("Erro: " + (data.message || data.error));
                 }
-
             } catch (error) {
-                console.error("Erro:", error);
-                alert("Erro ao conectar com o servidor.");
+                console.error(error);
+                alert("Erro de conexão.");
             }
         });
     </script>
