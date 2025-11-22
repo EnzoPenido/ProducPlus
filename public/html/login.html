@@ -87,19 +87,45 @@
     <script>
         const API_URL = 'http://localhost:3000';
 
+        // Função para ler o token
         function parseJwt(token) {
-            try {
-                return JSON.parse(atob(token.split('.')[1]));
-            } catch (e) {
-                return null;
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        // Função para redirecionar (usada no auto-login e no login manual)
+        function redirecionarUsuario(token) {
+            const payload = parseJwt(token);
+
+            if (payload && payload.tipo === 'ADMIN') {
+                window.location.href = 'profile.html';
+            } else if (payload && payload.tipo === 'CLIENTE') {
+                window.location.href = 'profile_user.html';
+            } else {
+                // Se o token for inválido, limpamos tudo
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
             }
         }
 
+        // --- 1. AUTO-LOGIN (Roda assim que a página abre) ---
+        window.addEventListener('load', () => {
+            // Tenta pegar o token do LocalStorage (Lembrar de mim) OU SessionStorage (Temporário)
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            if (token) {
+                console.log("Token encontrado! Redirecionando automaticamente...");
+                redirecionarUsuario(token);
+            }
+        });
+
+        // --- 2. LOGIN MANUAL ---
         document.getElementById('btnEntrar').addEventListener('click', async (event) => {
             event.preventDefault();
 
             const email = document.getElementById('emailLogin').value;
             const senha = document.getElementById('senhaLogin').value;
+            const checkbox = document.getElementById('checkbox'); // Checkbox "Lembrar de mim"
+
             if (!email || !senha) {
                 alert("Por favor, preencha todos os campos!");
                 return;
@@ -119,24 +145,23 @@
                     return;
                 }
 
-                localStorage.setItem('token', data.token);
-
-                // Decodifica o token para saber quem é
-                const payload = parseJwt(data.token);
-
-                // Verifica o TIPO e redireciona para a página certa
-                if (payload && payload.tipo === 'ADMIN') {
-                    alert('Bem-vindo, Administrador!');
-                    window.location.href = 'profile.html';
-                } else if (payload && payload.tipo === 'CLIENTE') {
-                    alert('Bem-vindo, Usuário!');
-                    window.location.href = 'profile_user.html';
+                // SUCESSO! Agora decidimos onde salvar o token
+                if (checkbox.checked) {
+                    // Se marcou "Lembrar de mim", salva no LocalStorage (Eterno)
+                    localStorage.setItem('token', data.token);
+                    sessionStorage.removeItem('token'); // Garante que não duplica
                 } else {
-                    alert('Erro: tipo de usuário inválido ou token inválido.');
+                    // Se NÃO marcou, salva no SessionStorage (Morre ao fechar o navegador)
+                    sessionStorage.setItem('token', data.token);
+                    localStorage.removeItem('token'); // Garante que não fica salvo pra sempre
                 }
+
+                alert('Login realizado!');
+                redirecionarUsuario(data.token);
+
             } catch (error) {
                 console.error('Erro:', error);
-                alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
+                alert('Erro de conexão.');
             }
         });
     </script>

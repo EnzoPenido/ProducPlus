@@ -47,7 +47,7 @@
                                     <div class="dropdown-center me-1">
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
-                                            <li><a class="dropdown-item" href="#">Sair</a></li>
+                                            <li><a class="dropdown-item" id="btnSair">Sair</a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -86,7 +86,7 @@
         </div>
 
     </header>
-    
+
     <main>
         <div class="container-fluid filter ms-6 me-6 p-2">
             <div style=" margin-top: 120px;" class="text-svg-catalog">
@@ -171,7 +171,7 @@
         }
 
         window.addEventListener('load', () => {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
             if (!token) {
                 window.location.href = 'login.html';
@@ -181,14 +181,21 @@
             const user = parseJwt(token);
 
             if (user.tipo === 'ADMIN') {
-                 window.location.href = 'profile.html';
-                 return;
+                window.location.href = 'profile.html';
+                return;
             }
 
             console.log("Cliente logado:", user.nome);
 
             // DICA: Aqui você pode usar user.nome para colocar o nome dele na tela!
             // document.getElementById('nomeUsuario').innerText = user.nome;
+
+            document.getElementById('btnSair').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                window.location.href = 'login.html';
+            });
         });
     </script>
 

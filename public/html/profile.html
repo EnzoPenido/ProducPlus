@@ -86,7 +86,7 @@
         </div>
 
     </header>
-    
+
     <main>
         <div class="container-fluid filter ms-6 me-6 p-2">
             <div style=" margin-top: 120px;" class="text-svg-catalog">
@@ -290,30 +290,21 @@
         }
 
         window.addEventListener('load', () => {
-            const token = localStorage.getItem('token');
-
-            // 1. Se não tem token, tchau
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             if (!token) {
                 window.location.href = 'login.html';
                 return;
             }
-
-            // 2. Ler o que tem dentro do token
             const user = parseJwt(token);
-
-            // 3. SEGURANÇA: Se não for ADMIN, chuta ele para o perfil de usuário
             if (user.tipo !== 'ADMIN') {
                 alert("Você não tem permissão para acessar a área administrativa.");
                 window.location.href = 'profile_user.html';
             }
-            
             console.log("Admin logado:", user.nome);
         });
-
-        // Função para o botão "Sair" (Logout)
-        // Lembrete: Adicionar id="btnSair" no link de logout quando tiver
         function logout() {
             localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
             window.location.href = 'login.html';
         }
     </script>
