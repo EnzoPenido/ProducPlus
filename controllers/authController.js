@@ -22,10 +22,12 @@ export const registrarCliente = async (req, res) => {
 
 export const loginCliente = async (req, res) => {
     try {
-        const { cnpjCliente, senha } = req.body;
-        if (!cnpjCliente || !senha) return res.status(400).json({ message: "cnpjCliente e senha são obrigatórios" });
+        const { email, senha } = req.body;
 
-        const cliente = await Cliente.getByCnpj(cnpjCliente);
+        if (!email || !senha) return res.status(400).json({ message: "email e senha são obrigatórios" });
+
+        const cliente = await Cliente.getByEmail(email);
+
         if (!cliente) return res.status(404).json({ message: "Cliente não encontrado" });
 
         const ok = await bcrypt.compare(senha, cliente.senha);

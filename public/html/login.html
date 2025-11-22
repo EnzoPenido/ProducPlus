@@ -38,7 +38,7 @@
                 <div class="content-size-login">
                     <div class="inputs-login">
                         <div class="wave-group">
-                            <input required="" type="email" class="input">
+                            <input required="" type="email" class="input" id="emailLogin">
                             <span class="bar"></span>
                             <label class="label">
                                 <span class="label-char" style="--index: 0">E</span>
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="wave-group">
-                            <input required="" type="password" class="input">
+                            <input required="" type="password" class="input" id="senhaLogin">
                             <span class="bar"></span>
                             <label class="label">
                                 <span class="label-char" style="--index: 0">S</span>
@@ -65,9 +65,9 @@
                         <input type="checkbox" name="checkbox" id="checkbox">
                         <label for="checkbox"> Lembrar de mim</label>
                     </div>
-                    <a class="btn-action" href="">
+                    <button class="btn-action" id="btnEntrar">
                         Entrar
-                    </a>
+                    </button>
                     <h3>Ainda não tem uma conta? <a href="register.html" target="_parent" style="color: #1714A8;">Crie
                             uma</a></h3>
                     <br>
@@ -83,6 +83,63 @@
     <footer>
 
     </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+
+        function parseJwt(token) {
+            try {
+                return JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        document.getElementById('btnEntrar').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById('emailLogin').value;
+            const senha = document.getElementById('senhaLogin').value;
+            if (!email || !senha) {
+                alert("Por favor, preencha todos os campos!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert('Erro: ' + (data.message || 'Falha no login'));
+                    return;
+                }
+
+                localStorage.setItem('token', data.token);
+
+                // Decodifica o token para saber quem é
+                const payload = parseJwt(data.token);
+
+                // Verifica o TIPO e redireciona para a página certa
+                if (payload && payload.tipo === 'ADMIN') {
+                    alert('Bem-vindo, Administrador!');
+                    window.location.href = 'profile.html';
+                } else if (payload && payload.tipo === 'CLIENTE') {
+                    alert('Bem-vindo, Usuário!');
+                    window.location.href = 'profile_user.html';
+                } else {
+                    alert('Erro: tipo de usuário inválido ou token inválido.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
+            }
+        });
+    </script>
 
 </body>
 

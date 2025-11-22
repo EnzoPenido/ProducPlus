@@ -162,8 +162,34 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous">
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+        </script>
+
+    <script>
+        function parseJwt(token) {
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = parseJwt(token);
+
+            if (user.tipo === 'ADMIN') {
+                 window.location.href = 'profile.html';
+                 return;
+            }
+
+            console.log("Cliente logado:", user.nome);
+
+            // DICA: Aqui você pode usar user.nome para colocar o nome dele na tela!
+            // document.getElementById('nomeUsuario').innerText = user.nome;
+        });
     </script>
 
     <script>

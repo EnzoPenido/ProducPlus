@@ -11,6 +11,11 @@ const Cliente = {
         return rows[0];
     },
 
+    async getByEmail(email) {
+        const [rows] = await db.query("SELECT * FROM Cliente WHERE email = ?", [email]);
+        return rows[0];
+    },
+
     async create({ cnpjCliente, nome, email, senha, telefone, endereco }) {
         await db.query(
             `INSERT INTO Cliente (cnpjCliente, nome, email, senha, telefone, endereco)
