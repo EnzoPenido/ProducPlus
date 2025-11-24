@@ -943,3 +943,9 @@ footer {
     }
 }
 /*Animação fade*/
+
+.nav-profile-img {
+    width: 32px;
+    height: 32px;
+    margin-top: -5px;
+}
