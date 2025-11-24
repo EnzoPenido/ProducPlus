@@ -394,6 +394,7 @@ spline-viewer {
 
 @media (max-width: 768px) {
     .imagem-home {
+        display: none !important;
         width: 100%;
         height: auto;
         display: flex;
@@ -402,6 +403,26 @@ spline-viewer {
             width: 70%;
             height: auto;
         }
+    }
+
+    .imagem-home spline-viewer{
+        display: none  !important;
+    }
+
+    .hide-button{
+        display: none !important;
+    }
+
+    .hide{
+        display: none !important;
+    }
+
+    .arrow img{
+        top: 0px;
+    }
+
+    .container{
+        margin-top: 40px;
     }
 
 }
