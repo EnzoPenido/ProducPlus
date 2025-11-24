@@ -65,6 +65,14 @@ p {
         margin-left: 0px;
     }
 
+    .buttons-home{
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+
+        margin-bottom: 50px;
+    }
+
 }
 
 span {
@@ -205,13 +213,13 @@ header {
 .dif {
     background-color: transparent;
     width: fit-content;
-    border: 1px solid #ffffff;
+    border: 2px solid #c2c2c2;
     transition: ease-in-out 0.3s;
-    color: #1D00D1;
+    color: #c2c2c2;
 }
 
 .dif:hover {
-    border: 1px solid #1D00D1;
+    border: 2px solid #1D00D1;
     background-color: #ffffff;
 }
 /* Botoes Home Inicio */
@@ -373,6 +381,15 @@ spline-viewer {
         }
     }
 
+    .informacoes2{
+        display: flex !important;
+        flex-direction: column-reverse !important;
+    }
+
+    .marka img{
+        height: 300px !important;
+    }
+
 }
 
 @media (max-width: 768px) {
@@ -387,6 +404,30 @@ spline-viewer {
         }
     }
 
+}
+
+@media (max-width: 600px) {
+    .link-footer{
+        display: flex;
+        flex-direction: column;
+        text-align: start;
+    }
+
+    .link-footer h1{
+        text-align: start;
+    }
+
+    footer{
+        height: auto !important;
+    }
+
+}
+
+@media (max-width: 510px){
+    footer{
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .a-bonito {
@@ -466,6 +507,7 @@ spline-viewer {
 }
 
 .info-text {
+    height: auto !important;
     padding: 30px;
 }
 
@@ -506,6 +548,7 @@ spline-viewer {
 .texto-info {
     margin: 0;
     font-size: 15pt;
+    height: auto;
 }
 
 /* ----------------------  */
@@ -804,6 +847,9 @@ footer {
 
 .informacoes2 .info-text {
     transition-delay: 0.1s;
+    height: auto !important;
+
+    margin-bottom: 60px;
 }
 
 .informacoes2 .info-img {
