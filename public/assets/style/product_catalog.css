@@ -688,3 +688,7 @@ li a:hover {
         flex-direction: column;
     }
 }
+
+.dropdown-menu{
+    --bs-dropdown-link-active-bg: #1811AC;
+}
