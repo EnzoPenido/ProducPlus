@@ -676,6 +676,10 @@ li a:hover {
         width: 90%;
     }
 
+    .blur{
+        width: 97%;
+    }
+
 }
 
 @media (max-width: 510px){
