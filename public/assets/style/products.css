@@ -439,8 +439,9 @@ li a:hover{
 
 .container-products{
     display: flex;
-    width: 100%;
+    width: 88%;
     min-height: auto;
+    margin: auto;
 
     background-color: #f5f5f500;
 
