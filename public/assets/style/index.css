@@ -575,6 +575,7 @@ spline-viewer {
     display: flex;
     padding: 30px;
     margin-top: 50px;
+    margin-bottom: 100px;
 
     flex-wrap: nowrap;
 
