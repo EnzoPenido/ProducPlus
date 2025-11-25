@@ -29,33 +29,27 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav gap-3 ">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="#about" target="_parent">Sobre</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="contact.html" target="_parent">Contato</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    Catálogo
-                                </a>
-                                <ul class="dropdown-menu">
-                                   
-                                    <li><a class="dropdown-item" href="product_catalog.html">Ver catálogo</a></li>
-                                    
-                                    
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="products.html">Produtos</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item btn-destaque">
-                                <a class="nav-link" href="login.html" target="_parent">Entrar</a>
+                        <ul class="navbar-nav gap-3">
+
+                            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Sobre-nós</a></li>
+                            <li class="nav-item"><a class="nav-link" href="contact.html">Contato</a></li>
+
+                            <li class="nav-item btn-destaque" id="nav-entrar">
+                                <a class="nav-link" href="login.html">Entrar</a>
                             </li>
 
+                            <li class="nav-item d-none" id="nav-perfil">
+                                <a type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                    data-bs-offset="10,20"><img src="../assets/images/svg/user-circle-svgrepo-com.svg"
+                                        class="nav-profile-img" alt=""></a>
+                                <div class="dropdown-center me-1">
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
+                                        <li><a class="dropdown-item" id="btnSair">Sair</a></li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -76,13 +70,20 @@
 
                             <h1 class="titulo-home">Seus <span>produtos</span><br> com <span>mais</span> qualidade.</h1>
                             <p>Sua plataforma de gestão de produção eficiente e intuitiva.</p>
-                            <div class="buttons-home">
-                                <button class="btn btn-destaque d-flex" onclick="location.href='register.html'">Comece
-                                    agora</button>
-                                <button class="dif btn btn-destaque d-flex"
-                                    onclick="location.href='product_catalog.html'">Catálogo</button>
+                            <div class="buttons-home" id="container-botoes">
+
+                                <button class="btn-action btn btn-destaque d-flex" id="btn-comece"
+                                    onclick="location.href='register.html'">
+                                    Comece agora
+                                </button>
+
+                                <button class="btn-action dif btn btn-destaque d-flex"
+                                    onclick="location.href='product_catalog.html'">
+                                    Catálogo
+                                </button>
+
                             </div>
-                            <p class="">Tentando acessar o ProducPlus? <a class="a-bonito"
+                            <p id="texto-login-extra">Tentando acessar o ProducPlus? <a class="a-bonito"
                                     href="./login.html">Entrar</a></p>
                         </div>
                     </div>
@@ -362,6 +363,54 @@
         crossorigin="anonymous"></script>
     <script src="../assets/js/marquee-home.js"></script>
     <script src="../assets/js/scroll-reveal.js"></script>
+
+    <script>
+        function parseJwt(token) {
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            // Elementos
+            const navEntrar = document.getElementById('nav-entrar');
+            const navPerfil = document.getElementById('nav-perfil');
+            const btnComece = document.getElementById('btn-comece');
+            const textoLoginExtra = document.getElementById('texto-login-extra');
+
+            if (token) {
+                // --- LOGADO ---
+                // 1. Navbar
+                if (navEntrar) navEntrar.classList.add('d-none');
+
+                if (navPerfil) {
+                    navPerfil.classList.remove('d-none');
+
+                    const user = parseJwt(token);
+                    const link = navPerfil.querySelector('a');
+                    if (user && user.tipo === 'ADMIN') link.href = 'profile.html';
+                    else link.href = 'profile_user.html';
+                }
+
+                // 2. Botões e Textos
+                if (btnComece) btnComece.classList.add('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+
+            } else {
+                // --- DESLOGADO ---
+                if (navEntrar) navEntrar.classList.remove('d-none');
+                if (navPerfil) navPerfil.classList.add('d-none');
+                if (btnComece) btnComece.classList.remove('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
+            }
+            document.getElementById('btnSair').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
 
 </body>
 
