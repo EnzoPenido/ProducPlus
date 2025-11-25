@@ -369,7 +369,7 @@ h3 {
 footer {
     display: flex;
     margin: auto;
-    width: 85%;
+    width: 85% !important;
     height: 300px;
 
     background-color: #1811AC;
@@ -1301,14 +1301,6 @@ main {
     font-size: 10pt !important;
     color: #1800ad;
     font-weight: bold;
-}
-
-footer {
-    display: flex;
-    width: 100%;
-    background-color: #1811AC;
-    padding: 35px;
-    gap: 45px;
 }
 
 footer ul {
