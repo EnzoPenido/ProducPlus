@@ -9,6 +9,7 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/style/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <script src="https://kit.fontawesome.com/fefb6d759c.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
@@ -31,18 +32,32 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul class="navbar-nav gap-3">
 
-                            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Sobre-nós</a></li>
+                            
+                            
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contato</a></li>
-
+                             <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Catálogo
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="product_catalog.html">Ver categorias</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="products.html">Produtos</a></li>
+                                </ul>
+                            </li>
                             <li class="nav-item btn-destaque" id="nav-entrar">
                                 <a class="nav-link" href="login.html">Entrar</a>
                             </li>
 
-                            <li class="nav-item d-none" id="nav-perfil">
-                                <a type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-offset="10,20"><img src="../assets/images/svg/user-circle-svgrepo-com.svg"
-                                        class="nav-profile-img" alt=""></a>
+                             
+                             <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
+                                <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" data-bs-offset="10,20">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
                                 <div class="dropdown-center me-1">
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
