@@ -18,94 +18,97 @@
 
 <body>
 
-     <header class="d-flex justify-content-center camada-nav">
-    <div class="container container-navbar m-sm-0 p-sm-0">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid ms-5 me-5 p-2">
-                <a class="navbar-brand m-0" href="index.html" target="_self">
-                    <img src="../assets/images/logo/LogoPequena.png">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <header class="d-flex justify-content-center camada-nav">
+        <div class="container container-navbar m-sm-0 p-sm-0">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid ms-5 me-5 p-2">
+                    <a class="navbar-brand m-0" href="index.html" target="_self">
+                        <img src="../assets/images/logo/LogoPequena.png">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <!-- Menu desktop (fora do offcanvas) -->
-                <div class="collapse navbar-collapse justify-content-end" id="navbarDesktop">
-                    <ul class="navbar-nav gap-3 align-items-center">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Catálogo
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="product_catalog.html">Ver catálogo</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="products.html">Produtos</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item nav-item-icon p-0">
-                            <a class="nav-link nav-link-icon" aria-current="page" href="carrinho.html" target="_parent">
-                                <i class="fa-solid fa-cart-plus"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item nav-item-icon btn-destaque p-0">
-                            <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown" 
-                                aria-expanded="false" data-bs-offset="10,20">
-                                <i class="fa-solid fa-user"></i>
-                            </a>
-                            <div class="dropdown-center me-1">
+                    <!-- Menu desktop (fora do offcanvas) -->
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarDesktop">
+                        <ul class="navbar-nav gap-3 align-items-center">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Catálogo
+                                </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
-                                    <li><a class="dropdown-item" href="#">Sair</a></li>
+                                    <li><a class="dropdown-item" href="product_catalog.html">Ver categorias</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="products.html">Produtos</a></li>
                                 </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Offcanvas para mobile -->
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                    aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <!-- Menu alternativo para mobile -->
-                        <ul class="navbar-nav-alternative">
-                            <a href="product_catalog.html">
-                                <li class="nav-item">
-                                    <span>Catálogo</span>
-                                    <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                                </li>
-                            </a>
-                            <a href="carrinho.html">
-                                <li class="nav-item">
-                                    <span>Carrinho</span>
-                                    <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                                </li>
-                            </a>
-                            <a href="profile_user.html">
-                                <li class="nav-item">
-                                    <span>Perfil</span>
-                                    <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                                </li>
-                            </a>
-                            <a href="#" onclick="sair()">
-                                <li class="nav-item">
-                                    <span>Sair</span>
-                                    <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                                </li>
-                            </a>
+                            </li>
+                            <li class="nav-item nav-item-icon p-0">
+                                <a class="nav-link nav-link-icon" aria-current="page" href="carrinho.html"
+                                    target="_parent">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item nav-item-icon btn-destaque p-0">
+                                <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" data-bs-offset="10,20">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+                                <div class="dropdown-center me-1">
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
+                                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
+
+                    <!-- Offcanvas para mobile -->
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <!-- Menu alternativo para mobile -->
+                            <ul class="navbar-nav-alternative">
+                                <a href="product_catalog.html">
+                                    <li class="nav-item">
+                                        <span>Catálogo</span>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="carrinho.html">
+                                    <li class="nav-item">
+                                        <span>Carrinho</span>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="profile_user.html">
+                                    <li class="nav-item">
+                                        <span>Perfil</span>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                                <a href="#" onclick="sair()">
+                                    <li class="nav-item">
+                                        <span>Sair</span>
+                                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </div>
-</header>
+            </nav>
+        </div>
+    </header>
 
     <main>
         <div class="container-fluid filter ms-6 me-6 p-2">
