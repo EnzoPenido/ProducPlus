@@ -562,10 +562,10 @@ h3 {
         transition: background-color 0.1s;
     }
     .text-button-catalog span {
-    display: flex;
-    width: 150px;
-    text-align: center;
-    margin: auto;
+    display: flex !important;
+    width: 150px !important;
+    text-align: center !important;
+    margin: auto !important;
 }
 
 }
@@ -592,7 +592,8 @@ h3 {
 
 .text-button-catalog span {
     display: flex;
-    width: 150px;
+    width: 250px;
+    opacity: 70%;
 }
 
 .text-button-catalog a {
@@ -633,9 +634,9 @@ h3 {
 }
 
 .img-block-catalog img {
-    width: auto;
+    width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 @media(max-width: 768px) {
@@ -650,6 +651,20 @@ h3 {
         width: auto;
         height: 100%;
         object-fit: cover;
+    }
+
+    .text-catalog{
+        text-align: center;
+    }
+
+    .text-svg-catalog{
+        justify-content: center;
+    }
+
+    .text-svg-catalog span{
+        display: flex;
+        justify-content: center;
+        text-align: center;
     }
 
 }
@@ -891,11 +906,11 @@ footer {
     .search-bar{
         height: 40px;
         margin-left: 0;
-        width: 70%;
+        width: 100%;
     }
 
     .search-bar:focus{
-        width: 90%;
+        width: 100%;
     }
 
     .blur{

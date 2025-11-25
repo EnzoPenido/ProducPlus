@@ -368,13 +368,40 @@ h3 {
 /*Footer*/
 footer {
     display: flex;
-    width: 100%;
+    margin: auto;
+    width: 85% !important;
     height: 300px;
 
     background-color: #1811AC;
     border-radius: 10px 10px 0px 0px;
 
     padding: 35px 35px 35px 55px;
+
+    ul {
+        list-style: none;
+        margin-top: 20px;
+    }
+
+    ul h1 {
+        font-family: Roboto;
+        font-size: 15pt;
+        color: white;
+    }
+
+    li {
+        font-family: Roboto;
+        font-size: 11pt;
+    }
+
+    li a {
+        color: rgba(255, 255, 255, 0.653);
+        text-decoration: none;
+    }
+
+    li a:hover {
+        color: rgb(255, 255, 255);
+        text-decoration: underline;
+    }
 }
 
 .svg-footer-content {
@@ -421,30 +448,74 @@ footer {
     column-gap: 45px;
 }
 
-ul {
-    list-style: none;
-    margin-top: 20px;
+@media (max-width: 600px) {
+    .link-footer{
+        display: flex;
+        flex-direction: column;
+        text-align: start;
+    }
+
+    .link-footer h1{
+        text-align: start;
+    }
+
+    footer{
+        height: auto !important;
+    }
+
+    .filter-search-bar{
+        display: flex;
+        height: auto;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+
+    .filter-search-bar h1{
+        display: none;
+        height: auto;
+        line-height: 15px;
+        border-right: 0px;
+        border-bottom: 1px solid white;
+        padding-bottom: 5px;
+
+        text-align: center;
+    }
+
+    .filter-search-bar img{
+        display: none;
+    }
+
+    .filter-search-bar select{
+        display: none;
+    }
+
+    .search-bar{
+        height: 40px;
+        margin-left: 0;
+        width: 70%;
+    }
+
+    .search-bar:focus{
+        width: 90%;
+    }
+
+    .blur{
+        width: 97%;
+    }
+
 }
 
-ul h1 {
-    font-family: Roboto;
-    font-size: 15pt;
-    color: white;
+@media (max-width: 510px){
+    footer{
+        display: flex;
+        flex-direction: column;
+    }
 }
 
-li {
-    font-family: Roboto;
-    font-size: 11pt;
-}
-
-li a {
-    color: rgba(255, 255, 255, 0.653);
-    text-decoration: none;
-}
-
-li a:hover {
-    color: rgb(255, 255, 255);
-    text-decoration: underline;
+.dropdown-menu{
+    --bs-dropdown-link-active-bg: #1811AC;
 }
 
 /*Footer*/
@@ -1230,14 +1301,6 @@ main {
     font-size: 10pt !important;
     color: #1800ad;
     font-weight: bold;
-}
-
-footer {
-    display: flex;
-    width: 100%;
-    background-color: #1811AC;
-    padding: 35px;
-    gap: 45px;
 }
 
 footer ul {
