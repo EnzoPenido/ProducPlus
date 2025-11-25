@@ -386,6 +386,18 @@ spline-viewer {
         flex-direction: column-reverse !important;
     }
 
+    .informacoes{
+        flex-direction: column !important;
+    }
+
+    .informacoes2 .info-text{
+        width: 100% !important;
+    }
+
+    .info-text{
+        width: 100% !important;
+    }
+
     .marka img{
         height: 300px !important;
     }
@@ -506,16 +518,20 @@ spline-viewer {
 
 
 .informacoes {
+    display: flex;
     padding: 30px;
     margin-top: 50px;
+
+    flex-wrap: nowrap;
 
 }
 
 .informacoes2 {
+    display: flex;
     padding: 30px;
     margin-top: 50px;
-    display: flex;
-    flex-direction: row;
+
+    flex-wrap: nowrap;
 
 }
 
@@ -528,7 +544,7 @@ spline-viewer {
 }
 
 .info-text {
-    width: auto !important;
+    width: 50%;
     height: auto !important;
     padding: 30px;
 }
@@ -540,6 +556,10 @@ spline-viewer {
         display: flex;
         flex-direction: column-reverse;
 
+    }
+
+    .informacoes{
+        flex-direction: column;
     }
 
     .info-img {
@@ -571,6 +591,7 @@ spline-viewer {
     margin: 0;
     font-size: 14pt;
     height: auto;
+    text-align: justify;
 }
 
 /* ----------------------  */
@@ -938,7 +959,7 @@ footer {
 }
 
 .informacoes2 .info-text {
-    width: auto !important;
+    width: 50%;
     transition-delay: 0.1s;
     height: auto !important;
 
