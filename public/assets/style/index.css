@@ -27,9 +27,9 @@ body {
 }
 
 main {
-   
+    padding-top: 93.06px;
     width: auto;
-    height: fit-content;
+    height: 100dvh;
 
     justify-content: center;
     align-items: center;
