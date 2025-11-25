@@ -793,8 +793,6 @@ span {
 span:hover {
     font-family: Roboto;
     color: #1811AC;
-    text-decoration: underline;
-    font-weight: bolder;
 }
 
 .product-action-txt a img {
@@ -1021,11 +1019,6 @@ main {
     transition: font-weight 0.2s;
 }
 
-.back-button a:hover {
-    text-decoration: underline;
-    font-weight: bold;
-}
-
 .product-all-content {
     display: flex;
     width: 100%;
@@ -1036,7 +1029,7 @@ main {
 
 .product-img-content {
     width: 65%;
-    height: 38rem !important;
+    height: 550px !important;
     background-color: #ECECEC;
     border-radius: 10px;
 
@@ -1046,10 +1039,10 @@ main {
 }
 
 .product-txt-content {
-    width: 55%;
+    width: 60%;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 10px;
 }
 
 .product-txt-content h1 {
@@ -1160,16 +1153,21 @@ main {
     transition: color 0.3s;
 }
 
+.specs-button span{
+    margin-bottom: 0;
+}
+
 .specs-button:hover {
     color: #1800ad;
 }
 
-.specs-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    transition: transform 0.3s;
-    font-size: 16pt;
+.specs-icon{
+    width: 15px;
+    height: 15px;
+    height: 100%;
+    object-fit: cover;
+
+    transition: transform 0.2s;
 }
 
 .specs-button.active .specs-icon {
@@ -1191,7 +1189,7 @@ main {
 }
 
 .specs-content {
-    padding: 30px;
+    padding: 15px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
@@ -1229,7 +1227,7 @@ main {
 
 .spec-value {
     font-family: Roboto;
-    font-size: 11pt;
+    font-size: 10pt !important;
     color: #1800ad;
     font-weight: bold;
 }
@@ -1270,6 +1268,13 @@ footer li a:hover {
     text-decoration: underline;
 }
 
+@media (max-width: 1200px) {
+    .spec-item{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 @media (max-width: 768px) {
     .product-all-content {
         flex-direction: column;
@@ -1282,5 +1287,20 @@ footer li a:hover {
 
     .specs-content {
         grid-template-columns: 1fr;
+    }
+
+    .product-img-content {
+        width: 100%;
+        height: 350px !important;
+        background-color: #ECECEC;
+        border-radius: 10px;
+
+        position: static;
+        top: 100px;
+        align-self: flex-start;
+    }
+    .spec-item{
+        display: flex;
+        flex-direction: row;
     }
 }
