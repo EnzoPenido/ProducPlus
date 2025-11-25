@@ -27,7 +27,7 @@ body {
 }
 
 main {
-    padding-top: 93.06px;
+    padding-top: 130px;
     width: auto;
     height: 100dvh;
 
@@ -431,6 +431,18 @@ spline-viewer {
         flex-direction: column-reverse !important;
     }
 
+    .informacoes{
+        flex-direction: column !important;
+    }
+
+    .informacoes2 .info-text{
+        width: 100% !important;
+    }
+
+    .info-text{
+        width: 100% !important;
+    }
+
     .marka img{
         height: 300px !important;
     }
@@ -551,16 +563,20 @@ spline-viewer {
 
 
 .informacoes {
+    display: flex;
     padding: 30px;
     margin-top: 50px;
+
+    flex-wrap: nowrap;
 
 }
 
 .informacoes2 {
+    display: flex;
     padding: 30px;
     margin-top: 50px;
-    display: flex;
-    flex-direction: row;
+
+    flex-wrap: nowrap;
 
 }
 
@@ -573,6 +589,7 @@ spline-viewer {
 }
 
 .info-text {
+    width: 50%;
     height: auto !important;
     padding: 30px;
 }
@@ -584,6 +601,10 @@ spline-viewer {
         display: flex;
         flex-direction: column-reverse;
 
+    }
+
+    .informacoes{
+        flex-direction: column;
     }
 
     .info-img {
@@ -613,8 +634,9 @@ spline-viewer {
 
 .texto-info {
     margin: 0;
-    font-size: 15pt;
+    font-size: 14pt;
     height: auto;
+    text-align: justify;
 }
 
 /* ----------------------  */
@@ -701,6 +723,76 @@ footer {
     background-color: rgba(250, 235, 215, 0);
 
     column-gap: 45px;
+}
+
+@media (max-width: 600px) {
+    .link-footer{
+        display: flex;
+        flex-direction: column;
+        text-align: start;
+    }
+
+    .link-footer h1{
+        text-align: start;
+    }
+
+    footer{
+        height: auto !important;
+    }
+
+    .filter-search-bar{
+        display: flex;
+        height: auto;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+
+    .filter-search-bar h1{
+        display: none;
+        height: auto;
+        line-height: 15px;
+        border-right: 0px;
+        border-bottom: 1px solid white;
+        padding-bottom: 5px;
+
+        text-align: center;
+    }
+
+    .filter-search-bar img{
+        display: none;
+    }
+
+    .filter-search-bar select{
+        display: none;
+    }
+
+    .search-bar{
+        height: 40px;
+        margin-left: 0;
+        width: 70%;
+    }
+
+    .search-bar:focus{
+        width: 90%;
+    }
+
+    .blur{
+        width: 97%;
+    }
+
+}
+
+@media (max-width: 510px){
+    footer{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.dropdown-menu{
+    --bs-dropdown-link-active-bg: #1811AC;
 }
 
 /*Footer*/
@@ -912,6 +1004,7 @@ footer {
 }
 
 .informacoes2 .info-text {
+    width: 50%;
     transition-delay: 0.1s;
     height: auto !important;
 
