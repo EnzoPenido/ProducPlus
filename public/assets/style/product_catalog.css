@@ -339,10 +339,10 @@ h3 {
         transition: background-color 0.1s;
     }
     .text-button-catalog span {
-    display: flex;
-    width: 150px;
-    text-align: center;
-    margin: auto;
+    display: flex !important;
+    width: 150px !important;
+    text-align: center !important;
+    margin: auto !important;
 }
 
 }
