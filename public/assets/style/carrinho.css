@@ -390,7 +390,6 @@ li img:hover {
 }
 
 /* HEADER */
-<<<<<<< HEAD
 
 /*Offcanvas*/
 .offcanvas {
@@ -545,10 +544,6 @@ li img:hover {
         height: 20px;
     }
 }
-
-
-=======
->>>>>>> 5a3c9a9aea66bc30aac16a538bbe9b6ad760c14d
 header {
     background-color: #ffffff;
     position: fixed;
@@ -557,10 +552,10 @@ header {
     z-index: 2;
 }
 
-<<<<<<< HEAD
+
 /* Faz o risco apareer quando a tela é pequena */
-=======
->>>>>>> 5a3c9a9aea66bc30aac16a538bbe9b6ad760c14d
+
+
 @media (max-width: 992px) {
     ul {
 
@@ -570,7 +565,6 @@ header {
 
 
     }
-<<<<<<< HEAD
 }
 
 #logo {
@@ -607,11 +601,6 @@ header {
     background-color: #ffffff;
 }
 
-=======
-}
-
-
->>>>>>> 5a3c9a9aea66bc30aac16a538bbe9b6ad760c14d
 .navbar-brand {
     img {
         width: 50px;
@@ -626,7 +615,6 @@ header {
     border: 1px solid transparent;
 }
 
-<<<<<<< HEAD
 .nav-item:hover {
     border: #5964ff 1px solid;
 
@@ -674,10 +662,10 @@ header {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
     color: #ffffff !important;
-=======
+}
 .btn-destaque {
     background-color: #1800ad;
-    width: fit-content;
+    width: fit-content; 
     transition: ease-in-out 0.3s;
 
     a {
@@ -687,7 +675,7 @@ header {
 
 .btn-destaque:hover {
     background-color: #5964ff;
->>>>>>> 5a3c9a9aea66bc30aac16a538bbe9b6ad760c14d
+
 }
 
 /* HEADER */
@@ -1039,8 +1027,7 @@ footer {
     column-gap: 45px;
 }
 
-<<<<<<< HEAD
-=======
+
 @media (max-width: 600px) {
     .link-footer{
         display: flex;
@@ -1111,7 +1098,6 @@ footer {
     --bs-dropdown-link-active-bg: #1811AC;
 }
 
->>>>>>> 5a3c9a9aea66bc30aac16a538bbe9b6ad760c14d
 /*Footer*/
 
 /*Products */

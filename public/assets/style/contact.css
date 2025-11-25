@@ -604,9 +604,9 @@ footer {
     column-gap: 45px;
 }
 
-<<<<<<< HEAD
+
 /*Footer*/
-=======
+
 @media (max-width: 600px) {
     .link-footer{
         display: flex;
@@ -678,4 +678,4 @@ footer {
 }
 
 /*Footer*/
->>>>>>> 5a3c9a9aea66bc30aac16a538bbe9b6ad760c14d
+

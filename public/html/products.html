@@ -52,7 +52,12 @@
                                     <i class="fa-solid fa-cart-plus"></i>
                                 </a>
                             </li>
-                            <li class="nav-item nav-item-icon btn-destaque p-0">
+                            <li class="nav-item btn-destaque" id="nav-entrar">
+                                <a class="nav-link" href="login.html">Entrar</a>
+                            </li>
+
+                             
+                             <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
                                 <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false" data-bs-offset="10,20">
                                     <i class="fa-solid fa-user"></i>
@@ -60,7 +65,7 @@
                                 <div class="dropdown-center me-1">
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
-                                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                                        <li><a class="dropdown-item" id="btnSair">Sair</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -345,6 +350,54 @@
             </footer>
         </div>
     </main>
+    
+    <script>
+        function parseJwt(token) {
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            // Elementos
+            const navEntrar = document.getElementById('nav-entrar');
+            const navPerfil = document.getElementById('nav-perfil');
+            const btnComece = document.getElementById('btn-comece');
+            const textoLoginExtra = document.getElementById('texto-login-extra');
+
+            if (token) {
+                // --- LOGADO ---
+                // 1. Navbar
+                if (navEntrar) navEntrar.classList.add('d-none');
+
+                if (navPerfil) {
+                    navPerfil.classList.remove('d-none');
+
+                    const user = parseJwt(token);
+                    const link = navPerfil.querySelector('a');
+                    if (user && user.tipo === 'ADMIN') link.href = 'profile.html';
+                    else link.href = 'profile_user.html';
+                }
+
+                // 2. Botões e Textos
+                if (btnComece) btnComece.classList.add('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+
+            } else {
+                // --- DESLOGADO ---
+                if (navEntrar) navEntrar.classList.remove('d-none');
+                if (navPerfil) navPerfil.classList.add('d-none');
+                if (btnComece) btnComece.classList.remove('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
+            }
+            document.getElementById('btnSair').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
