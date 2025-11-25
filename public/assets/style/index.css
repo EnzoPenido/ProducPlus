@@ -144,6 +144,7 @@ header {
     z-index: 10;
 }
 
+
 .camada {
     z-index: 13;
 }
@@ -177,6 +178,11 @@ header {
 .nav-item:hover {
     border: #5964ff 1px solid;
 }
+
+.navbar-nav .nav-link.show{
+    color: #1D00D1;
+}
+
 
 .btn-destaque {
     background-color: #1D00D1;
