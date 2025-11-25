@@ -8,16 +8,38 @@
     <link rel="shortcut icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../assets/style/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <nav>
+    <header class="d-flex justify-content-center camada-nav">
+        <div class="container container-navbar m-sm-0 p-sm-0 ">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid ms-5 me-5 p-2">
+                    <a class="navbar-brand m-0 " href="index.html" target="_self"><img
+                            src="../assets/images/logo/LogoPequena.png"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav gap-3 ">
 
-        </nav>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="contact.html" target="_parent">Contato</a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
     </header>
 
     <main>
@@ -114,9 +136,13 @@
                         <a class="btn-action" href="#" id="btnRegistrar">
                             Criar conta
                         </a>
-                        <h3>Já tem uma conta? <a href="login.html" target="_parent" style="color: #1714A8;">Faça
+                      
+                        <h3 >Já tem uma conta? <a href="login.html" target="_parent" style="color: #1714A8;">Faça
                                 Login</a></h3>
-                        <br>
+                    </div>
+                </div>
+                
+                
             </section>
 
         </div>
@@ -126,6 +152,9 @@
     <footer>
 
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
     <script src="https://unpkg.com/imask"></script>
     <script>
         const API_URL = 'http://localhost:3000';

@@ -115,6 +115,45 @@ header {
     z-index: 2;
 }
 
+.nav-item-icon {
+    border-radius: 10px;
+    padding: 0px 0.5rem;
+    width: 42px;
+    height: 42px;
+
+    width: fit-content;
+    background-color: #ffffff;
+    transition: ease-in-out 0.3s;
+    color: #1D00D1;
+    border: 1px solid transparent;
+}
+
+.nav-item-icon:hover {
+    border: #5964ff 1px solid;
+    background-color: #1D00D1;
+    color: #ffffff;
+
+}
+
+.nav-link-icon {
+    font-size: 1.3rem;
+    width: 42px;
+    height: 42px;
+    color: #1D00D1;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.nav-link-icon:hover {
+    font-size: 1.3rem;
+    border-radius: 50px;
+    width: 42px;
+    height: 42px;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    color: #ffffff !important;
+}
+
 /* Faz o risco apareer quando a tela é pequena */
 @media (max-width: 992px) {
     ul {
@@ -143,6 +182,7 @@ header {
     align-items: end;
     z-index: 10;
 }
+
 
 .camada {
     z-index: 13;
@@ -177,6 +217,11 @@ header {
 .nav-item:hover {
     border: #5964ff 1px solid;
 }
+
+.navbar-nav .nav-link.show{
+    color: #a0a0a0;
+}
+
 
 .btn-destaque {
     background-color: #1D00D1;
@@ -1036,3 +1081,9 @@ footer {
     }
 }
 /*Animação fade*/
+
+.nav-profile-img {
+    width: 32px;
+    height: 32px;
+    margin-top: -5px;
+}
