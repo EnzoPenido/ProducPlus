@@ -842,11 +842,13 @@ footer {
         margin-left: auto;
         height: 20px;
     }
+
+  
 }
 
 @media (max-width: 745px){
     .container-products-item{
-        width: 100%;
+        width: 200px;
     }
 
     .link-item{
@@ -929,7 +931,13 @@ footer {
     footer{
         display: flex;
         flex-direction: column;
-    }
+    }/* 
+      .container-products {
+    display: flex;
+    width: 100%;
+    padding: 0%;
+  
+} */
 }
 
 .dropdown-menu{
