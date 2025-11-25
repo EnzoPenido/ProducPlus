@@ -930,3 +930,53 @@ footer {
 .dropdown-menu{
     --bs-dropdown-link-active-bg: #1811AC;
 }
+
+/*End Catalog */
+.end-catalog-content {
+    display: flex;
+    width: 100%;
+    height: 150px;
+
+    background-color: #1700ad00;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 10px;
+
+}
+
+.end-catalog-content img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+    opacity: 70%;
+}
+
+.end-catalog-content span {
+    font-family: Roboto;
+    font-size: 14pt;
+    color: rgba(0, 0, 0, 0.57);
+    margin-bottom: 5px;
+}
+
+.end-catalog-content a {
+    display: flex;
+
+    color: #1700ad;
+
+    justify-content: center;
+    align-items: center;
+
+    text-decoration: none;
+    font-size: 13pt;
+    font-family: Roboto;
+
+    border-radius: 5px;
+}
+
+.end-catalog-content a:hover {
+    text-decoration: underline;
+}
+/*End Catalog */
