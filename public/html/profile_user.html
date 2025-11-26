@@ -10,11 +10,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/style/profile.css">
+    <link rel="stylesheet" href="../assets/style/pedidos-slider.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../assets/js/pedidos-slider.js"></script>
 </head>
 
 <body>
@@ -130,18 +132,31 @@
             </div>
 
             <div class="dashboard-container">
-                <!-- Card Pedidos -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title">Seus pedidos</div>
-                        <div class="card-value">30</div>
-                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de fornecedores</div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="suppliersChart"></canvas>
+                <div id="pedidos-slider-container">
+                    <!-- slider renderizado aqui -->
+                    <div class="pedidos-container">
+                
+                        <div class="pedidos-slider-wrapper">
+                            <div class="pedidos-slider" id="pedidosSlider">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Carregando pedidos...
+                                </div>
+                            </div>
+                
+                            <div class="slider-controls" id="sliderControls" style="display: none;">
+                                <button class="slider-btn" id="prevBtn" onclick="handlePrev()">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span class="slider-info">
+                                    <span id="currentSlide">0</span> / <span id="totalSlides">0</span>
+                                </span>
+                                <button class="slider-btn" id="nextBtn" onclick="handleNext()">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
             <footer>
