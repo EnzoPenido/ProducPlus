@@ -136,13 +136,13 @@
                         <a class="btn-action" href="#" id="btnRegistrar">
                             Criar conta
                         </a>
-                      
-                        <h3 >Já tem uma conta? <a href="login.html" target="_parent" style="color: #1714A8;">Faça
+
+                        <h3>Já tem uma conta? <a href="login.html" target="_parent" style="color: #1714A8;">Faça
                                 Login</a></h3>
                     </div>
                 </div>
-                
-                
+
+
             </section>
 
         </div>
@@ -191,6 +191,11 @@
 
             if (cnpjCliente.length !== 14) {
                 alert("O CNPJ deve conter 14 números.");
+                return;
+            }
+
+            if (email.endsWith('@producplus.com')) {
+                alert("O domínio @producplus.com é reservado para a equipe administrativa.");
                 return;
             }
 
