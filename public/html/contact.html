@@ -157,7 +157,7 @@
         function carregarFotoPerfilGlobal() {
             const imagemSalva = localStorage.getItem('userProfileImage');
             // Pega o elemento 'a' que envolve o ícone
-            const containerIcone = document.querySelector('.nav-link-icon');
+            const containerIcone = document.querySelector('#nav-perfil .nav-link-icon');
 
             if (imagemSalva && containerIcone) {
                 // Remove o ícone <i> e coloca a imagem <img>
