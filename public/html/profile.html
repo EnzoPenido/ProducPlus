@@ -46,7 +46,7 @@
                                     <li><a class="dropdown-item" href="products.html">Produtos</a></li>
                                 </ul>
                             </li>
-                          
+
                         </ul>
                     </div>
 
@@ -67,7 +67,7 @@
                                         <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                                     </li>
                                 </a>
-                               
+
                                 <a href="profile_user.html">
                                     <li class="nav-item">
                                         <span>Perfil</span>
@@ -103,6 +103,9 @@
                             <h2>Administrador</h2>
                         </div>
                     </div>
+                    <a type="button" class="btn btn-primary" id="btn-upload-foto">Editar foto de perfil</a>
+                    <input type="file" id="file-input-foto" accept="image/*" style="display: none;">
+                    <a type="button" class="logout-btn">Sair</a>
                 </div>
                 <img class="img-profile-hero" src="../assets/images/svg/adm_profile_hero_ProducPlus.svg" alt="">
             </section>
@@ -286,27 +289,139 @@
     </script>
 
     <script>
+        const API_URL = 'http://localhost:3000';
+
+        // 1. Decodifica o Token
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
 
+        // 2. Carrega a foto em todos os ícones da tela (Navbar e Principal)
+        function carregarFotoPerfilGlobal() {
+            // Agora pegamos a URL que veio do backend e foi salva no localStorage
+            const imagemSalva = localStorage.getItem('userProfileImage');
+
+            if (imagemSalva) {
+                // Atualiza ícone da navbar
+                const navIcons = document.querySelectorAll('.nav-profile-img');
+                navIcons.forEach(img => img.src = imagemSalva);
+
+                // Atualiza imagem grande do perfil (se existir na tela)
+                const mainImage = document.getElementById('main-profile-image');
+                if (mainImage) mainImage.src = imagemSalva;
+            }
+        }
+
+        // --- AO CARREGAR A PÁGINA ---
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            // A. Segurança: Verifica Login
             if (!token) {
                 window.location.href = 'login.html';
                 return;
             }
+
             const user = parseJwt(token);
+
+            // B. Segurança: Verifica se é ADMIN
             if (user.tipo !== 'ADMIN') {
-                alert("Você não tem permissão para acessar a área administrativa.");
+                alert("Acesso restrito a administradores.");
                 window.location.href = 'profile_user.html';
+                return;
             }
+
             console.log("Admin logado:", user.nome);
+
+            // C. Carrega a foto atual
+            carregarFotoPerfilGlobal();
+
+            // D. Configura Botões de Sair (Logout)
+            const botoesSair = document.querySelectorAll('.logout-btn');
+            botoesSair.forEach(botao => {
+                botao.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('token');
+                    sessionStorage.removeItem('token');
+                    // Opcional: Limpar a foto do cache local ao sair
+                    // localStorage.removeItem('userProfileImage'); 
+                    window.location.href = 'login.html';
+                });
+            });
         });
-        function logout() {
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('token');
-            window.location.href = 'login.html';
+
+        // --- LÓGICA DE UPLOAD (ENVIAR FOTO PRO SERVIDOR) ---
+        const fileInput = document.getElementById('file-input-foto');
+        const uploadBtn = document.getElementById('btn-upload-foto');
+        const mainImage = document.getElementById('main-profile-image');
+
+        // Botão visual clica no input invisível
+        if (uploadBtn && fileInput) {
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+
+        // Quando escolhe o arquivo
+        if (fileInput) {
+            fileInput.addEventListener('change', async function (e) {
+                const file = e.target.files[0];
+
+                if (file) {
+                    // Validação de tamanho (2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert("A imagem é muito grande. Máximo 2MB.");
+                        return;
+                    }
+
+                    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                    const user = parseJwt(token);
+
+                    // PREPARA O PACOTE PARA O SERVIDOR
+                    const formData = new FormData();
+
+                    // ⚠️ IMPORTANTE: Adicione os textos PRIMEIRO
+                    formData.append('tipo', user.tipo);
+
+                    // Admin usa idAdmin
+                    formData.append('id', user.idAdmin);
+                    formData.append('email', user.email);
+
+                    // Arquivo por ÚLTIMO
+                    formData.append('foto', file);
+
+                    try {
+                        const response = await fetch(`${API_URL}/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            // Sucesso! O servidor devolveu a URL da imagem salva
+                            const novaUrl = data.url;
+
+                            // 1. Atualiza na tela agora
+                            if (mainImage) mainImage.src = novaUrl;
+
+                            // 2. Salva a URL no navegador (para as outras páginas verem)
+                            localStorage.setItem('userProfileImage', novaUrl);
+
+                            // 3. Atualiza a navbar
+                            carregarFotoPerfilGlobal();
+
+                            alert("Foto de perfil atualizada!");
+                        } else {
+                            alert("Erro ao salvar: " + data.message);
+                        }
+
+                    } catch (error) {
+                        console.error(error);
+                        alert("Erro de conexão com o servidor.");
+                    }
+                }
+            });
         }
     </script>
 

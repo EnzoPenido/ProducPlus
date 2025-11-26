@@ -108,13 +108,17 @@
             <section class="profile-block-section">
                 <div class="svg-text-profile">
                     <div class="organizer-profile">
-                        <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="">
+                        <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="Foto de Perfil"
+                            class="img-fluid rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #1714A8;"
+                            id="main-profile-image">
                         <div class="text-content-profile">
                             <h1 style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
                             <h2>Usuário</h2>
                         </div>
                     </div>
-                    <a type="button" href="">Editar foto de perfil</a>
+                    <a type="button" class="btn btn-primary" id="btn-upload-foto">Editar foto de perfil</a>
+                    <input type="file" id="file-input-foto" accept="image/*" style="display: none;">
                     <a type="button" class="logout-btn">Sair</a>
                 </div>
                 <img class="img-profile-hero" src="../assets/images/svg/user_profile_hero_ProducPlus.svg" alt="">
@@ -179,8 +183,21 @@
         </script>
 
     <script>
+        const API_URL = 'http://localhost:3000';
+
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        function carregarFotoPerfilGlobal() {
+            const imagemSalva = localStorage.getItem('userProfileImage');
+            if (imagemSalva) {
+                const navIcons = document.querySelectorAll('.nav-profile-img');
+                navIcons.forEach(img => img.src = imagemSalva);
+
+                const mainImage = document.getElementById('main-profile-image');
+                if (mainImage) mainImage.src = imagemSalva;
+            }
         }
 
         window.addEventListener('load', () => {
@@ -193,21 +210,19 @@
 
             const user = parseJwt(token);
 
+            // Verifica se é CLIENTE (Se for Admin, manda pro painel dele)
             if (user.tipo === 'ADMIN') {
                 window.location.href = 'profile.html';
                 return;
             }
 
             console.log("Cliente logado:", user.nome);
+            // document.getElementById('nomeUsuario').innerText = user.nome; // (Se quiser mostrar o nome)
 
-            // DICA: Aqui você pode usar user.nome para colocar o nome dele na tela!
-            // document.getElementById('nomeUsuario').innerText = user.nome;
+            carregarFotoPerfilGlobal();
 
-            //NOVA LÓGICA DE LOGOUT (MÚLTIPLOS BOTÕES)
-            // 1. Pega TODOS os elementos com a classe .logout-btn
+            // Logout
             const botoesSair = document.querySelectorAll('.logout-btn');
-
-            // 2. Adiciona o clique em CADA um deles
             botoesSair.forEach(botao => {
                 botao.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -217,6 +232,67 @@
                 });
             });
         });
+
+        // --- UPLOAD PARA CLIENTE ---
+        const fileInput = document.getElementById('file-input-foto');
+        const uploadBtn = document.getElementById('btn-upload-foto');
+        const mainImage = document.getElementById('main-profile-image');
+
+        if (uploadBtn && fileInput) {
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', async function (e) {
+                const file = e.target.files[0];
+
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert("Imagem muito grande. Máximo 2MB.");
+                        return;
+                    }
+
+                    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                    const user = parseJwt(token);
+
+                    const formData = new FormData();
+
+                    // ⚠️ ORDEM IMPORTANTE PARA O MULTER LER A PASTA
+                    formData.append('tipo', user.tipo);
+
+                    // Cliente usa cnpjCliente
+                    formData.append('id', user.cnpjCliente);
+                    formData.append('email', user.email);
+
+                    formData.append('foto', file);
+
+                    try {
+                        const response = await fetch(`${API_URL}/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            const novaUrl = data.url;
+                            if (mainImage) mainImage.src = novaUrl;
+                            localStorage.setItem('userProfileImage', novaUrl);
+                            carregarFotoPerfilGlobal();
+                            alert("Foto atualizada!");
+                        } else {
+                            alert("Erro: " + data.message);
+                        }
+
+                    } catch (error) {
+                        console.error(error);
+                        alert("Erro de conexão.");
+                    }
+                }
+            });
+        }
     </script>
 
     <script>
