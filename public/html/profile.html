@@ -146,7 +146,7 @@
 
             <!-- Add Products Section -->
             <div class="add-products-section">
-                
+
                 <div class="text-svg-catalog">
                     <h1>ADICIONAR <br> PRODUTOS</h1>
                     <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
@@ -172,6 +172,18 @@
                         <div class="form-group">
                             <label for="productQuantity">Quantidade</label>
                             <input type="number" id="productQuantity" name="productQuantity" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productCat">Categoria</label>
+                            <select id="productCat" name="productCat" min="0" required>
+                                <option value="">Selecionar categoria</option>
+                                <option value="materiais">Materiais</option>
+                                <option value="ferramentas">Ferramentas</option>
+                                <option value="eletronica">Eletrônica</option>
+                                <option value="mecanica">Mecânica</option>
+                                <option value="embalagem">Embalagem</option>
+                            </select>
                         </div>
 
                         <div class="form-group">

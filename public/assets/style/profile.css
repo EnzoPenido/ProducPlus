@@ -1210,6 +1210,7 @@ footer {
 }
 
 .form-group input,
+.form-group select,
 .form-group textarea {
     padding: 12px;
     border: 2px solid #e0e0e0;
