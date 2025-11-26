@@ -20,6 +20,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
+app.options('*', cors());
 app.use(express.json());
 
 // --- CONFIGURAÇÃO DE CAMINHOS ---
