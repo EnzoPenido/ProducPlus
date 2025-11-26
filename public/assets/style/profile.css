@@ -930,6 +930,8 @@ footer {
     flex-direction: column;
 
     justify-content: center;
+
+    padding-left: 30px;
 }
 
 .text-svg-catalog{
@@ -1165,5 +1167,5 @@ footer {
     width: auto;
     height: 150px;
 
-    margin-bottom: 25%;
+    margin-bottom: 12%;
 }
