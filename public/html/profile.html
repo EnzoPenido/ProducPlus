@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../assets/js/adicionar-produtos-slider.js"></script>
 </head>
 
 <body>
@@ -140,6 +141,53 @@
                     <div class="chart-container" style="position: relative;">
                         <canvas id="stockChart"></canvas>
                     </div>
+                </div>
+            </div>
+
+            <!-- Add Products Section -->
+            <div class="add-products-section">
+                
+                <div class="text-svg-catalog">
+                    <h1>ADICIONAR <br> PRODUTOS</h1>
+                    <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
+                </div>
+
+                <div class="add-products-container">
+                    <form class="add-products-form" id="addProductForm">
+                        <div class="form-group">
+                            <label for="productName">Nome produto</label>
+                            <input type="text" id="productName" name="productName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productPrice">Preço unitario</label>
+                            <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="productDescription">Descrição</label>
+                            <textarea id="productDescription" name="productDescription" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productQuantity">Quantidade</label>
+                            <input type="number" id="productQuantity" name="productQuantity" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productImage">Imagem</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="productImage" name="productImage" accept="image/*">
+                                <label for="productImage" class="file-input-label">Enviar imagem</label>
+                                <span class="file-name" id="fileName">Nenhum arquivo selecionado</span>
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn-clear" onclick="clearForm()">Limpar</button>
+                            <button type="submit" class="btn-submit">Adicionar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
