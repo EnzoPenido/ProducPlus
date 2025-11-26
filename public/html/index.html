@@ -9,7 +9,7 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/style/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <script src="https://kit.fontawesome.com/fefb6d759c.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/fefb6d759c.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
@@ -32,10 +32,10 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul class="navbar-nav gap-3">
 
-                            
-                            
+
+
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contato</a></li>
-                             <li class="nav-item dropdown">
+                            <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                     Catálogo
@@ -52,16 +52,21 @@
                                 <a class="nav-link" href="login.html">Entrar</a>
                             </li>
 
-                             
-                             <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
-                                <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false" data-bs-offset="10,20">
+
+                            <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
+                                <a class="nav-link nav-link-icon" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" style="color: #1714A8; font-size: 20px;">
                                     <i class="fa-solid fa-user"></i>
                                 </a>
+
                                 <div class="dropdown-center me-1">
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
-                                        <li><a class="dropdown-item" id="btnSair">Sair</a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu Perfil</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#" id="btnSair"
+                                                style="color: red; font-weight: bold;">Sair</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -308,8 +313,11 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-12 col-lg-6 info-text">
-                        <h2 class="titulinho" style="display: block;"><span style="color: black; font-family: Lovelo;">Melhor da</span> indústria</h2>
-                        <p class="texto-info">Você tem acesso às melhores ferramentas e insumos para garantir que sua produção esteja sempre à frente no mercado. Nossos produtos são fabricados com precisão e qualidade, atendendo aos mais altos padrões da indústria.</p>
+                        <h2 class="titulinho" style="display: block;"><span
+                                style="color: black; font-family: Lovelo;">Melhor da</span> indústria</h2>
+                        <p class="texto-info">Você tem acesso às melhores ferramentas e insumos para garantir que sua
+                            produção esteja sempre à frente no mercado. Nossos produtos são fabricados com precisão e
+                            qualidade, atendendo aos mais altos padrões da indústria.</p>
                     </div>
 
 
@@ -319,8 +327,11 @@
                 <div class="informacoes2 row justify-content-center align-items-center">
 
                     <div class="col-12 col-md-12 col-lg-6 info-text">
-                        <h2 class="titulinho" style="display: block; width: auto;">Mais <span style="color: black; font-family: Lovelo;">qualidade</span></h2>
-                        <p class="texto-info">Aumente a produtividade com soluções inovadoras que simplificam os processos e maximizam a eficiência da sua equipe. Nossa plataforma integra ferramentas que ajudam a otimizar cada etapa da produção.</p>
+                        <h2 class="titulinho" style="display: block; width: auto;">Mais <span
+                                style="color: black; font-family: Lovelo;">qualidade</span></h2>
+                        <p class="texto-info">Aumente a produtividade com soluções inovadoras que simplificam os
+                            processos e maximizam a eficiência da sua equipe. Nossa plataforma integra ferramentas que
+                            ajudam a otimizar cada etapa da produção.</p>
                     </div>
                     <div class="col-12 col-md-12 col-lg-6 info-img">
                         <div class="marka"><img class="" src="../assets/images/hero-section2-img-ProducPlus.png">
@@ -380,10 +391,26 @@
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
 
+        // --- FUNÇÃO QUE TROCA O ÍCONE PELA FOTO ---
+        function carregarFotoPerfilGlobal() {
+            const imagemSalva = localStorage.getItem('userProfileImage');
+            // Pega o elemento 'a' que envolve o ícone
+            const containerIcone = document.querySelector('.nav-link-icon');
+
+            if (imagemSalva && containerIcone) {
+                // Remove o ícone <i> e coloca a imagem <img>
+                containerIcone.innerHTML = `
+                <img src="${imagemSalva}" 
+                     alt="Perfil" 
+                     style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #1714A8;">
+            `;
+            }
+        }
+
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-            // Elementos
+            // Elementos da tela
             const navEntrar = document.getElementById('nav-entrar');
             const navPerfil = document.getElementById('nav-perfil');
             const btnComece = document.getElementById('btn-comece');
@@ -391,21 +418,36 @@
 
             if (token) {
                 // --- LOGADO ---
-                // 1. Navbar
+
+                // 1. Esconde botão Entrar e Textos de Login
                 if (navEntrar) navEntrar.classList.add('d-none');
-
-                if (navPerfil) {
-                    navPerfil.classList.remove('d-none');
-
-                    const user = parseJwt(token);
-                    const link = navPerfil.querySelector('a');
-                    if (user && user.tipo === 'ADMIN') link.href = 'profile.html';
-                    else link.href = 'profile_user.html';
-                }
-
-                // 2. Botões e Textos
                 if (btnComece) btnComece.classList.add('d-none');
                 if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+
+                // 2. Mostra o Perfil (Dropdown)
+                if (navPerfil) {
+                    navPerfil.classList.remove('d-none');
+                    const user = parseJwt(token);
+                    const linkPerfil = document.getElementById('link-meu-perfil');
+
+                    if (linkPerfil) {
+                        if (user && user.tipo === 'ADMIN') linkPerfil.href = 'profile.html';
+                        else linkPerfil.href = 'profile_user.html';
+                    }
+                    carregarFotoPerfilGlobal();
+
+                    // Configura o botão SAIR do menu
+                    const btnSair = document.getElementById('btnSair');
+                    if (btnSair) {
+                        btnSair.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            localStorage.removeItem('token');
+                            sessionStorage.removeItem('token');
+                            localStorage.removeItem('userProfileImage');
+                            window.location.href = 'login.html';
+                        });
+                    }
+                }
 
             } else {
                 // --- DESLOGADO ---
@@ -414,12 +456,6 @@
                 if (btnComece) btnComece.classList.remove('d-none');
                 if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
             }
-            document.getElementById('btnSair').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                sessionStorage.removeItem('token');
-                window.location.href = 'login.html';
-            });
         });
     </script>
 

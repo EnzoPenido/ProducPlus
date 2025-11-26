@@ -125,7 +125,6 @@
             }
         }
 
-        // Auto-login
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             if (token) redirecionarUsuario(token);
@@ -140,7 +139,7 @@
         document.getElementById('btnEntrar').addEventListener('click', async (event) => {
             event.preventDefault();
 
-            const email = document.getElementById('emailLogin').value.trim(); // .trim() remove espaços acidentais
+            const email = document.getElementById('emailLogin').value.trim();
             const senha = document.getElementById('senhaLogin').value;
             const checkbox = document.getElementById('checkbox');
 
@@ -149,19 +148,12 @@
                 return;
             }
 
-            // --- A MÁGICA ACONTECE AQUI ---
             let rotaLogin;
-
             if (email.endsWith('@producplus.com')) {
-                // Se termina com o domínio da empresa -> É ADMIN
-                console.log("Domínio corporativo detectado. Rota: ADMIN");
                 rotaLogin = `${API_URL}/admin/auth/login`;
             } else {
-                // Qualquer outro email -> É CLIENTE
-                console.log("Email comum detectado. Rota: CLIENTE");
                 rotaLogin = `${API_URL}/auth/login`;
             }
-            // -------------------------------
 
             try {
                 const response = await fetch(rotaLogin, {
@@ -171,13 +163,22 @@
                 });
 
                 const data = await response.json();
-
+                // Se der erro, para aqui e mostra o alerta
                 if (!response.ok) {
                     alert('Erro: ' + (data.message || 'Email ou senha incorretos'));
                     return;
                 }
 
-                // Sucesso
+                // --- SUCESSO (Se chegou aqui, é porque logou) ---
+
+                // 1. Limpa foto antiga e Salva a nova (se houver)
+                localStorage.removeItem('userProfileImage');
+                if (data.foto) {
+                    const urlCompleta = `http://localhost:3000${data.foto}`;
+                    localStorage.setItem('userProfileImage', urlCompleta);
+                }
+
+                // 2. Salva Token
                 if (checkbox.checked) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('rememberedEmail', email);

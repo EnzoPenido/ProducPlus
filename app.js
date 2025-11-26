@@ -25,14 +25,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Configuração de Caminhos (Para ES Modules)
+// --- CONFIGURAÇÃO DE PASTA ESTÁTICA ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const pastaUploads = path.join(__dirname, '/uploads');
+// Libera o acesso público à pasta uploads
+app.use('/uploads', express.static(pastaUploads));
 
-// 2. CONFIGURAÇÃO DA PASTA DE IMAGENS
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-
-// --- DEFINIÇÃO DAS ROTAS ---
+// --- ROTAS ---
 app.use("/auth", authRoutes);
 app.use("/admin/auth", adminAuthRoutes);
 app.use("/admin", adminRoutes);
@@ -42,9 +42,9 @@ app.use("/categorias", categoriaRoutes);
 app.use("/produtos", produtoRoutes);
 app.use("/compras", compraRoutes);
 app.use("/itenscompra", itemCompraRoutes);
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use("/upload", uploadRoutes); // Rota de Upload
 
-// Inicia o servidor
+// Inicialização do Servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando em: http://localhost:${PORT}`));
 

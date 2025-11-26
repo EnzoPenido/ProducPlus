@@ -97,10 +97,13 @@
             <section class="profile-block-section">
                 <div class="svg-text-profile">
                     <div class="organizer-profile">
-                        <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="">
+                        <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="Foto de Perfil"
+                            class="img-fluid rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #1714A8;"
+                            id="main-profile-image">
                         <div class="text-content-profile">
-                            <h1 style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
-                            <h2>Administrador</h2>
+                            <h1 id="textoSaudacao" style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
+                            <h2 id="nomeUsuario">Administrador</h2>
                         </div>
                     </div>
                     <a type="button" class="btn btn-primary" id="btn-upload-foto">Editar foto de perfil</a>
@@ -316,7 +319,6 @@
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-            // A. Segurança: Verifica Login
             if (!token) {
                 window.location.href = 'login.html';
                 return;
@@ -324,27 +326,39 @@
 
             const user = parseJwt(token);
 
-            // B. Segurança: Verifica se é ADMIN
             if (user.tipo !== 'ADMIN') {
-                alert("Acesso restrito a administradores.");
+                alert("Área restrita.");
                 window.location.href = 'profile_user.html';
                 return;
             }
 
-            console.log("Admin logado:", user.nome);
+            // --- LÓGICA DA SAUDAÇÃO (ESTILO SEU) ---
+            const hora = new Date().getHours();
+            const h1Saudacao = document.getElementById('textoSaudacao');
+            const h2Nome = document.getElementById('nomeUsuario');
 
-            // C. Carrega a foto atual
+            if (h1Saudacao) {
+                let texto = "BOM DIA,";
+                if (hora >= 12 && hora < 18) texto = "BOA TARDE,";
+                else if (hora >= 18 || hora < 5) texto = "BOA NOITE,";
+
+                h1Saudacao.innerText = texto;
+            }
+
+            if (h2Nome && user.nome) {
+                h2Nome.innerText = user.nome;
+            }
+
             carregarFotoPerfilGlobal();
 
-            // D. Configura Botões de Sair (Logout)
+            // Logout
             const botoesSair = document.querySelectorAll('.logout-btn');
             botoesSair.forEach(botao => {
                 botao.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('token');
                     sessionStorage.removeItem('token');
-                    // Opcional: Limpar a foto do cache local ao sair
-                    // localStorage.removeItem('userProfileImage'); 
+                    localStorage.removeItem('userProfileImage');
                     window.location.href = 'login.html';
                 });
             });
@@ -367,59 +381,61 @@
             fileInput.addEventListener('change', async function (e) {
                 const file = e.target.files[0];
 
-                if (file) {
-                    // Validação de tamanho (2MB)
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert("A imagem é muito grande. Máximo 2MB.");
-                        return;
-                    }
+                // Se o usuário cancelar a seleção, file será undefined
+                if (!file) return;
 
-                    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-                    const user = parseJwt(token);
+                // Validação de tamanho
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("A imagem é muito grande. Máximo 2MB.");
+                    fileInput.value = ''; // Limpa para tentar de novo
+                    return;
+                }
 
-                    // PREPARA O PACOTE PARA O SERVIDOR
-                    const formData = new FormData();
+                const token = localStorage.getItem('token');
+                const user = parseJwt(token);
 
-                    // ⚠️ IMPORTANTE: Adicione os textos PRIMEIRO
-                    formData.append('tipo', user.tipo);
+                // DEBUG: Verifica se o token tem os dados necessários
+                console.log("Dados do Token para Upload:", user);
+                if (!user.email || (!user.idAdmin && !user.cnpjCliente)) {
+                    alert("Erro: Token de usuário incompleto. Faça login novamente.");
+                    return;
+                }
 
-                    // Admin usa idAdmin
+                const formData = new FormData();
+
+                // Ordem rigorosa dos campos
+                formData.append('tipo', user.tipo);
+                if (user.tipo === 'ADMIN') {
                     formData.append('id', user.idAdmin);
-                    formData.append('email', user.email);
+                } else {
+                    formData.append('id', user.cnpjCliente);
+                }
+                formData.append('email', user.email);
+                formData.append('foto', file);
 
-                    // Arquivo por ÚLTIMO
-                    formData.append('foto', file);
+                try {
+                    const response = await fetch(`${API_URL}/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                    try {
-                        const response = await fetch(`${API_URL}/upload`, {
-                            method: 'POST',
-                            body: formData
-                        });
+                    const data = await response.json();
 
-                        const data = await response.json();
-
-                        if (response.ok) {
-                            // Sucesso! O servidor devolveu a URL da imagem salva
-                            const novaUrl = data.url;
-
-                            // 1. Atualiza na tela agora
-                            if (mainImage) mainImage.src = novaUrl;
-
-                            // 2. Salva a URL no navegador (para as outras páginas verem)
-                            localStorage.setItem('userProfileImage', novaUrl);
-
-                            // 3. Atualiza a navbar
-                            carregarFotoPerfilGlobal();
-
-                            alert("Foto de perfil atualizada!");
-                        } else {
-                            alert("Erro ao salvar: " + data.message);
-                        }
-
-                    } catch (error) {
-                        console.error(error);
-                        alert("Erro de conexão com o servidor.");
+                    if (response.ok) {
+                        // Atualiza visualmente
+                        if (mainImage) mainImage.src = data.url;
+                        localStorage.setItem('userProfileImage', data.url);
+                        carregarFotoPerfilGlobal();
+                        alert("Foto de perfil atualizada!");
+                    } else {
+                        alert("Erro do servidor: " + data.message);
                     }
+
+                } catch (error) {
+                    console.error(error);
+                    alert("Erro de conexão.");
+                } finally {
+                    fileInput.value = '';
                 }
             });
         }

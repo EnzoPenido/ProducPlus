@@ -56,8 +56,8 @@
                                 <a class="nav-link" href="login.html">Entrar</a>
                             </li>
 
-                             
-                             <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
+
+                            <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
                                 <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false" data-bs-offset="10,20">
                                     <i class="fa-solid fa-user"></i>
@@ -179,7 +179,7 @@
                         <button class="btn-buy-product">Comprar</button>
                     </div>
                 </div>
-                
+
                 <div class="container-products-item">
                     <a class="link-item" href="">
                         <div class="container-products-img-text">
@@ -350,16 +350,32 @@
             </footer>
         </div>
     </main>
-    
+
     <script>
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
 
+        // --- FUNÇÃO QUE TROCA O ÍCONE PELA FOTO ---
+        function carregarFotoPerfilGlobal() {
+            const imagemSalva = localStorage.getItem('userProfileImage');
+            // Pega o elemento 'a' que envolve o ícone
+            const containerIcone = document.querySelector('.nav-link-icon');
+
+            if (imagemSalva && containerIcone) {
+                // Remove o ícone <i> e coloca a imagem <img>
+                containerIcone.innerHTML = `
+                <img src="${imagemSalva}" 
+                     alt="Perfil" 
+                     style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #1714A8;">
+            `;
+            }
+        }
+
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-            // Elementos
+            // Elementos da tela
             const navEntrar = document.getElementById('nav-entrar');
             const navPerfil = document.getElementById('nav-perfil');
             const btnComece = document.getElementById('btn-comece');
@@ -367,21 +383,40 @@
 
             if (token) {
                 // --- LOGADO ---
-                // 1. Navbar
-                if (navEntrar) navEntrar.classList.add('d-none');
 
+                // 1. Esconde botão Entrar e Textos de Login
+                if (navEntrar) navEntrar.classList.add('d-none');
+                if (btnComece) btnComece.classList.add('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+
+                // 2. Mostra o Perfil (Dropdown)
                 if (navPerfil) {
                     navPerfil.classList.remove('d-none');
 
+                    // Configura para onde vai o link "Meu Perfil"
                     const user = parseJwt(token);
-                    const link = navPerfil.querySelector('a');
-                    if (user && user.tipo === 'ADMIN') link.href = 'profile.html';
-                    else link.href = 'profile_user.html';
-                }
+                    const linkPerfil = document.getElementById('link-meu-perfil');
 
-                // 2. Botões e Textos
-                if (btnComece) btnComece.classList.add('d-none');
-                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+                    if (linkPerfil) {
+                        if (user && user.tipo === 'ADMIN') linkPerfil.href = 'profile.html';
+                        else linkPerfil.href = 'profile_user.html';
+                    }
+
+                    // Carrega a foto (substitui o ícone)
+                    carregarFotoPerfilGlobal();
+
+                    // Configura o botão SAIR do menu
+                    const btnSair = document.getElementById('btnSair');
+                    if (btnSair) {
+                        btnSair.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            localStorage.removeItem('token');
+                            sessionStorage.removeItem('token');
+                            localStorage.removeItem('userProfileImage');
+                            window.location.href = 'login.html';
+                        });
+                    }
+                }
 
             } else {
                 // --- DESLOGADO ---
@@ -390,12 +425,6 @@
                 if (btnComece) btnComece.classList.remove('d-none');
                 if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
             }
-            document.getElementById('btnSair').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                sessionStorage.removeItem('token');
-                window.location.href = 'login.html';
-            });
         });
     </script>
 

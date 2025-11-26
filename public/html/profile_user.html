@@ -113,8 +113,8 @@
                             style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #1714A8;"
                             id="main-profile-image">
                         <div class="text-content-profile">
-                            <h1 style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
-                            <h2>Usuário</h2>
+                            <h1 id="textoSaudacao" style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
+                            <h2 id="nomeUsuario">Usuário</h2>
                         </div>
                     </div>
                     <a type="button" class="btn btn-primary" id="btn-upload-foto">Editar foto de perfil</a>
@@ -210,24 +210,36 @@
 
             const user = parseJwt(token);
 
-            // Verifica se é CLIENTE (Se for Admin, manda pro painel dele)
             if (user.tipo === 'ADMIN') {
                 window.location.href = 'profile.html';
                 return;
             }
 
-            console.log("Cliente logado:", user.nome);
-            // document.getElementById('nomeUsuario').innerText = user.nome; // (Se quiser mostrar o nome)
+            const hora = new Date().getHours();
+            const h1Saudacao = document.getElementById('textoSaudacao');
+            const h2Nome = document.getElementById('nomeUsuario');
+
+            if (h1Saudacao) {
+                let texto = "BOM DIA,";
+                if (hora >= 12 && hora < 18) texto = "BOA TARDE,";
+                else if (hora >= 18 || hora < 5) texto = "BOA NOITE,";
+
+                h1Saudacao.innerText = texto;
+            }
+
+            if (h2Nome && user.nome) {
+                h2Nome.innerText = user.nome;
+            }
 
             carregarFotoPerfilGlobal();
 
-            // Logout
             const botoesSair = document.querySelectorAll('.logout-btn');
             botoesSair.forEach(botao => {
                 botao.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('token');
                     sessionStorage.removeItem('token');
+                    localStorage.removeItem('userProfileImage');
                     window.location.href = 'login.html';
                 });
             });
@@ -259,7 +271,6 @@
 
                     const formData = new FormData();
 
-                    // ⚠️ ORDEM IMPORTANTE PARA O MULTER LER A PASTA
                     formData.append('tipo', user.tipo);
 
                     // Cliente usa cnpjCliente

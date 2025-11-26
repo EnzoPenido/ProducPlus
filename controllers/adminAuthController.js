@@ -4,25 +4,21 @@ import { gerarToken } from "../config/jwt.js";
 
 export const loginAdmin = async (req, res) => {
     try {
-        // 1. MUDANÇA: Agora pegamos 'email', não 'username'
         const { email, senha } = req.body;
 
         if (!email || !senha) {
             return res.status(400).json({ message: "Email e senha são obrigatórios" });
         }
 
-        // 2. MUDANÇA: Buscamos pelo método getByEmail
-        // (Certifique-se de ter criado esse método no adminModel.js!)
         const admin = await Admin.getByEmail(email);
 
         if (!admin) {
-            // Esse é o erro 404 que pode estar aparecendo (Admin não encontrado)
-            return res.status(404).json({ message: "Admin não encontrado com este email" });
+            return res.status(404).json({ message: "Administrador não encontrado com este e-mail." });
         }
 
-        const ok = await bcrypt.compare(senha, admin.senha);
-        if (!ok) {
-            return res.status(401).json({ message: "Senha inválida" });
+        const senhaValida = await bcrypt.compare(senha, admin.senha);
+        if (!senhaValida) {
+            return res.status(401).json({ message: "Senha incorreta." });
         }
 
         const token = gerarToken({
@@ -32,10 +28,15 @@ export const loginAdmin = async (req, res) => {
             nome: admin.nome,
             email: admin.email
         });
-
-        res.json({ message: "Login admin realizado", token });
+        
+        res.json({
+            message: "Login realizado!",
+            token,
+            foto: admin.foto_perfil
+        });
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("ERRO NO LOGIN ADMIN:", err);
+        res.status(500).json({ error: "Erro interno no servidor." });
     }
 };
