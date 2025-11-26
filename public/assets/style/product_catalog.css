@@ -818,6 +818,12 @@ footer {
 }
 
 @media (max-width: 991px){
+    .search-bar{
+        width: 32%;
+    }
+    #btn-limpar-filtros{
+        display: none;
+    }
     .navbar-nav{
         display: none;
     }    
@@ -984,5 +990,13 @@ footer {
 
 .end-catalog-content a:hover {
     text-decoration: underline;
+}
+
+#sem-resultados{
+    display: flex !important;
+    flex-direction: column !important;
+
+    justify-content: center !important;
+    align-items: center !important;
 }
 /*End Catalog */
