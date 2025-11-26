@@ -125,42 +125,6 @@ function filtrarCategorias(termoBusca, categoriaSelect) {
     gerenciarMensagemSemResultados(resultadosVisiveis);
 }
 
-// Função para mensagem de "sem resultados"
-function gerenciarMensagemSemResultados(quantidade) {
-    let mensagem = document.getElementById('sem-resultados');
-    
-    if (quantidade === 0) {
-        if (!mensagem) {
-            mensagem = document.createElement('div');
-            mensagem.id = 'sem-resultados';
-            mensagem.className = 'container';
-            mensagem.style.cssText = `
-                width: 100%;
-                text-align: center;
-                padding: 60px 20px;
-                font-family: Roboto, sans-serif;
-                color: #1800ad;
-                margin-top: 40px;
-            `;
-            mensagem.innerHTML = `
-                <i class="fa-solid fa-magnifying-glass" style="font-size: 48px; opacity: 0.3; margin-bottom: 20px; display: block;"></i>
-                <h2 style="font-size: 24px; margin-bottom: 10px; font-weight: normal;">Nenhum resultado encontrado</h2>
-                <p style="font-size: 14px; opacity: 0.7; margin: 0;">Tente ajustar seus filtros ou buscar por outro termo</p>
-            `;
-            
-            const footer = document.querySelector('footer');
-            if (footer) {
-                footer.parentNode.insertBefore(mensagem, footer);
-            }
-        }
-        mensagem.style.display = 'block';
-    } else {
-        if (mensagem) {
-            mensagem.style.display = 'none';
-        }
-    }
-}
-
 // Função para resetar filtros
 function resetarFiltros() {
     console.log('Resetando filtros...');
