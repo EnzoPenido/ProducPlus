@@ -36,7 +36,7 @@ const pastaUploads = path.join(raizProjeto, 'uploads');
 console.log("---------------------------------------------------");
 console.log(`🌐 Servindo raiz (Assets): ${pastaPublica}`);
 console.log(`📄 Servindo páginas (HTML): ${pastaHtml}`);
-console.log(`📂 Servindo imagens:       ${pastaUploads}`);
+console.log(`📂 Servindo imagens: ${pastaUploads}`);
 console.log("---------------------------------------------------");
 
 // --- SERVIR ARQUIVOS ---

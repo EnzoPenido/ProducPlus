@@ -19,17 +19,59 @@
 </head>
 
 <body>
-    <header class="d-flex justify-content-center">
-        <div class="container container-navbar m-sm-0 p-sm-0 ">
+   <header class="d-flex justify-content-center camada-nav">
+        <div class="container container-navbar m-sm-0 p-sm-0">
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid ms-5 me-5 p-2">
-                    <a class="navbar-brand m-0 " href="index.html" target="_self"><img
-                            src="../assets/images/logo/LogoPequena.png"></a>
+                    <a class="navbar-brand m-0" href="index.html" target="_self">
+                        <img src="../assets/images/logo/LogoPequena.png">
+                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
+                    <!-- Menu desktop (fora do offcanvas) -->
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarDesktop">
+                        <ul class="navbar-nav gap-3 align-items-center">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Catálogo
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="product_catalog.html">Ver categorias</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="products.html">Produtos</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item nav-item-icon p-0">
+                                <a class="nav-link nav-link-icon" aria-current="page" href="carrinho.html"
+                                    target="_parent">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown d-none nav-item-icon p-0" id="nav-perfil">
+                                <a class="nav-link nav-link-icon" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" style="color: #1714A8; font-size: 20px;">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu Perfil</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#" id="btnSair"
+                                            style="color: red; font-weight: bold;">Sair</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Offcanvas para mobile -->
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
                         aria-labelledby="offcanvasRightLabel">
                         <div class="offcanvas-header">
@@ -38,52 +80,29 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a href=""><img src="../assets/images/svg/cart-large-svgrepo-com.svg" alt=""></a>
-                                </li>
-                                <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
-                                    <a class="nav-link nav-link-icon" href="#" role="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false" style="color: #1714A8; font-size: 20px;">
-                                        <i class="fa-solid fa-user"></i>
-                                    </a>
-
-                                    <div class="dropdown-center me-1">
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu Perfil</a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li><a class="dropdown-item" href="#" id="btnSair"
-                                                    style="color: red; font-weight: bold;">Sair</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-
-                            </ul>
+                            <!-- Menu alternativo para mobile -->
                             <ul class="navbar-nav-alternative">
                                 <a href="product_catalog.html">
-                                    <li class="nav-item" onclick="location.href = 'product_catalog.html'">
-                                        <a href="">Catálogo</a>
+                                    <li class="nav-item">
+                                        <span>Catálogo</span>
                                         <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                                     </li>
                                 </a>
-                                <a href="">
-                                    <li class="nav-item" onclick="location.href = 'carrinho.html'">
-                                        <a href="">Carrinho</a>
+                                <a href="carrinho.html">
+                                    <li class="nav-item">
+                                        <span>Carrinho</span>
                                         <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                                     </li>
                                 </a>
-                                <a href="">
-                                    <li class="nav-item" onclick="location.href = 'profile.html'">
-                                        <a href="profile.html">Perfil</a>
+                                <a href="profile_user.html">
+                                    <li class="nav-item">
+                                        <span>Perfil</span>
                                         <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                                     </li>
                                 </a>
-                                <a href="">
-                                    <li class="nav-item" onclick="sair()">
-                                        <a href="profile.html">Sair</a>
+                                <a href="#" onclick="sair()">
+                                    <li class="nav-item">
+                                        <span>Sair</span>
                                         <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                                     </li>
                                 </a>
@@ -93,7 +112,6 @@
                 </div>
             </nav>
         </div>
-
     </header>
 
     <main>
@@ -341,11 +359,6 @@
             }
         });
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-
 
 </body>
 
