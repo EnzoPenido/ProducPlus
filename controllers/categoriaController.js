@@ -23,7 +23,7 @@ export const criarCategoria = async (req, res) => {
     try {
         const id = await Categoria.create(req.body);
         res.status(201).json({ message: "Categoria criada", idCategoria: id });
-    } catch (err) {
+    } catch (err) {   
         res.status(500).json({ error: err.message });
     }
 };
