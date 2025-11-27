@@ -1542,6 +1542,7 @@
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
             // Elementos da tela
+            const btnComprar = document.querySelectorAll('.btn-buy-product');
             const navEntrar = document.getElementById('nav-entrar');
             const navPerfil = document.getElementById('nav-perfil');
             const btnComece = document.getElementById('btn-comece');
@@ -1554,6 +1555,7 @@
                 if (navEntrar) navEntrar.classList.add('d-none');
                 if (btnComece) btnComece.classList.add('d-none');
                 if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+                
 
                 // 2. Mostra o Perfil (Dropdown)
                 if (navPerfil) {
@@ -1566,6 +1568,26 @@
                     if (linkPerfil) {
                         if (user && user.tipo === 'ADMIN') linkPerfil.href = 'profile.html';
                         else linkPerfil.href = 'profile_user.html';
+                    }
+
+                    if (user && user.tipo === 'ADMIN') {
+                        // Mostra os botões de editar e deletar produtos
+                        btnComprar.forEach(btn => {
+                            const btnEditar = btn.nextElementSibling;
+                            const btnDeletar = btnEditar ? btnEditar.nextElementSibling : null;
+
+                            if (btnEditar) btnEditar.classList.remove('d-none');
+                            if (btnDeletar) btnDeletar.classList.remove('d-none');
+                        });
+                    } else {
+                        // Esconde os botões de editar e deletar produtos
+                        btnComprar.forEach(btn => {
+                            const btnEditar = btn.nextElementSibling;
+                            const btnDeletar = btnEditar ? btnEditar.nextElementSibling : null;
+
+                            if (btnEditar) btnEditar.classList.add('d-none');
+                            if (btnDeletar) btnDeletar.classList.add('d-none');
+                        });
                     }
 
                     // Carrega a foto (substitui o ícone)
