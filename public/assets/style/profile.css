@@ -1308,3 +1308,132 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* Criar categoria*/
+.management-section {
+    background-color: #EEEEEE;
+    border-radius: 10px;
+    padding: 30px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.category-form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.category-list {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+}
+
+.category-item:hover {
+    background-color: #f8f9fa;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14pt;
+    color: #333;
+    font-weight: 500;
+}
+
+.category-id {
+    font-size: 10pt;
+    color: #666;
+    margin-left: 10px;
+}
+
+.btn-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10pt;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #1800ad;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #5964ff;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-primary-custom {
+    background-color: #1800ad;
+    border: none;
+    padding: 12px 30px;
+    font-size: 12pt;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #5964ff;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 48pt;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .category-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-actions {
+        width: 100%;
+    }
+
+    .btn-edit,
+    .btn-delete {
+        flex: 1;
+    }
+}
+/* Criar categoria*/
