@@ -19,12 +19,16 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 dotenv.config();
 
 const app = express();
+
+// --- 1. CONFIGURAÇÃO DO CORS E OPTIONS ---
 app.use(cors());
-app.options('*', cors());
+app.options(/.*/, cors());
+
 app.use(express.json());
 
 // --- CONFIGURAÇÃO DE CAMINHOS ---
 const raizProjeto = process.cwd();
+
 const pastaPublica = path.join(raizProjeto, 'public');
 const pastaHtml = path.join(raizProjeto, 'public', 'html');
 const pastaUploads = path.join(raizProjeto, 'uploads');
@@ -37,10 +41,8 @@ console.log("---------------------------------------------------");
 
 // --- SERVIR ARQUIVOS ---
 app.use(express.static(pastaPublica));
-
 app.use(express.static(pastaHtml));
 app.use('/uploads', express.static(pastaUploads));
-
 
 // --- ROTAS DA API ---
 app.use("/auth", authRoutes);
