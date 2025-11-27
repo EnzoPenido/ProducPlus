@@ -5,6 +5,31 @@
     src: url(../fonts/Lovelo\ Black.otf);
 }
 
+#material-section{
+    width: 100%;
+    height: 50px;
+}
+
+#ferramentas-section{
+    width: 100%;
+    height: 50px;
+}
+
+#eletronica-section{
+    width: 100%;
+    height: 50px;
+}
+
+#mecanica-section{
+    width: 100%;
+    height: 50px;
+}
+
+#embalagem-section{
+    width: 100%;
+    height: 50px;
+}
+
 
 .roboto-uniquifier {
     font-family: "Roboto", sans-serif;
