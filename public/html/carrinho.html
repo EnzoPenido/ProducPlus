@@ -10,7 +10,7 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/style/carrinho.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <script src="https://kit.fontawesome.com/fefb6d759c.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/fefb6d759c.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
@@ -45,16 +45,21 @@
                                     <li><a class="dropdown-item" href="products.html">Produtos</a></li>
                                 </ul>
                             </li>
-                          
-                            <li class="nav-item nav-item-icon btn-destaque p-0">
-                                <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false" data-bs-offset="10,20">
+
+                            <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
+                                <a class="nav-link nav-link-icon" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" style="color: #1714A8; font-size: 20px;">
                                     <i class="fa-solid fa-user"></i>
                                 </a>
+
                                 <div class="dropdown-center me-1">
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
-                                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu Perfil</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#" id="btnSair"
+                                                style="color: red !important; font-weight: bold;">Sair</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -103,57 +108,57 @@
             </nav>
         </div>
     </header>
-    
+
     <main>
         <div class="container-fluid filter ms-6 me-6 p-2">
             <div class="separator"></div>
             <div class="text-button-catalog">
-                    <div class="text-catalog">
-                        <div class="text-svg-catalog">
-                            <h1>CARRINHO</h1>
-                            <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
-                        </div>
-        
+                <div class="text-catalog">
+                    <div class="text-svg-catalog">
+                        <h1>CARRINHO</h1>
+                        <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                     </div>
+
                 </div>
+            </div>
             <section class="container-products">
                 <div class="cart-items" id="cartItems">
-                <!-- Itens serão inseridos aqui dinamicamente -->
-            </div>
-
-            <!-- Resumo e Frete -->
-            <div class="cart-summary">
-                <!-- Card de Frete -->
-                <div class="summary-card">
-                    <div class="summary-title">Frete</div>
-                    <div class="shipping-input">
-                        <input type="text" id="cepInput" placeholder="Digite o CEP" maxlength="9">
-                        <button onclick="calcularFrete()">Calcular</button>
-                    </div>
-                    <div class="shipping-options" id="shippingOptions" style="display: none;">
-                        <!-- Opções de frete aparecerão aqui -->
-                    </div>
+                    <!-- Itens serão inseridos aqui dinamicamente -->
                 </div>
 
-                <!-- Card de Total -->
-                <div class="summary-card">
-                    <div class="price-breakdown">
-                        <div class="price-item">
-                            <span class="price-label">Subtotal</span>
-                            <span class="price-amount" id="subtotalValue">R$0,00</span>
+                <!-- Resumo e Frete -->
+                <div class="cart-summary">
+                    <!-- Card de Frete -->
+                    <div class="summary-card">
+                        <div class="summary-title">Frete</div>
+                        <div class="shipping-input">
+                            <input type="text" id="cepInput" placeholder="Digite o CEP" maxlength="9">
+                            <button onclick="calcularFrete()">Calcular</button>
                         </div>
-                        <div class="price-item">
-                            <span class="price-label">Frete</span>
-                            <span class="price-amount" id="shippingValue">R$0,00</span>
+                        <div class="shipping-options" id="shippingOptions" style="display: none;">
+                            <!-- Opções de frete aparecerão aqui -->
                         </div>
                     </div>
-                    <div class="total-section">
-                        <div class="total-label">Total</div>
-                        <div class="total-value" id="totalValue">R$0,00</div>
-                        <button class="payment-button" onclick="realizarPagamento()">Pagamento</button>
+
+                    <!-- Card de Total -->
+                    <div class="summary-card">
+                        <div class="price-breakdown">
+                            <div class="price-item">
+                                <span class="price-label">Subtotal</span>
+                                <span class="price-amount" id="subtotalValue">R$0,00</span>
+                            </div>
+                            <div class="price-item">
+                                <span class="price-label">Frete</span>
+                                <span class="price-amount" id="shippingValue">R$0,00</span>
+                            </div>
+                        </div>
+                        <div class="total-section">
+                            <div class="total-label">Total</div>
+                            <div class="total-value" id="totalValue">R$0,00</div>
+                            <button class="payment-button" onclick="realizarPagamento()">Pagamento</button>
+                        </div>
                     </div>
                 </div>
-            </div>
             </section>
 
             <footer>
@@ -167,27 +172,104 @@
                     </div>
                 </div>
                 <div class="link-footer">
-                        <ul>
-                            <h1>Info</h1>
-                            <li> <a href="">Home</a></li>
-                            <li> <a href="">Sobre-nós</a></li>
-                            <li> <a href="">Contato</a></li>
-                            <li> <a href="">Entrar</a></li>
-                            <li> <a href="">Ajuda</a></li>
-                        </ul>
-                        <ul>
-                            <h1>Insumos</h1>
-                            <li> <a href="">Todos os produtos</a></li>
-                            <li> <a href="">Materiais</a></li>
-                            <li> <a href="">Ferramentas</a></li>
-                            <li> <a href="">Eletrônica</a></li>
-                            <li> <a href="">Mecânica</a></li>
-                        </ul>
+                    <ul>
+                        <h1>Info</h1>
+                        <li> <a href="">Home</a></li>
+                        <li> <a href="">Sobre-nós</a></li>
+                        <li> <a href="">Contato</a></li>
+                        <li> <a href="">Entrar</a></li>
+                        <li> <a href="">Ajuda</a></li>
+                    </ul>
+                    <ul>
+                        <h1>Insumos</h1>
+                        <li> <a href="">Todos os produtos</a></li>
+                        <li> <a href="">Materiais</a></li>
+                        <li> <a href="">Ferramentas</a></li>
+                        <li> <a href="">Eletrônica</a></li>
+                        <li> <a href="">Mecânica</a></li>
+                    </ul>
 
                 </div>
             </footer>
         </div>
     </main>
+
+    <script>
+        function parseJwt(token) {
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        // --- FUNÇÃO QUE TROCA O ÍCONE PELA FOTO ---
+        function carregarFotoPerfilGlobal() {
+            const imagemSalva = localStorage.getItem('userProfileImage');
+            // Pega o elemento 'a' que envolve o ícone
+            const containerIcone = document.querySelector('.nav-link-icon');
+
+            if (imagemSalva && containerIcone) {
+                // Remove o ícone <i> e coloca a imagem <img>
+                containerIcone.innerHTML = `
+                <img src="${imagemSalva}" 
+                     alt="Perfil" 
+                     style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #1714A8;">
+            `;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            // Elementos da tela
+            const navEntrar = document.getElementById('nav-entrar');
+            const navPerfil = document.getElementById('nav-perfil');
+            const btnComece = document.getElementById('btn-comece');
+            const textoLoginExtra = document.getElementById('texto-login-extra');
+
+            if (token) {
+                // --- LOGADO ---
+
+                // 1. Esconde botão Entrar e Textos de Login
+                if (navEntrar) navEntrar.classList.add('d-none');
+                if (btnComece) btnComece.classList.add('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+
+                // 2. Mostra o Perfil (Dropdown)
+                if (navPerfil) {
+                    navPerfil.classList.remove('d-none');
+
+                    // Configura para onde vai o link "Meu Perfil"
+                    const user = parseJwt(token);
+                    const linkPerfil = document.getElementById('link-meu-perfil');
+
+                    if (linkPerfil) {
+                        if (user && user.tipo === 'ADMIN') linkPerfil.href = 'profile.html';
+                        else linkPerfil.href = 'profile_user.html';
+                    }
+
+                    // Carrega a foto (substitui o ícone)
+                    carregarFotoPerfilGlobal();
+
+                    // Configura o botão SAIR do menu
+                    const btnSair = document.getElementById('btnSair');
+                    if (btnSair) {
+                        btnSair.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            localStorage.removeItem('token');
+                            sessionStorage.removeItem('token');
+                            localStorage.removeItem('userProfileImage');
+                            window.location.href = 'login.html';
+                        });
+                    }
+                }
+
+            } else {
+                // --- DESLOGADO ---
+                if (navEntrar) navEntrar.classList.remove('d-none');
+                if (navPerfil) navPerfil.classList.add('d-none');
+                if (btnComece) btnComece.classList.remove('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
+            }
+        });
+    </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"

@@ -302,12 +302,15 @@ header {
 }
 
 .nav-link-icon {
+    display: flex;
     font-size: 1.3rem;
     width: 42px;
     height: 42px;
     color: #1D00D1;
     padding-top: 5px !important;
     padding-bottom: 5px !important;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-link-icon:hover {
@@ -927,6 +930,8 @@ footer {
     flex-direction: column;
 
     justify-content: center;
+
+    padding-left: 30px;
 }
 
 .text-svg-catalog{
@@ -1162,5 +1167,272 @@ footer {
     width: auto;
     height: 150px;
 
-    margin-bottom: 25%;
+    margin-bottom: 12%;
 }
+
+/* Add Products Section */
+.add-products-section {
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+.add-products-container {
+    background-color: #EEEEEE;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    ;
+}
+
+.add-products-form {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 11pt;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1800ad;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.file-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-input-wrapper input[type="file"] {
+    display: none;
+}
+
+.file-input-label {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    transition: all 0.3s;
+}
+
+.file-input-label:hover {
+    background-color: #e0e0e0;
+    border-color: #1800ad;
+}
+
+.file-name {
+    font-size: 9pt;
+    color: #666;
+    font-style: italic;
+}
+
+.form-buttons {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.btn-clear,
+.btn-submit {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11pt;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-clear {
+    background-color: transparent;
+    border: 2px solid #1800ad;
+    color: #1800ad;
+}
+
+.btn-clear:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-submit {
+    background-color: #1800ad;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #5964ff;
+}
+
+@media (max-width: 768px) {
+    .add-products-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Criar categoria*/
+.management-section {
+    background-color: #eeeeee00;
+    border-radius: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.category-form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.category-list {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+}
+
+.category-item:hover {
+    background-color: #f8f9fa;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14pt;
+    color: #333;
+    font-weight: 500;
+}
+
+.category-id {
+    font-size: 10pt;
+    color: #666;
+    margin-left: 10px;
+}
+
+.btn-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10pt;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #1800ad;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #5964ff;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-primary-custom {
+    background-color: #1800ad;
+    border: none;
+    padding: 12px 30px;
+    font-size: 12pt;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #5964ff;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 48pt;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .category-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-actions {
+        width: 100%;
+    }
+
+    .btn-edit,
+    .btn-delete {
+        flex: 1;
+    }
+}
+/* Criar categoria*/

@@ -4,14 +4,22 @@ import { gerarToken } from "../config/jwt.js";
 
 export const loginAdmin = async (req, res) => {
     try {
-        const { username, senha } = req.body;
-        if (!username || !senha) return res.status(400).json({ message: "username e senha obrigatórios" });
+        const { email, senha } = req.body;
 
-        const admin = await Admin.getByUsername(username);
-        if (!admin) return res.status(404).json({ message: "Admin não encontrado" });
+        if (!email || !senha) {
+            return res.status(400).json({ message: "Email e senha são obrigatórios" });
+        }
 
-        const ok = await bcrypt.compare(senha, admin.senha);
-        if (!ok) return res.status(401).json({ message: "Senha inválida" });
+        const admin = await Admin.getByEmail(email);
+
+        if (!admin) {
+            return res.status(404).json({ message: "Administrador não encontrado com este e-mail." });
+        }
+
+        const senhaValida = await bcrypt.compare(senha, admin.senha);
+        if (!senhaValida) {
+            return res.status(401).json({ message: "Senha incorreta." });
+        }
 
         const token = gerarToken({
             tipo: "ADMIN",
@@ -20,9 +28,15 @@ export const loginAdmin = async (req, res) => {
             nome: admin.nome,
             email: admin.email
         });
+        
+        res.json({
+            message: "Login realizado!",
+            token,
+            foto: admin.foto_perfil
+        });
 
-        res.json({ message: "Login admin realizado", token });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("ERRO NO LOGIN ADMIN:", err);
+        res.status(500).json({ error: "Erro interno no servidor." });
     }
 };

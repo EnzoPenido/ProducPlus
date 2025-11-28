@@ -5,8 +5,10 @@ import { gerarToken } from "../config/jwt.js";
 export const registrarCliente = async (req, res) => {
     try {
         const { cnpjCliente, nome, email, senha, telefone, endereco } = req.body;
-        if (!cnpjCliente || !nome || !email || !senha || !telefone || !endereco) return res.status(400).json({ message: "Campos obrigatórios ausentes" });
-
+        if (email.endsWith('@producplus.com')) {
+            return res.status(403).json({ message: "Domínio de email não permitido para clientes." });
+        }
+        
         const existe = await Cliente.getByCnpj(cnpjCliente);
         if (existe) return res.status(409).json({ message: "Cliente já cadastrado" });
 

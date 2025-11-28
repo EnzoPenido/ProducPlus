@@ -136,12 +136,15 @@ header {
 }
 
 .nav-link-icon {
+    display: flex;
     font-size: 1.3rem;
     width: 42px;
     height: 42px;
     color: #1D00D1;
     padding-top: 5px !important;
     padding-bottom: 5px !important;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-link-icon:hover {

@@ -10,11 +10,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/style/profile.css">
+    <link rel="stylesheet" href="../assets/style/pedidos-slider.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../assets/js/pedidos-slider.js"></script>
 </head>
 
 <body>
@@ -108,13 +110,17 @@
             <section class="profile-block-section">
                 <div class="svg-text-profile">
                     <div class="organizer-profile">
-                        <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="">
+                        <img src="../assets/images/svg/user-circle-svgrepo-com.svg" alt="Foto de Perfil"
+                            class="img-fluid rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #1714A8;"
+                            id="main-profile-image">
                         <div class="text-content-profile">
-                            <h1 style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
-                            <h2>Usuário</h2>
+                            <h1 id="textoSaudacao" style="color: #130188; font-size: 13pt; margin: 0;">BOM DIA,</h1>
+                            <h2 id="nomeUsuario">Usuário</h2>
                         </div>
                     </div>
-                    <a type="button" href="">Editar foto de perfil</a>
+                    <a type="button" class="btn btn-primary" id="btn-upload-foto">Editar foto de perfil</a>
+                    <input type="file" id="file-input-foto" accept="image/*" style="display: none;">
                     <a type="button" class="logout-btn">Sair</a>
                 </div>
                 <img class="img-profile-hero" src="../assets/images/svg/user_profile_hero_ProducPlus.svg" alt="">
@@ -126,18 +132,31 @@
             </div>
 
             <div class="dashboard-container">
-                <!-- Card Pedidos -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title">Seus pedidos</div>
-                        <div class="card-value">30</div>
-                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de fornecedores</div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="suppliersChart"></canvas>
+                <div id="pedidos-slider-container">
+                    <!-- slider renderizado aqui -->
+                    <div class="pedidos-container">
+                
+                        <div class="pedidos-slider-wrapper">
+                            <div class="pedidos-slider" id="pedidosSlider">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Carregando pedidos...
+                                </div>
+                            </div>
+                
+                            <div class="slider-controls" id="sliderControls" style="display: none;">
+                                <button class="slider-btn" id="prevBtn" onclick="handlePrev()">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span class="slider-info">
+                                    <span id="currentSlide">0</span> / <span id="totalSlides">0</span>
+                                </span>
+                                <button class="slider-btn" id="nextBtn" onclick="handleNext()">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
             <footer>
@@ -179,8 +198,21 @@
         </script>
 
     <script>
+        const API_URL = 'http://localhost:3000';
+
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        function carregarFotoPerfilGlobal() {
+            const imagemSalva = localStorage.getItem('userProfileImage');
+            if (imagemSalva) {
+                const navIcons = document.querySelectorAll('.nav-profile-img');
+                navIcons.forEach(img => img.src = imagemSalva);
+
+                const mainImage = document.getElementById('main-profile-image');
+                if (mainImage) mainImage.src = imagemSalva;
+            }
         }
 
         window.addEventListener('load', () => {
@@ -198,25 +230,95 @@
                 return;
             }
 
-            console.log("Cliente logado:", user.nome);
+            const hora = new Date().getHours();
+            const h1Saudacao = document.getElementById('textoSaudacao');
+            const h2Nome = document.getElementById('nomeUsuario');
 
-            // DICA: Aqui você pode usar user.nome para colocar o nome dele na tela!
-            // document.getElementById('nomeUsuario').innerText = user.nome;
+            if (h1Saudacao) {
+                let texto = "BOM DIA,";
+                if (hora >= 12 && hora < 18) texto = "BOA TARDE,";
+                else if (hora >= 18 || hora < 5) texto = "BOA NOITE,";
 
-            //NOVA LÓGICA DE LOGOUT (MÚLTIPLOS BOTÕES)
-            // 1. Pega TODOS os elementos com a classe .logout-btn
+                h1Saudacao.innerText = texto;
+            }
+
+            if (h2Nome && user.nome) {
+                h2Nome.innerText = user.nome;
+            }
+
+            carregarFotoPerfilGlobal();
+
             const botoesSair = document.querySelectorAll('.logout-btn');
-
-            // 2. Adiciona o clique em CADA um deles
             botoesSair.forEach(botao => {
                 botao.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('token');
                     sessionStorage.removeItem('token');
+                    localStorage.removeItem('userProfileImage');
                     window.location.href = 'login.html';
                 });
             });
         });
+
+        // --- UPLOAD PARA CLIENTE ---
+        const fileInput = document.getElementById('file-input-foto');
+        const uploadBtn = document.getElementById('btn-upload-foto');
+        const mainImage = document.getElementById('main-profile-image');
+
+        if (uploadBtn && fileInput) {
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', async function (e) {
+                const file = e.target.files[0];
+
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert("Imagem muito grande. Máximo 2MB.");
+                        return;
+                    }
+
+                    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                    const user = parseJwt(token);
+
+                    const formData = new FormData();
+
+                    formData.append('tipo', user.tipo);
+
+                    // Cliente usa cnpjCliente
+                    formData.append('id', user.cnpjCliente);
+                    formData.append('email', user.email);
+
+                    formData.append('foto', file);
+
+                    try {
+                        const response = await fetch(`${API_URL}/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            const novaUrl = data.url;
+                            if (mainImage) mainImage.src = novaUrl;
+                            localStorage.setItem('userProfileImage', novaUrl);
+                            carregarFotoPerfilGlobal();
+                            alert("Foto atualizada!");
+                        } else {
+                            alert("Erro: " + data.message);
+                        }
+
+                    } catch (error) {
+                        console.error(error);
+                        alert("Erro de conexão.");
+                    }
+                }
+            });
+        }
     </script>
 
     <script>
