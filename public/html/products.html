@@ -255,6 +255,61 @@
         </div>
     </main>
 
+    <!-- Modal de Edição de Produto -->
+    <div class="modal fade" id="modalEditarProduto" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header" style="background-color: #130188; color: white;">
+                    <h5 class="modal-title" id="modalLabel">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar Produto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="formEditarProduto">
+                        <input type="hidden" id="editProdId">
+
+                        <div class="mb-3">
+                            <label for="editProdNome" class="form-label fw-bold">Nome do Produto</label>
+                            <input type="text" class="form-control" id="editProdNome" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editProdPreco" class="form-label fw-bold">Preço (R$)</label>
+                                <input type="number" step="0.01" class="form-control" id="editProdPreco" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editProdEstoque" class="form-label fw-bold">Estoque</label>
+                                <input type="number" class="form-control" id="editProdEstoque" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editProdCategoria" class="form-label fw-bold">Categoria</label>
+                            <select class="form-select" id="editProdCategoria" required>
+                                <option value="" disabled selected>Carregando categorias...</option>
+                            </select>
+                        </div>
+
+                        <div class="modal-footer px-0 pb-0">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color: #130188; border: none;">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
     <script>
         const API_URL = 'http://localhost:3000';
 
@@ -281,12 +336,12 @@
         // --- CRIAR CARD DE PRODUTO ---
         function createProductCard(produto, isAdmin = false) {
             const imagemUrl = produto.url_imagem || '../assets/images/placeholder.png';
-            
+
             let buttonsHTML = `<button class="btn-buy-product">Comprar</button>`;
-            
+
             if (isAdmin) {
                 buttonsHTML += `
-                    <button class="btn-edit-product" onclick="openEditProductModal(${produto.idProduto}, '${produto.nome.replace(/'/g, "\\'")}', ${produto.preco_unitario}, '${produto.descricao.replace(/'/g, "\\'")}', ${produto.quantidadeEstoque})">
+                    <button class="btn-edit-product" onclick="editProduct(${produto.idProduto})">
                         Editar <img src="../assets/images/svg/edit-svgrepo-com.svg" alt="">
                     </button>
                     <button class="btn-delete-product" onclick="deleteProduct(${produto.idProduto}, '${produto.nome.replace(/'/g, "\\'")}')">
@@ -315,36 +370,119 @@
             `;
         }
 
-        // --- CARREGAR PRODUTOS POR SEÇÃO ---
-        async function loadProductsBySection(sectionId) {
+        // --- 1. FUNÇÃO DO CARRINHO (Lógica Pura) ---
+    function addToCart(id, nome, preco) {
+        let carrinho = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
+        
+        const itemExistente = carrinho.find(item => item.id === id);
+
+        if (itemExistente) {
+            itemExistente.quantity += 1;
+            alert(`+1 unidade de "${nome}" adicionada!`);
+        } else {
+            carrinho.push({ id: id, name: nome, price: parseFloat(preco), quantity: 1 });
+            alert(`"${nome}" adicionado ao carrinho!`);
+        }
+        localStorage.setItem('carrinhoProducPlus', JSON.stringify(carrinho));
+    }
+
+    // --- 2. CARREGAR PRODUTOS (Respeitando seu Layout) ---
+    async function loadProductsBySection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+        section.innerHTML = '';
+
+        const token = localStorage.getItem('token');
+        let isAdmin = false;
+        if (token) {
             try {
-                const response = await fetch(`${API_URL}/produtos/secao/${sectionId}`);
-                
-                if (!response.ok) {
-                    console.error(`Erro ao carregar produtos da seção ${sectionId}`);
-                    return;
-                }
-
-                const produtos = await response.json();
-                const section = document.getElementById(sectionId);
-
-                if (section) {
-                    if (produtos.length === 0) {
-                        section.innerHTML = '<p style="text-align: center; color: #999; width:100%;">Nenhum produto nesta seção</p>';
-                    } else {
-                        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-                        const user = token ? parseJwt(token) : null;
-                        const isAdmin = user && user.tipo === 'ADMIN';
-
-                        const cardsHtml = produtos.map(p => createProductCard(p, isAdmin)).join('');
-                        section.innerHTML = cardsHtml;
-                    }
-                }
-            } catch (error) {
-                console.error(`Erro ao carregar produtos:`, error);
-            }
+                const user = JSON.parse(atob(token.split('.')[1]));
+                if (user.tipo === 'ADMIN') isAdmin = true;
+            } catch (e) {}
         }
 
+        try {
+            const response = await fetch('http://localhost:3000/produtos');
+            const products = await response.json();
+            
+            const grid = document.createElement('div');
+            grid.className = 'product-list';
+
+            products.forEach(product => {
+                const preco = parseFloat(product.preco_unitario);
+                const precoFormatado = preco.toFixed(2).replace('.', ',');
+                // Protege contra aspas no nome (ex: D'agua)
+                const nomeSeguro = product.nome.replace(/'/g, "\\'"); 
+
+                // Lógica da Imagem (Usa sua classe img-placeholder se não tiver foto)
+                let imagemHTML = '';
+                if (product.url_imagem) {
+                     const src = product.url_imagem.startsWith('http') ? product.url_imagem : `http://localhost:3000${product.url_imagem}`;
+                     // Aqui mantive um style mínimo apenas para a imagem não estourar o card, 
+                     // mas se você tiver CSS para 'container-products-img-text img', pode tirar o style.
+                     imagemHTML = `<img src="${src}" alt="${product.nome}" style="width: 100%; height: 150px; object-fit: contain;">`;
+                } else {
+                     imagemHTML = `
+                        <div class="img-placeholder">
+                            <i class="fa-solid fa-box-open" style="font-size: 40px; color: #ccc;"></i>
+                        </div>`;
+                }
+
+                // Define qual botão mostrar
+                let botaoHTML = '';
+                if (isAdmin) {
+                    botaoHTML = `
+                        <div class="action-buttons">
+                            <button class="btn-edit-product" onclick="editProduct(${product.idProduto})">
+                                Editar <img src="../assets/images/svg/edit-svgrepo-com.svg" alt="" width="16">
+                            </button>
+                            <button class="btn-delete-product" onclick="deleteProduct(${product.idProduto})">
+                                Deletar <img src="../assets/images/svg/delete-1-svgrepo-com.svg" alt="" width="16">
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // AQUI ESTÁ O QUE VOCÊ PEDIU:
+                    // O botão usa SUA classe 'btn-buy-product' e NÃO tem style inline.
+                    // Apenas o onclick foi adicionado.
+                    botaoHTML = `
+                        <button class="btn-buy-product" onclick="addToCart(${product.idProduto}, '${nomeSeguro}', ${preco})">
+                            Comprar
+                        </button>
+                    `;
+                }
+
+                // O Card Montado (Estrutura idêntica ao seu template)
+                const cardHTML = `
+                    <div class="container-products-item">
+                        <a class="link-item" href="#">
+                            <div class="container-products-img-text">
+                                ${imagemHTML}
+                                <div class="container-products-text">
+                                    <h1>${product.nome}</h1>
+                                    <p>${product.categoriaProduto || 'Geral'}</p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="container-products-item-desc-text">
+                            <div class="container-products-item-desc-text-price">
+                                <span>${product.descricao || 'Descrição do produto'}</span>
+                                <h3 style="color: #1800ad;">R$ ${precoFormatado}</h3>
+                            </div>
+                            
+                            ${botaoHTML}
+                            
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+
+            section.appendChild(grid);
+        } catch (error) { console.error(error); }
+    }
+
+        
         // --- DELETAR PRODUTO ---
         async function deleteProduct(idProduto, nomeProduto) {
             if (!confirm(`Deseja excluir o produto "${nomeProduto}"?`)) {
@@ -352,7 +490,7 @@
             }
 
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-            
+
             if (!token) {
                 alert('Você precisa estar logado como admin');
                 return;
@@ -378,11 +516,128 @@
             }
         }
 
-        // --- ABRIR MODAL DE EDITAR PRODUTO ---
-        function openEditProductModal(idProduto, nome, preco, descricao, quantidade) {
-            // Implementar modal de edição aqui
-            alert(`Editar produto: ${nome}\nFuncionalidade em desenvolvimento`);
+        // --- FUNÇÕES DE EDIÇÃO CORRIGIDAS ---
+
+        // 1. ABRIR O MODAL E CARREGAR DADOS
+        window.editProduct = async function (id) {
+            console.log("Abrindo edição para o ID:", id);
+
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                // A. Busca os dados do produto no Backend
+                const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const produto = await response.json();
+                    console.log("Dados do produto recebidos:", produto); // Debug
+
+                    // B. Preenche os campos do Modal (COM OS NOMES CERTOS DO BANCO)
+                    document.getElementById('editProdId').value = produto.idProduto;
+
+                    // CORREÇÃO AQUI: 'nome' em vez de 'nomeProduto'
+                    document.getElementById('editProdNome').value = produto.nome;
+
+                    // CORREÇÃO AQUI: 'preco_unitario' em vez de 'precoProduto'
+                    document.getElementById('editProdPreco').value = produto.preco_unitario;
+
+                    // CORREÇÃO AQUI: 'quantidadeEstoque' em vez de 'qtdEstoqueProduto'
+                    document.getElementById('editProdEstoque').value = produto.quantidadeEstoque;
+
+                    // C. Carrega as categorias e seleciona a correta
+                    await carregarCategoriasNoModal(produto.idCategoria);
+
+                    // D. Abre o Modal usando o Bootstrap
+                    const modalElement = document.getElementById('modalEditarProduto');
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show();
+                } else {
+                    alert("Erro ao buscar dados do produto.");
+                }
+            } catch (error) {
+                console.error("Erro:", error);
+                alert("Erro de conexão.");
+            }
+        };
+
+        // 2. CARREGAR CATEGORIAS NO SELECT (CORRIGIDO TAMBÉM)
+        async function carregarCategoriasNoModal(idCategoriaAtual) {
+            const select = document.getElementById('editProdCategoria');
+            const token = localStorage.getItem('token');
+
+            // Se já tiver opções carregadas, limpa para garantir ou verifica se precisa recarregar
+            // Aqui vou forçar recarregar para garantir os nomes certos
+            select.innerHTML = '<option value="" disabled selected>Carregando...</option>';
+
+            try {
+                const res = await fetch('http://localhost:3000/categorias', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const categorias = await res.json();
+
+                select.innerHTML = '<option value="" disabled selected>Selecione...</option>';
+
+                categorias.forEach(cat => {
+                    // CORREÇÃO AQUI: 'cat.nome' em vez de 'cat.nomeCategoria'
+                    // Baseado na tabela Categoria do seu SQL
+                    select.innerHTML += `<option value="${cat.idCategoria}">${cat.nome}</option>`;
+                });
+
+                // Seleciona a categoria que veio do produto
+                if (idCategoriaAtual) {
+                    select.value = idCategoriaAtual;
+                }
+
+            } catch (error) {
+                console.error("Erro categorias:", error);
+            }
         }
+
+        // 3. SALVAR AS ALTERAÇÕES (SUBMIT DO FORM)
+        const formEdit = document.getElementById('formEditarProduto');
+        if (formEdit) {
+            formEdit.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const id = document.getElementById('editProdId').value;
+                const token = localStorage.getItem('token');
+
+                // Cria o objeto com os dados novos (Usando os nomes que o seu MODEL espera no UPDATE)
+                // No produtoModel.js update(), ele espera: nome, preco_unitario, quantidadeEstoque
+                const dadosAtualizados = {
+                    nome: document.getElementById('editProdNome').value,
+                    preco_unitario: parseFloat(document.getElementById('editProdPreco').value),
+                    quantidadeEstoque: parseInt(document.getElementById('editProdEstoque').value),
+                    idCategoria: document.getElementById('editProdCategoria').value
+                };
+
+                try {
+                    const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(dadosAtualizados)
+                    });
+
+                    if (response.ok) {
+                        alert("Produto atualizado com sucesso!");
+                        location.reload();
+                    } else {
+                        const erro = await response.json();
+                        alert("Erro ao salvar: " + (erro.message || "Tente novamente."));
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("Erro de conexão ao salvar.");
+                }
+            });
+        }
+
 
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -453,11 +708,6 @@
             });
         });
     </script>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
 
 </body>
 

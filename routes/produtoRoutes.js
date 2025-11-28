@@ -8,7 +8,8 @@ import {
     buscarProduto,
     criarProduto,
     atualizarProduto,
-    excluirProduto
+    excluirProduto,
+    baixarEstoque
 } from "../controllers/produtoController.js";
 
 const router = express.Router();
@@ -20,5 +21,6 @@ router.get("/:id", buscarProduto);
 router.post("/", autenticarJWT, permitirRoles("ADMIN"), criarProduto);
 router.put("/:id", autenticarJWT, permitirRoles("ADMIN"), atualizarProduto);
 router.delete("/:id", autenticarJWT, permitirRoles("ADMIN"), excluirProduto);
+router.put("/baixa-estoque", baixarEstoque);
 
 export default router;

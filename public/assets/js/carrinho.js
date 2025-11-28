@@ -1,162 +1,166 @@
-// Dados mockados do carrinho (substituir por dados reais do backend)
-        let cartData = [
-            { id: 1, name: "Produto 1", quantity: 1, price: 35.00 },
-            { id: 2, name: "Produto 2", quantity: 2, price: 45.00 },
-            { id: 3, name: "Produto 3", quantity: 1, price: 55.00 },
-            { id: 4, name: "Produto 4", quantity: 1, price: 25.00 },
-            { id: 5, name: "Produto 5", quantity: 1, price: 30.00 },
-            { id: 6, name: "Produto 6", quantity: 1, price: 40.00 }
-        ];
+// Recupera o carrinho do navegador
+let cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
+let shippingCost = 0; // Começa com frete zero
 
-        let shippingCost = 0;
+// --- 1. RENDERIZAR E CALCULAR TOTAIS ---
+function renderCart() {
+    const cartContainer = document.getElementById('cartItems');
+    cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
 
-        // Renderizar itens do carrinho
-        function renderCart() {
-            const cartContainer = document.getElementById('cartItems');
+    // Se vazio
+    if (cartData.length === 0) {
+        cartContainer.innerHTML = '<p style="text-align:center; padding:20px;">Seu carrinho está vazio.</p>';
+        updateTotal(); // Zera os valores
+        return;
+    }
+
+    // Gera o HTML dos itens (simples e limpo)
+    cartContainer.innerHTML = cartData.map(item => `
+        <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0;">
+            <div style="flex-grow: 1;">
+                <h4 style="margin: 0; font-size: 16px;">${item.name}</h4>
+                <p style="margin: 0; color: #666;">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+            </div>
             
-            if (cartData.length === 0) {
-                cartContainer.innerHTML = '<div class="empty-cart">Seu carrinho está vazio</div>';
-                updateTotal();
-                return;
-            }
-
-            cartContainer.innerHTML = cartData.map(item => `
-                <div class="cart-item">
-                    <div class="item-info">
-                        <span class="item-name">${item.name}</span>
-                        <span class="item-price">R$${item.price.toFixed(2).replace('.', ',')} cada</span>
-                    </div>
-                    <div class="item-controls">
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)" ${item.quantity <= 1 ? 'disabled' : ''}>−</button>
-                            <span class="item-quantity">${item.quantity}x</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                        </div>
-                        <button class="remove-btn" onclick="removeItem(${item.id})" title="Remover item">×</button>
-                    </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 5px;">
+                    <button onclick="changeQuantity(${item.id}, -1)" style="border: none; background: transparent; padding: 5px 10px; cursor: pointer;">-</button>
+                    <span style="padding: 0 5px;">${item.quantity}</span>
+                    <button onclick="changeQuantity(${item.id}, 1)" style="border: none; background: transparent; padding: 5px 10px; cursor: pointer;">+</button>
                 </div>
-            `).join('');
+                <button onclick="removeItem(${item.id})" style="border: none; background: transparent; color: red; cursor: pointer;">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
 
-            updateTotal();
-        }
+    updateTotal();
+}
 
-        // Atualizar quantidade
-        function updateQuantity(itemId, change) {
-            const item = cartData.find(i => i.id === itemId);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity < 1) {
-                    item.quantity = 1;
-                }
-                renderCart();
-            }
-        }
+// --- 2. ATUALIZAR VALORES (SUBTOTAL E TOTAL) ---
+function updateTotal() {
+    // Calcula a soma de todos os itens (Preço x Quantidade)
+    const subtotal = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const total = subtotal + shippingCost;
 
-        // Remover item
-        function removeItem(itemId) {
-            if (confirm('Deseja remover este item do carrinho?')) {
-                cartData = cartData.filter(i => i.id !== itemId);
-                renderCart();
-            }
-        }
+    // Atualiza o HTML
+    document.getElementById('subtotalPrice').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
 
-        // Calcular total
-        function updateTotal() {
-            const subtotal = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const total = subtotal + shippingCost;
-            
-            // Atualizar subtotal
-            document.getElementById('subtotalValue').textContent = `R$${subtotal.toFixed(2).replace('.', ',')}`;
-            
-            // Atualizar frete
-            document.getElementById('shippingValue').textContent = shippingCost === 0 && document.getElementById('shippingOptions').style.display === 'none' 
-                ? 'R$0,00' 
-                : `R$${shippingCost.toFixed(2).replace('.', ',')}`;
-            
-            // Atualizar total
-            document.getElementById('totalValue').textContent = `R$${total.toFixed(2).replace('.', ',')}`;
-        }
+    // Atualiza o Frete na tela
+    const shippingEl = document.getElementById('shippingPrice');
+    if (shippingEl) {
+        shippingEl.textContent = shippingCost === 0 ? 'R$ 0,00' : `R$ ${shippingCost.toFixed(2).replace('.', ',')}`;
+    }
 
-        // Calcular frete (mockado - integrar com API real)
-        function calcularFrete() {
-            const cep = document.getElementById('cepInput').value.replace(/\D/g, '');
-            
-            if (cep.length !== 8) {
-                alert('Por favor, insira um CEP válido');
-                return;
-            }
+    // Atualiza o Total Geral
+    document.getElementById('totalPrice').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+}
 
-            // Simular chamada de API
-            const shippingOptionsDiv = document.getElementById('shippingOptions');
-            shippingOptionsDiv.style.display = 'flex';
-            
-            // Opções mockadas (substituir por dados reais da API)
-            shippingOptionsDiv.innerHTML = `
-                <label class="shipping-option" onclick="selectShipping(0)">
-                    <input type="radio" name="shipping" value="0">
-                    <div class="shipping-info">
-                        <div class="shipping-name">Retirar na loja</div>
-                        <div class="shipping-details">Disponível imediatamente</div>
-                    </div>
-                    <div class="shipping-price">Grátis</div>
-                </label>
-                <label class="shipping-option" onclick="selectShipping(15)">
-                    <input type="radio" name="shipping" value="15">
-                    <div class="shipping-info">
-                        <div class="shipping-name">Entrega Econômica</div>
-                        <div class="shipping-details">Até 10 dias úteis</div>
-                    </div>
-                    <div class="shipping-price">R$15,00</div>
-                </label>
-                <label class="shipping-option" onclick="selectShipping(30)">
-                    <input type="radio" name="shipping" value="30">
-                    <div class="shipping-info">
-                        <div class="shipping-name">Entrega Expressa</div>
-                        <div class="shipping-details">Até 3 dias úteis</div>
-                    </div>
-                    <div class="shipping-price">R$30,00</div>
-                </label>
-            `;
-        }
+// --- 3. FUNÇÕES DE QUANTIDADE E REMOVER ---
+function changeQuantity(id, delta) {
+    const index = cartData.findIndex(i => i.id === id);
+    if (index > -1) {
+        cartData[index].quantity += delta;
+        if (cartData[index].quantity <= 0) cartData.splice(index, 1); // Remove se for zero
+        localStorage.setItem('carrinhoProducPlus', JSON.stringify(cartData));
+        renderCart();
+    }
+}
 
-        // Selecionar opção de frete
-        function selectShipping(cost) {
-            shippingCost = cost;
-            
-            // Atualizar visual da seleção
-            document.querySelectorAll('.shipping-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.currentTarget.classList.add('selected');
-            
-            updateTotal();
-        }
+function removeItem(id) {
+    if (confirm("Remover item?")) {
+        cartData = cartData.filter(i => i.id !== id);
+        localStorage.setItem('carrinhoProducPlus', JSON.stringify(cartData));
+        renderCart();
+    }
+}
 
-        // Realizar pagamento
-        function realizarPagamento() {
-            if (cartData.length === 0) {
-                alert('Seu carrinho está vazio!');
-                return;
-            }
+// --- 4. CÁLCULO DE FRETE (SIMULADO) ---
+function calculateShipping() {
+    const cep = document.getElementById('cepInput').value;
+    const optionsDiv = document.getElementById('shippingOptions');
 
-            if (shippingCost === null && document.getElementById('shippingOptions').style.display === 'flex') {
-                alert('Por favor, selecione uma opção de frete!');
-                return;
-            }
+    if (cep.length >= 8) {
+        optionsDiv.style.display = 'block';
+        // Gera opções clicáveis
+        optionsDiv.innerHTML = `
+            <div onclick="selectShipping(15.90, this)" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 5px; cursor: pointer; border-radius: 5px;">
+                <strong>Econômico</strong> (7 dias) - R$ 15,90
+            </div>
+            <div onclick="selectShipping(25.90, this)" style="padding: 10px; border: 1px solid #ddd; cursor: pointer; border-radius: 5px;">
+                <strong>Expresso</strong> (2 dias) - R$ 25,90
+            </div>
+        `;
+    } else {
+        alert("Digite um CEP válido.");
+    }
+}
 
-            // Aqui você integraria com o sistema de pagamento
-            alert('Redirecionando para pagamento...');
-            // window.location.href = 'payment.html';
-        }
+function selectShipping(value, element) {
+    shippingCost = value;
 
-        // Máscara para CEP
-        document.getElementById('cepInput').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 5) {
-                value = value.slice(0, 5) + '-' + value.slice(5, 8);
-            }
-            e.target.value = value;
+    // Efeito visual de seleção
+    const options = document.getElementById('shippingOptions').children;
+    for (let opt of options) {
+        opt.style.borderColor = '#ddd';
+        opt.style.backgroundColor = 'transparent';
+    }
+    element.style.borderColor = '#1800ad'; // Cor azul
+    element.style.backgroundColor = '#f0f4ff';
+
+    updateTotal(); // Recalcula o total com o frete
+}
+
+// --- 5. FINALIZAR COMPRA (BAIXA NO ESTOQUE) ---
+async function realizarPagamento() {
+    // Validações
+    if (cartData.length === 0) return alert("Seu carrinho está vazio!");
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("Você precisa estar logado para comprar.");
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Pergunta se quer confirmar
+    if (!confirm(`Confirmar compra no valor de R$ ${(cartData.reduce((a, b) => a + (b.price * b.quantity), 0) + shippingCost).toFixed(2)}?`)) {
+        return;
+    }
+
+    try {
+        // CHAMA O BACKEND PARA DAR BAIXA NO ESTOQUE
+        const response = await fetch('http://localhost:3000/produtos/baixa-estoque', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(cartData) // Envia os itens do carrinho
         });
 
-        // Inicializar
-        renderCart();
+        if (response.ok) {
+            alert("Compra realizada com sucesso! O estoque foi atualizado.");
+
+            // Limpa o carrinho
+            localStorage.removeItem('carrinhoProducPlus');
+            cartData = [];
+            shippingCost = 0;
+            renderCart();
+
+            // Aqui você pode redirecionar para uma página de sucesso
+            // window.location.href = 'sucesso.html';
+        } else {
+            const erro = await response.json();
+            alert("Erro ao finalizar: " + erro.message);
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Erro de conexão com o servidor.");
+    }
+}
+
+// Inicializa ao abrir a página
+window.addEventListener('load', renderCart);

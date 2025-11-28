@@ -66,3 +66,25 @@ export const excluirProduto = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const baixarEstoque = async (req, res) => {
+    const itens = req.body; // Recebe o array do carrinho
+
+    if (!itens || itens.length === 0) {
+        return res.status(400).json({ message: "Carrinho vazio." });
+    }
+
+    try {
+        // Percorre cada item e subtrai do banco
+        for (const item of itens) {
+            await db.query(
+                "UPDATE Produto SET quantidadeEstoque = quantidadeEstoque - ? WHERE idProduto = ?",
+                [item.quantity, item.id]
+            );
+        }
+        res.status(200).json({ message: "Estoque atualizado com sucesso!" });
+    } catch (err) {
+        console.error("Erro ao baixar estoque:", err);
+        res.status(500).json({ message: "Erro no servidor ao atualizar estoque." });
+    }
+};
