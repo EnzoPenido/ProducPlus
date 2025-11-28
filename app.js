@@ -4,7 +4,6 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from 'url';
 
-// --- IMPORTAÇÃO DAS ROTAS ---
 import authRoutes from "./routes/authRoutes.js";
 import adminAuthRoutes from "./routes/adminAuthRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -17,34 +16,21 @@ import itemCompraRoutes from "./routes/itemCompraRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
-
 const app = express();
 
-// --- 1. CONFIGURAÇÃO DO CORS E OPTIONS ---
 app.use(cors());
 app.options(/.*/, cors());
-
 app.use(express.json());
 
-// --- CONFIGURAÇÃO DE CAMINHOS ---
 const raizProjeto = process.cwd();
-
 const pastaPublica = path.join(raizProjeto, 'public');
 const pastaHtml = path.join(raizProjeto, 'public', 'html');
 const pastaUploads = path.join(raizProjeto, 'uploads');
 
-console.log("---------------------------------------------------");
-console.log(`🌐 Servindo raiz (Assets): ${pastaPublica}`);
-console.log(`📄 Servindo páginas (HTML): ${pastaHtml}`);
-console.log(`📂 Servindo imagens: ${pastaUploads}`);
-console.log("---------------------------------------------------");
-
-// --- SERVIR ARQUIVOS ---
 app.use(express.static(pastaPublica));
 app.use(express.static(pastaHtml));
 app.use('/uploads', express.static(pastaUploads));
 
-// --- ROTAS DA API ---
 app.use("/auth", authRoutes);
 app.use("/admin/auth", adminAuthRoutes);
 app.use("/admin", adminRoutes);
@@ -56,12 +42,10 @@ app.use("/compras", compraRoutes);
 app.use("/itenscompra", itemCompraRoutes);
 app.use("/upload", uploadRoutes);
 
-// --- ROTA PRINCIPAL (HOME) ---
 app.get('/', (req, res) => {
     res.sendFile(path.join(pastaHtml, 'index.html'));
 });
 
-// Inicialização
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`));
 
