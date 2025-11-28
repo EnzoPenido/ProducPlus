@@ -11,6 +11,9 @@
     height: auto;
 
     gap: 35px;
+    flex-wrap: wrap;
+    
+    justify-content: center;
 }
 
 #ferramentas-section{
@@ -19,7 +22,11 @@
     height: auto;
 
     gap: 35px;
+    flex-wrap: wrap;
+
+    justify-content: center;
 }
+
 
 #eletronica-section{
     display: flex;
@@ -27,6 +34,9 @@
     height: auto;
 
     gap: 35px;
+    flex-wrap: wrap;
+
+    justify-content: center;
 }
 
 #mecanica-section{
@@ -35,6 +45,9 @@
     height: auto;
 
     gap: 35px;
+    flex-wrap: wrap;
+    
+    justify-content: center;
 }
 
 #embalagem-section{
@@ -43,6 +56,9 @@
     height: auto;
 
     gap: 35px;
+    flex-wrap: wrap;
+
+    justify-content: center;
 }
 
 
@@ -728,7 +744,7 @@ footer {
 
 .container-products-item {
     display: flex;
-    width: 230px;
+    width: 250px;
     height: auto;
 
     background-color: white;
@@ -974,7 +990,7 @@ footer {
 
 @media (max-width: 745px){
     .container-products-item{
-        width: 200px;
+        width: 250px;
     }
 
     .link-item{
