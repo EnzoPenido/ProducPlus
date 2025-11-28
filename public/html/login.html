@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProducPlus - Login</title>
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="shortcut icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../assets/style/login.css">
@@ -16,7 +16,7 @@
 </head>
 
 <body>
-     <header class="d-flex justify-content-center camada-nav">
+    <header class="d-flex justify-content-center camada-nav">
         <div class="container container-navbar m-sm-0 p-sm-0 ">
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid ms-5 me-5 p-2">
@@ -28,11 +28,11 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul class="navbar-nav gap-3 ">
-                          
+
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="contact.html" target="_parent">Contato</a>
                             </li>
-                          
+
 
                         </ul>
                     </div>
@@ -109,73 +109,84 @@
     <script>
         const API_URL = 'http://localhost:3000';
 
-        // Função para ler o token
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
 
-        // Função para redirecionar (usada no auto-login e no login manual)
         function redirecionarUsuario(token) {
             const payload = parseJwt(token);
-
             if (payload && payload.tipo === 'ADMIN') {
                 window.location.href = 'profile.html';
             } else if (payload && payload.tipo === 'CLIENTE') {
                 window.location.href = 'profile_user.html';
             } else {
-                // Se o token for inválido, limpamos tudo
                 localStorage.removeItem('token');
                 sessionStorage.removeItem('token');
             }
         }
 
-        // --- 1. AUTO-LOGIN (Roda assim que a página abre) ---
         window.addEventListener('load', () => {
-            // Tenta pegar o token do LocalStorage (Lembrar de mim) OU SessionStorage (Temporário)
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            if (token) redirecionarUsuario(token);
 
-            if (token) {
-                console.log("Token encontrado! Redirecionando automaticamente...");
-                redirecionarUsuario(token);
+            const emailSalvo = localStorage.getItem('rememberedEmail');
+            if (emailSalvo) {
+                document.getElementById('emailLogin').value = emailSalvo;
+                document.getElementById('checkbox').checked = true;
             }
         });
 
-        // --- 2. LOGIN MANUAL ---
         document.getElementById('btnEntrar').addEventListener('click', async (event) => {
             event.preventDefault();
 
-            const email = document.getElementById('emailLogin').value;
+            const email = document.getElementById('emailLogin').value.trim();
             const senha = document.getElementById('senhaLogin').value;
-            const checkbox = document.getElementById('checkbox'); // Checkbox "Lembrar de mim"
+            const checkbox = document.getElementById('checkbox');
 
             if (!email || !senha) {
                 alert("Por favor, preencha todos os campos!");
                 return;
             }
 
+            let rotaLogin;
+            if (email.endsWith('@producplus.com')) {
+                rotaLogin = `${API_URL}/admin/auth/login`;
+            } else {
+                rotaLogin = `${API_URL}/auth/login`;
+            }
+
             try {
-                const response = await fetch(`${API_URL}/auth/login`, {
+                const response = await fetch(rotaLogin, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, senha })
                 });
 
                 const data = await response.json();
-
+                // Se der erro, para aqui e mostra o alerta
                 if (!response.ok) {
-                    alert('Erro: ' + (data.message || 'Falha no login'));
+                    alert('Erro: ' + (data.message || 'Email ou senha incorretos'));
                     return;
                 }
 
-                // SUCESSO! Agora decidimos onde salvar o token
+                // --- SUCESSO (Se chegou aqui, é porque logou) ---
+
+                // 1. Limpa foto antiga e Salva a nova (se houver)
+                localStorage.removeItem('userProfileImage');
+                if (data.foto) {
+                    const urlCompleta = `http://localhost:3000${data.foto}`;
+                    localStorage.setItem('userProfileImage', urlCompleta);
+                }
+
+                // 2. Salva Token
                 if (checkbox.checked) {
-                    // Se marcou "Lembrar de mim", salva no LocalStorage (Eterno)
                     localStorage.setItem('token', data.token);
-                    sessionStorage.removeItem('token'); // Garante que não duplica
+                    localStorage.setItem('rememberedEmail', email);
+                    sessionStorage.removeItem('token');
                 } else {
-                    // Se NÃO marcou, salva no SessionStorage (Morre ao fechar o navegador)
                     sessionStorage.setItem('token', data.token);
-                    localStorage.removeItem('token'); // Garante que não fica salvo pra sempre
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('rememberedEmail');
                 }
 
                 alert('Login realizado!');
@@ -187,7 +198,7 @@
             }
         });
     </script>
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
 </body>

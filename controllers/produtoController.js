@@ -9,6 +9,24 @@ export const listarProdutos = async (req, res) => {
     }
 };
 
+export const listarProdutosPorCategoria = async (req, res) => {
+    try {
+        const produtos = await Produto.getByCategoria(req.params.idCategoria);
+        res.json(produtos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const listarProdutosPorSecao = async (req, res) => {
+    try {
+        const produtos = await Produto.getBySeccao(req.params.secao);
+        res.json(produtos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 export const buscarProduto = async (req, res) => {
     try {
         const produto = await Produto.getById(req.params.id);
@@ -21,9 +39,12 @@ export const buscarProduto = async (req, res) => {
 
 export const criarProduto = async (req, res) => {
     try {
+        console.log('POST /produtos body:', req.body);
         const id = await Produto.create(req.body);
+        console.log('Produto criado no DB id:', id);
         res.status(201).json({ message: "Produto criado", idProduto: id });
     } catch (err) {
+        console.error('Erro ao criar produto:', err);
         res.status(500).json({ error: err.message });
     }
 };

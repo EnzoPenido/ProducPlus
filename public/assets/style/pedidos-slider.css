@@ -1,0 +1,228 @@
+.pedidos-container {
+    width: 100%;
+}
+
+.pedidos-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+.pedidos-header h2 {
+    font-size: 20pt;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: 1px;
+}
+
+.pedidos-slider-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pedidos-slider-container{
+    width: 100%;
+}
+
+.pedidos-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 20px;
+}
+
+.pedido-card {
+    flex: 0 0 calc(33.333% - 14px);
+    min-height: 280px;
+    background: linear-gradient(135deg, #1800ad 0%, #130188 100%);
+    border-radius: 12px;
+    padding: 25px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(24, 0, 173, 0.2);
+}
+
+.pedido-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(24, 0, 173, 0.4);
+}
+
+.pedido-numero {
+    font-size: 12pt;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 5px;
+}
+
+.pedido-id {
+    font-size: 18pt;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.pedido-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11pt;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+}
+
+.info-label {
+    opacity: 0.85;
+}
+
+.info-value {
+    font-weight: 600;
+}
+
+.pedido-status {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 10pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-top: 10px;
+}
+
+.status-pendente {
+    background-color: rgba(255, 193, 7, 0.3);
+    border: 1px solid #ffc107;
+    color: #ffc107;
+}
+
+.status-aguardando {
+    background-color: rgba(33, 150, 243, 0.3);
+    border: 1px solid #2196f3;
+    color: #2196f3;
+}
+
+.status-confirmada {
+    background-color: rgba(76, 175, 80, 0.3);
+    border: 1px solid #4caf50;
+    color: #4caf50;
+}
+
+.status-entregue {
+    background-color: rgba(76, 175, 80, 0.3);
+    border: 1px solid #4caf50;
+    color: #4caf50;
+}
+
+.status-cancelada {
+    background-color: rgba(244, 67, 54, 0.3);
+    border: 1px solid #f44336;
+    color: #f44336;
+}
+
+.slider-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.slider-btn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1800ad;
+    color: white;
+    cursor: pointer;
+    font-size: 16pt;
+    transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover:not(:disabled) {
+    background-color: #130188;
+    transform: scale(1.1);
+}
+
+.slider-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.slider-info {
+    font-size: 11pt;
+    color: #666;
+    font-weight: 500;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 14pt;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state-icon {
+    font-size: 48pt;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-state-text {
+    font-size: 16pt;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .pedido-card {
+        flex: 0 0 calc(50% - 10px);
+    }
+
+    .pedidos-header h2 {
+        font-size: 16pt;
+    }
+}
+
+@media (max-width: 480px) {
+    .pedido-card {
+        flex: 0 0 100%;
+        min-height: 240px;
+    }
+
+    .pedidos-slider-wrapper {
+        padding: 15px;
+    }
+
+    .slider-controls {
+        gap: 10px;
+    }
+
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 14pt;
+    }
+}

@@ -51,15 +51,20 @@
                                     <i class="fa-solid fa-cart-plus"></i>
                                 </a>
                             </li>
-                            <li class="nav-item nav-item-icon btn-destaque p-0">
-                                <a class="nav-link nav-link-icon" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false" data-bs-offset="10,20">
+                            <li class="nav-item d-none nav-item-icon p-0" id="nav-perfil">
+                                <a class="nav-link nav-link-icon" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" style="color: #1714A8; font-size: 20px;">
                                     <i class="fa-solid fa-user"></i>
                                 </a>
+
                                 <div class="dropdown-center me-1">
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="profile_user.html">Perfil</a></li>
-                                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu Perfil</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#" id="btnSair"
+                                                style="color: red; font-weight: bold;">Sair</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -164,7 +169,7 @@
                             <span>A base de todos produtos.</span>
                         </div>
 
-                        <a class="" href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html#material-section">Ver mais</a>
                     </div>
                     <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
                         <img src="../assets/images/svg/materiais-catalog-ProducPlus.svg" alt="">
@@ -183,7 +188,7 @@
                             <span>Melhores ajudantes para sua fábrica.</span>
                         </div>
 
-                        <a class="" href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html#ferramentas-section">Ver mais</a>
                     </div>
                     <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
                         <img src="../assets/images/svg/ferramentas-catalog-ProducPlus.svg" alt="">
@@ -202,7 +207,7 @@
                             <span>Circuitos, cabos e automação de empresa.</span>
                         </div>
 
-                        <a class="" href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html#eletronica-section">Ver mais</a>
                     </div>
                     <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
                         <img style="transform: rotate(180deg);"
@@ -222,7 +227,7 @@
                             <span>Peças vitais para as máquinas.</span>
                         </div>
 
-                        <a class="" href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html#mecanica-section">Ver mais</a>
                     </div>
                     <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
                         <img src="../assets/images/svg/mecanica-catalog-ProducPlus.svg" alt="">
@@ -241,7 +246,7 @@
                             <span>Simplicidade, materiais e organização.</span>
                         </div>
 
-                        <a class="" href="../html/products.html">Ver mais</a>
+                        <a class="" href="../html/products.html#embalagem-section">Ver mais</a>
                     </div>
                     <div class="col-sm-12 col-md-7 p-0 img-block-catalog">
                         <img src="../assets/images/svg/embalagem-catalog-ProducPlus.svg" alt="">
@@ -256,35 +261,35 @@
         </div>
     </main>
     <footer>
-                <div class="svg-footer-content">
-                    <div class="svg-logo-footer">
-                        <img src="../assets/images/svg/logo_extensa_ProducPlus.svg" alt="">
-                    </div>
-                    <div class="svg-social-footer">
-                        <a href=""><img src="../assets/images/svg/github-142-svgrepo-com (1).svg" alt=""></a>
-                        <a href=""><img src="../assets/images/svg/instagram-svgrepo-com.svg" alt=""></a>
-                    </div>
-                </div>
-                <div class="link-footer">
-                    <ul>
-                        <h1>Info</h1>
-                        <li> <a href="">Home</a></li>
-                        <li> <a href="">Sobre-nós</a></li>
-                        <li> <a href="">Contato</a></li>
-                        <li> <a href="">Entrar</a></li>
-                        <li> <a href="">Ajuda</a></li>
-                    </ul>
-                    <ul>
-                        <h1>Insumos</h1>
-                        <li> <a href="">Todos os produtos</a></li>
-                        <li> <a href="">Materiais</a></li>
-                        <li> <a href="">Ferramentas</a></li>
-                        <li> <a href="">Eletrônica</a></li>
-                        <li> <a href="">Mecânica</a></li>
-                    </ul>
+        <div class="svg-footer-content">
+            <div class="svg-logo-footer">
+                <img src="../assets/images/svg/logo_extensa_ProducPlus.svg" alt="">
+            </div>
+            <div class="svg-social-footer">
+                <a href=""><img src="../assets/images/svg/github-142-svgrepo-com (1).svg" alt=""></a>
+                <a href=""><img src="../assets/images/svg/instagram-svgrepo-com.svg" alt=""></a>
+            </div>
+        </div>
+        <div class="link-footer">
+            <ul>
+                <h1>Info</h1>
+                <li> <a href="">Home</a></li>
+                <li> <a href="">Sobre-nós</a></li>
+                <li> <a href="">Contato</a></li>
+                <li> <a href="">Entrar</a></li>
+                <li> <a href="">Ajuda</a></li>
+            </ul>
+            <ul>
+                <h1>Insumos</h1>
+                <li> <a href="">Todos os produtos</a></li>
+                <li> <a href="">Materiais</a></li>
+                <li> <a href="">Ferramentas</a></li>
+                <li> <a href="">Eletrônica</a></li>
+                <li> <a href="">Mecânica</a></li>
+            </ul>
 
-                </div>
-            </footer>
+        </div>
+    </footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -301,6 +306,83 @@
 
         offcanvasElement.addEventListener('hide.bs.offcanvas', function () {
             navbarBrand.classList.remove('offcanvas-open');
+        });
+    </script>
+
+    <script>
+        function parseJwt(token) {
+            try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+        }
+
+        // --- FUNÇÃO QUE TROCA O ÍCONE PELA FOTO ---
+        function carregarFotoPerfilGlobal() {
+            const imagemSalva = localStorage.getItem('userProfileImage');
+            // Pega o elemento 'a' que envolve o ícone
+            const containerIcone = document.querySelector('#nav-perfil .nav-link-icon');
+
+            if (imagemSalva && containerIcone) {
+                // Remove o ícone <i> e coloca a imagem <img>
+                containerIcone.innerHTML = `
+                <img src="${imagemSalva}" 
+                     alt="Perfil" 
+                     style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #1714A8;">
+            `;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            // Elementos da tela
+            const navEntrar = document.getElementById('nav-entrar');
+            const navPerfil = document.getElementById('nav-perfil');
+            const btnComece = document.getElementById('btn-comece');
+            const textoLoginExtra = document.getElementById('texto-login-extra');
+
+            if (token) {
+                // --- LOGADO ---
+
+                // 1. Esconde botão Entrar e Textos de Login
+                if (navEntrar) navEntrar.classList.add('d-none');
+                if (btnComece) btnComece.classList.add('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
+
+                // 2. Mostra o Perfil (Dropdown)
+                if (navPerfil) {
+                    navPerfil.classList.remove('d-none');
+
+                    // Configura para onde vai o link "Meu Perfil"
+                    const user = parseJwt(token);
+                    const linkPerfil = document.getElementById('link-meu-perfil');
+
+                    if (linkPerfil) {
+                        if (user && user.tipo === 'ADMIN') linkPerfil.href = 'profile.html';
+                        else linkPerfil.href = 'profile_user.html';
+                    }
+
+                    // Carrega a foto (substitui o ícone)
+                    carregarFotoPerfilGlobal();
+
+                    // Configura o botão SAIR do menu
+                    const btnSair = document.getElementById('btnSair');
+                    if (btnSair) {
+                        btnSair.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            localStorage.removeItem('token');
+                            sessionStorage.removeItem('token');
+                            localStorage.removeItem('userProfileImage');
+                            window.location.href = 'login.html';
+                        });
+                    }
+                }
+
+            } else {
+                // --- DESLOGADO ---
+                if (navEntrar) navEntrar.classList.remove('d-none');
+                if (navPerfil) navPerfil.classList.add('d-none');
+                if (btnComece) btnComece.classList.remove('d-none');
+                if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
+            }
         });
     </script>
 
