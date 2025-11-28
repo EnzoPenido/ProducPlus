@@ -22,13 +22,6 @@ body {
 
 }
 
-main {
-    display: flex;
-    width: auto;
-    height: 100dvh;
-
-    justify-content: center;
-}
 
 li img {
     width: 32px;

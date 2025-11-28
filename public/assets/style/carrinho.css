@@ -366,7 +366,7 @@ body {
 main {
     display: flex;
     width: auto;
-    height: 100dvh;
+    height: fit-content;
 
     justify-content: center;
 }
@@ -956,6 +956,7 @@ footer {
     display: flex;
     margin: auto;
     width: 85%;
+    margin-top: 100px ;
     height: 300px;
 
     background-color: #1811AC;

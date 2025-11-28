@@ -50,7 +50,7 @@ body {
 main {
     display: flex;
     width: auto;
-    height: 100dvh;
+    height: fit-content;
 
     justify-content: center;
 }
@@ -609,6 +609,7 @@ h3 {
 footer {
     display: flex;
     margin: auto;
+    margin-top: 150px ;
     width: 85%;
     height: 300px;
 

@@ -29,7 +29,7 @@ body {
 main {
     padding-top: 130px;
     width: auto;
-    height: 100dvh;
+    height: fit-content;
 
     justify-content: center;
     align-items: center;

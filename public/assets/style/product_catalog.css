@@ -26,7 +26,7 @@ main {
     display: flex;
     width: auto;
     height: auto;
-    min-height: 100vh;
+    min-height: fit-content;;
 
     justify-content: center;
 }

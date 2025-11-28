@@ -415,18 +415,19 @@
                 <ul>
                     <h1>Info</h1>
                     <li> <a href="index.html">Home</a></li>
-                    <li> <a href="#about">Sobre-nós</a></li>
+                    <li> <a href="index.html#about">Sobre-nós</a></li>
                     <li> <a href="contact.html">Contato</a></li>
                     <li> <a href="login.html">Entrar</a></li>
                     <li> <a href="contact.html">Ajuda</a></li>
                 </ul>
                 <ul>
                     <h1>Insumos</h1>
-                    <li> <a href="">Todos os produtos</a></li>
-                    <li> <a href="">Materiais</a></li>
-                    <li> <a href="">Ferramentas</a></li>
-                    <li> <a href="">Eletrônica</a></li>
-                    <li> <a href="">Mecânica</a></li>
+                    <li> <a href="products.html">Todos os produtos</a></li>
+                    <li> <a href="products.html#material-section">Materiais</a></li>
+                    <li> <a href="products.html#ferramentas-section">Ferramentas</a></li>
+                    <li> <a href="products.html#eletronica-section">Eletrônica</a></li>
+                    <li> <a href="products.html#mecanica-section">Mecânica</a></li>
+                    <li> <a href="products.html#embalagem-section">Embalagem</a></li>
                 </ul>
 
             </div>
@@ -441,15 +442,11 @@
     <script src="../assets/js/scroll-reveal.js"></script>
 
     <script>
-    // Seleciona todos os elementos com a classe 'icone-giratorio'
+        //Giro aleatório nos icones 
     const icones = document.querySelectorAll('.icone-giratorio');
 
-    icones.forEach(icone => {
-        // Gera um número aleatório entre 2 segundos e 10 segundos
-        // Math.random() * (max - min) + min
+    icones.forEach(icone => { 
         const duracaoAleatoria = Math.random() * (10 - 2) + 8; 
-
-        // Aplica a duração aleatória como uma variável CSS inline (style="--velocidade-giro: X.Xs;")
         icone.style.setProperty('--velocidade-giro', `${duracaoAleatoria}s`);
     });
 </script>
