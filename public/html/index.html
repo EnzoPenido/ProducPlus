@@ -324,9 +324,9 @@
 
 
                 </div>
-                <div class="informacoes2 row justify-content-center align-items-center">
+                <div class="informacoes2 row justify-content-center align-items-center mb-0">
 
-                    <div class="col-12 col-md-12 col-lg-6 info-text">
+                    <div class="col-12 col-md-12 col-lg-6 info-text ">
                         <h2 class="titulinho" style="display: block; width: auto;">Mais <span
                                 style="color: black; font-family: Lovelo;">qualidade</span></h2>
                         <p class="texto-info">Aumente a produtividade com soluções inovadoras que simplificam os
@@ -341,7 +341,61 @@
 
 
                 </div>
+                <div class="informacoes row justify-content-center align-items-center">
+                    <div class="col-12 col-md-12 col-lg-6 info-img">
+                        <div class="marka"><img class="" src="../assets/images/hero-section-img3-ProducPlus.png">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-6 info-text">
+                        <h2 class="titulinho" style="display: block;">
+                            <span style="color: black; font-family: Lovelo;">PRATICIDADE</span> GARANTIDA</h2>
+                        <p class="texto-info">Receba insumos de qualidade de forma rápida e sem complicação. Nossa empresa entrega exatamente o que sua produção precisa, no tempo certo, para que sua operação nunca pare. Agilidade, confiança e materiais eficientes — tudo em um só lugar.</p>
+                    </div>
+
+
+
+
+                </div>
+
             </div>
+            <div class="container area-botao-entrar">
+                <div class="row d-flex w-100">
+
+                    <div class="col-3 d-lg-flex d-none parafusos gap-2">
+                       
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                    </div>
+                    <div class="col-12 col-lg-6  centro-entrar">
+                        <div class="teste">
+                           <i class="fa-solid fa-gear animacao"></i>
+                            <h1 class="titulinho-2" style="color: white; border-bottom: 0ch;">Avance mais, e com mais qualidade</h1>
+                                <button id="btnEntrar2" class="btn-action dif btn botao-entrar m-auto pt-3 pb-3 "
+                                    onclick="location.href='register.html'">
+                                    Comece Agora!
+                                </button>
+                        </div>
+
+                    </div>
+                    <div class="col-3 d-lg-flex d-none parafusos justify-content-end gap-2">
+                      
+                        <img class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                        <img  class="icone-giratorio" src="../assets/images/svg/screw-svgrepo-com.svg">
+                    </div>
+
+                </div>
+
+
             </div>
 
         </section>
@@ -387,6 +441,21 @@
     <script src="../assets/js/scroll-reveal.js"></script>
 
     <script>
+    // Seleciona todos os elementos com a classe 'icone-giratorio'
+    const icones = document.querySelectorAll('.icone-giratorio');
+
+    icones.forEach(icone => {
+        // Gera um número aleatório entre 2 segundos e 10 segundos
+        // Math.random() * (max - min) + min
+        const duracaoAleatoria = Math.random() * (10 - 2) + 8; 
+
+        // Aplica a duração aleatória como uma variável CSS inline (style="--velocidade-giro: X.Xs;")
+        icone.style.setProperty('--velocidade-giro', `${duracaoAleatoria}s`);
+    });
+</script>
+
+
+    <script>
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
@@ -415,6 +484,7 @@
             const navPerfil = document.getElementById('nav-perfil');
             const btnComece = document.getElementById('btn-comece');
             const textoLoginExtra = document.getElementById('texto-login-extra');
+            const btnEntrar2 = document.getElementById('btnEntrar2')
 
             if (token) {
                 // --- LOGADO ---
@@ -422,9 +492,11 @@
                 // 1. Esconde botão Entrar e Textos de Login
                 if (navEntrar) navEntrar.classList.add('d-none');
                 if (btnComece) btnComece.classList.add('d-none');
-                if (textoLoginExtra) textoLoginExtra.classList.add('d-none');
-
+                if (textoLoginExtra) textoLoginExtra.classList.add('d-none')
+                if (btnEntrar2) btnEntrar2.classList.add('d-none')
                 // 2. Mostra o Perfil (Dropdown)
+
+
                 if (navPerfil) {
                     navPerfil.classList.remove('d-none');
                     const user = parseJwt(token);
@@ -455,6 +527,7 @@
                 if (navPerfil) navPerfil.classList.add('d-none');
                 if (btnComece) btnComece.classList.remove('d-none');
                 if (textoLoginExtra) textoLoginExtra.classList.remove('d-none');
+                if (btnEntrar2) btnEntrar2.classList.remove('d-none')
             }
         });
     </script>
