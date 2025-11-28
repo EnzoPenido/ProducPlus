@@ -873,6 +873,13 @@ footer {
     padding: 30px !important;
 }
 
+@media (max-width:725px){
+    .img-profile-hero{
+        visibility: hidden;
+    padding: 30px !important;
+}
+}
+
 .dashboard-block-section{
     display: flex;
     width: 100%;
