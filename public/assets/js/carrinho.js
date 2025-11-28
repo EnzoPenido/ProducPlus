@@ -1,73 +1,98 @@
-// Recupera o carrinho do navegador
-let cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
-let shippingCost = 0; // Começa com frete zero
+// --- CARRINHO.JS (VERSÃO BLINDADA) ---
 
-// --- 1. RENDERIZAR E CALCULAR TOTAIS ---
+// 1. Recupera dados e Corrige preços estragados automaticamente
+let cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
+let shippingCost = 0;
+
+// Função para limpar preços (Transforma "R$ 19,90" ou "19.90" em número puro 19.90)
+function limparPreco(valor) {
+    if (typeof valor === 'number') return valor;
+    if (!valor) return 0;
+    // Remove "R$", espaços e troca vírgula por ponto
+    let limpo = String(valor).replace('R$', '').replace(/\s/g, '').replace(',', '.');
+    return parseFloat(limpo) || 0;
+}
+
+// 2. Renderizar itens
 function renderCart() {
+    console.log("Renderizando carrinho...", cartData); // Debug
     const cartContainer = document.getElementById('cartItems');
+
+    // Atualiza leitura
     cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
 
-    // Se vazio
     if (cartData.length === 0) {
-        cartContainer.innerHTML = '<p style="text-align:center; padding:20px;">Seu carrinho está vazio.</p>';
-        updateTotal(); // Zera os valores
+        cartContainer.innerHTML = '<div style="text-align: center; padding: 30px; color: #777;"><h3>Seu carrinho está vazio</h3><a href="products.html" style="color: #1800ad;">Voltar a comprar</a></div>';
+        updateTotal();
         return;
     }
 
-    // Gera o HTML dos itens (simples e limpo)
-    cartContainer.innerHTML = cartData.map(item => `
-        <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0;">
-            <div style="flex-grow: 1;">
-                <h4 style="margin: 0; font-size: 16px;">${item.name}</h4>
-                <p style="margin: 0; color: #666;">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+    cartContainer.innerHTML = cartData.map(item => {
+        // Garante preço numérico para exibição
+        const precoNumerico = limparPreco(item.price);
+
+        return `
+        <div class="cart-item" style="border-bottom: 1px solid #eee; padding: 15px 0; display: flex; align-items: center; justify-content: space-between;">
+            <div class="item-info">
+                <h4 style="margin: 0; font-size: 16px; color: #333;">${item.name}</h4>
+                <span class="item-price" style="color: #666;">R$ ${precoNumerico.toFixed(2).replace('.', ',')}</span>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 5px;">
-                    <button onclick="changeQuantity(${item.id}, -1)" style="border: none; background: transparent; padding: 5px 10px; cursor: pointer;">-</button>
-                    <span style="padding: 0 5px;">${item.quantity}</span>
-                    <button onclick="changeQuantity(${item.id}, 1)" style="border: none; background: transparent; padding: 5px 10px; cursor: pointer;">+</button>
+            <div class="item-controls" style="display: flex; gap: 15px; align-items: center;">
+                <div class="quantity-box" style="border: 1px solid #ddd; border-radius: 5px; display: flex; align-items: center;">
+                    <button onclick="changeQuantity(${item.id}, -1)" style="border: none; background: transparent; padding: 5px 10px; cursor: pointer; font-weight: bold;">-</button>
+                    <span style="padding: 0 5px; min-width: 20px; text-align: center;">${item.quantity}</span>
+                    <button onclick="changeQuantity(${item.id}, 1)" style="border: none; background: transparent; padding: 5px 10px; cursor: pointer; font-weight: bold;">+</button>
                 </div>
-                <button onclick="removeItem(${item.id})" style="border: none; background: transparent; color: red; cursor: pointer;">
+
+                <button onclick="removeItem(${item.id})" style="border: none; background: transparent; color: #dc3545; cursor: pointer; font-size: 18px;">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 
     updateTotal();
 }
 
-// --- 2. ATUALIZAR VALORES (SUBTOTAL E TOTAL) ---
+// 3. ATUALIZAR TOTAIS (CORRIGIDO PARA APARECER SEMPRE)
 function updateTotal() {
-    // Calcula a soma de todos os itens (Preço x Quantidade)
-    const subtotal = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let subtotal = 0;
+
+    // Soma item a item com segurança
+    cartData.forEach(item => {
+        const preco = limparPreco(item.price);
+        const qtd = parseInt(item.quantity) || 1;
+        subtotal += preco * qtd;
+    });
+
     const total = subtotal + shippingCost;
 
-    // Atualiza o HTML
-    document.getElementById('subtotalPrice').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+    console.log("Subtotal calculado:", subtotal); // Debug
 
-    // Atualiza o Frete na tela
-    const shippingEl = document.getElementById('shippingPrice');
-    if (shippingEl) {
-        shippingEl.textContent = shippingCost === 0 ? 'R$ 0,00' : `R$ ${shippingCost.toFixed(2).replace('.', ',')}`;
-    }
+    // Injeta no HTML
+    const elSub = document.getElementById('subtotalPrice');
+    const elShip = document.getElementById('shippingPrice');
+    const elTotal = document.getElementById('totalPrice');
 
-    // Atualiza o Total Geral
-    document.getElementById('totalPrice').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    if (elSub) elSub.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+    if (elShip) elShip.textContent = `R$ ${shippingCost.toFixed(2).replace('.', ',')}`;
+    if (elTotal) elTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// --- 3. FUNÇÕES DE QUANTIDADE E REMOVER ---
+// 4. Mudar Quantidade
 function changeQuantity(id, delta) {
     const index = cartData.findIndex(i => i.id === id);
     if (index > -1) {
         cartData[index].quantity += delta;
-        if (cartData[index].quantity <= 0) cartData.splice(index, 1); // Remove se for zero
+        if (cartData[index].quantity <= 0) cartData.splice(index, 1);
+
         localStorage.setItem('carrinhoProducPlus', JSON.stringify(cartData));
         renderCart();
     }
 }
 
+// 5. Remover
 function removeItem(id) {
     if (confirm("Remover item?")) {
         cartData = cartData.filter(i => i.id !== id);
@@ -76,91 +101,84 @@ function removeItem(id) {
     }
 }
 
-// --- 4. CÁLCULO DE FRETE (SIMULADO) ---
+// 6. Calcular Frete
 function calculateShipping() {
-    const cep = document.getElementById('cepInput').value;
+    const cepInput = document.getElementById('cepInput');
     const optionsDiv = document.getElementById('shippingOptions');
 
-    if (cep.length >= 8) {
+    // Remove tudo que não for número
+    const cep = cepInput.value.replace(/\D/g, '');
+
+    if (cep.length === 8) {
         optionsDiv.style.display = 'block';
-        // Gera opções clicáveis
         optionsDiv.innerHTML = `
-            <div onclick="selectShipping(15.90, this)" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 5px; cursor: pointer; border-radius: 5px;">
+            <div onclick="selectShipping(15.90, this)" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 5px; cursor: pointer; border-radius: 5px; background: white;">
                 <strong>Econômico</strong> (7 dias) - R$ 15,90
             </div>
-            <div onclick="selectShipping(25.90, this)" style="padding: 10px; border: 1px solid #ddd; cursor: pointer; border-radius: 5px;">
+            <div onclick="selectShipping(25.90, this)" style="border: 1px solid #ddd; padding: 10px; cursor: pointer; border-radius: 5px; background: white;">
                 <strong>Expresso</strong> (2 dias) - R$ 25,90
             </div>
         `;
     } else {
-        alert("Digite um CEP válido.");
+        alert("Digite um CEP válido (8 números).");
     }
 }
 
-function selectShipping(value, element) {
-    shippingCost = value;
+function selectShipping(valor, element) {
+    shippingCost = valor;
 
-    // Efeito visual de seleção
-    const options = document.getElementById('shippingOptions').children;
-    for (let opt of options) {
-        opt.style.borderColor = '#ddd';
-        opt.style.backgroundColor = 'transparent';
+    // Limpa seleção visual anterior
+    const allOptions = document.getElementById('shippingOptions').children;
+    for (let div of allOptions) {
+        div.style.borderColor = '#ddd';
+        div.style.backgroundColor = 'white';
     }
-    element.style.borderColor = '#1800ad'; // Cor azul
-    element.style.backgroundColor = '#f0f4ff';
 
-    updateTotal(); // Recalcula o total com o frete
+    // Marca o novo
+    element.style.borderColor = '#1800ad';
+    element.style.backgroundColor = '#eef0ff';
+
+    updateTotal();
 }
 
-// --- 5. FINALIZAR COMPRA (BAIXA NO ESTOQUE) ---
+// 7. Finalizar (Baixa Estoque)
 async function realizarPagamento() {
-    // Validações
     if (cartData.length === 0) return alert("Seu carrinho está vazio!");
 
     const token = localStorage.getItem('token');
     if (!token) {
-        alert("Você precisa estar logado para comprar.");
+        alert("Faça login para finalizar.");
         window.location.href = 'login.html';
         return;
     }
 
-    // Pergunta se quer confirmar
-    if (!confirm(`Confirmar compra no valor de R$ ${(cartData.reduce((a, b) => a + (b.price * b.quantity), 0) + shippingCost).toFixed(2)}?`)) {
-        return;
-    }
+    if (!confirm("Confirmar compra?")) return;
 
     try {
-        // CHAMA O BACKEND PARA DAR BAIXA NO ESTOQUE
         const response = await fetch('http://localhost:3000/produtos/baixa-estoque', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(cartData) // Envia os itens do carrinho
+            body: JSON.stringify(cartData)
         });
 
         if (response.ok) {
-            alert("Compra realizada com sucesso! O estoque foi atualizado.");
-
-            // Limpa o carrinho
+            alert("Compra realizada com sucesso!");
             localStorage.removeItem('carrinhoProducPlus');
             cartData = [];
             shippingCost = 0;
             renderCart();
-
-            // Aqui você pode redirecionar para uma página de sucesso
-            // window.location.href = 'sucesso.html';
         } else {
             const erro = await response.json();
-            alert("Erro ao finalizar: " + erro.message);
+            alert("Erro: " + erro.message);
         }
-
     } catch (error) {
         console.error(error);
-        alert("Erro de conexão com o servidor.");
+        alert("Erro de conexão.");
     }
 }
 
-// Inicializa ao abrir a página
+// Inicializa
 window.addEventListener('load', renderCart);
