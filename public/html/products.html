@@ -298,16 +298,15 @@
             return `
                 <div class="container-products-item">
                     <a class="link-item" href="product.html?id=${produto.idProduto}">
-                        <div class="container-products-img-text" style="background-image: url('${imagemUrl}'); background-size: cover; background-position: center;">
-                            <div class="container-products-text">
+                        <div class="container-products-img-text" style="background-image: url('${imagemUrl}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: white;">
+                        </div>
+                        <div class="container-products-text">
                                 <h1>${produto.nome}</h1>
                                 <p>${produto.descricao || 'Produto'}</p>
                             </div>
-                        </div>
                     </a>
                     <div class="container-products-item-desc-text">
                         <div class="container-products-item-desc-text-price">
-                            <span>${produto.descricao}</span>
                             <h3 style="color: #1800ad;">R$ ${parseFloat(produto.preco_unitario).toFixed(2)}</h3>
                         </div>
                         ${buttonsHTML}
