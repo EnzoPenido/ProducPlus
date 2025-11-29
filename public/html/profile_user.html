@@ -134,15 +134,15 @@
             <div class="dashboard-container">
                 <div id="pedidos-slider-container">
                     <!-- slider renderizado aqui -->
-                    <div class="pedidos-container">
-                
+                    <div class="pedidos-container" id="pedidos-container">
+
                         <div class="pedidos-slider-wrapper">
                             <div class="pedidos-slider" id="pedidosSlider">
                                 <div class="loading">
                                     <i class="fas fa-spinner fa-spin"></i> Carregando pedidos...
                                 </div>
                             </div>
-                
+
                             <div class="slider-controls" id="sliderControls" style="display: none;">
                                 <button class="slider-btn" id="prevBtn" onclick="handlePrev()">
                                     <i class="fas fa-chevron-left"></i>
@@ -212,6 +212,64 @@
 
                 const mainImage = document.getElementById('main-profile-image');
                 if (mainImage) mainImage.src = imagemSalva;
+            }
+        }
+
+        // --- FUNÇÃO PARA CARREGAR OS PEDIDOS ---
+        async function carregarMeusPedidos() {
+            const token = localStorage.getItem('token');
+            const container = document.getElementById('pedidos-container');
+
+            try {
+                const response = await fetch(`${API_URL}/compras/meus-pedidos`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const compras = await response.json();
+
+                    if (compras.length === 0) {
+                        container.innerHTML = '<div style="text-align: center; padding: 20px; background: #f9f9f9; border-radius: 8px;">Você ainda não tem pedidos.</div>';
+                        return;
+                    }
+
+                    container.innerHTML = '';
+
+                    // Gera os cards
+                    compras.forEach(compra => {
+                        const data = new Date(compra.dataCompra).toLocaleDateString('pt-BR');
+                        const valor = parseFloat(compra.valorTotal).toFixed(2).replace('.', ',');
+
+                        let corStatus = '#ffc107';
+                        if (compra.statusCompra === 'APROVADO') corStatus = '#198754';
+                        if (compra.statusCompra === 'CANCELADO') corStatus = '#dc3545';
+
+                        const cardHTML = `
+                            <div style="background: white; border: 1px solid #ddd; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin: 0; color: #130188; font-weight: bold; font-size: 18px;">Pedido #${compra.idCompra}</h4>
+                                    <span style="color: #666; font-size: 14px;">Realizado em: ${data}</span>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: bold; color: ${corStatus}; margin-bottom: 5px; text-transform: uppercase; font-size: 12px;">
+                                        ${compra.statusCompra}
+                                    </div>
+                                    <div style="font-size: 20px; font-weight: bold; color: #333;">
+                                        R$ ${valor}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += cardHTML;
+                    });
+
+                } else {
+                    console.error("Erro API:", response.status);
+                    container.innerHTML = '<p style="color: red; text-align: center;">Não foi possível carregar seus pedidos.</p>';
+                }
+            } catch (error) {
+                console.error("Erro Fetch:", error);
+                container.innerHTML = '<p style="color: red; text-align: center;">Erro de conexão com o servidor.</p>';
             }
         }
 
@@ -287,11 +345,8 @@
                     const formData = new FormData();
 
                     formData.append('tipo', user.tipo);
-
-                    // Cliente usa cnpjCliente
                     formData.append('id', user.cnpjCliente);
                     formData.append('email', user.email);
-
                     formData.append('foto', file);
 
                     try {
@@ -316,6 +371,28 @@
                         console.error(error);
                         alert("Erro de conexão.");
                     }
+                }
+            });
+            window.addEventListener('load', () => {
+                const token = localStorage.getItem('token');
+                const navEntrar = document.getElementById('nav-entrar');
+                const navPerfil = document.getElementById('nav-perfil');
+
+                if (token) {
+                    if (navEntrar) navEntrar.classList.add('d-none');
+                    if (navPerfil) {
+                        navPerfil.classList.remove('d-none');
+                        carregarFotoPerfilGlobal();
+
+                        document.getElementById('btnSair').addEventListener('click', (e) => {
+                            e.preventDefault(); localStorage.clear(); sessionStorage.clear(); window.location.href = 'login.html';
+                        });
+                    }
+
+                    carregarMeusPedidos();
+
+                } else {
+                    window.location.href = 'login.html';
                 }
             });
         }

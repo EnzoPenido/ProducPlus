@@ -1,24 +1,17 @@
-// --- CARRINHO.JS (VERSÃO BLINDADA) ---
-
-// 1. Recupera dados e Corrige preços estragados automaticamente
 let cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
 let shippingCost = 0;
 
-// Função para limpar preços (Transforma "R$ 19,90" ou "19.90" em número puro 19.90)
 function limparPreco(valor) {
     if (typeof valor === 'number') return valor;
     if (!valor) return 0;
-    // Remove "R$", espaços e troca vírgula por ponto
     let limpo = String(valor).replace('R$', '').replace(/\s/g, '').replace(',', '.');
     return parseFloat(limpo) || 0;
 }
 
-// 2. Renderizar itens
 function renderCart() {
-    console.log("Renderizando carrinho...", cartData); // Debug
+    console.log("Renderizando carrinho...", cartData);
     const cartContainer = document.getElementById('cartItems');
 
-    // Atualiza leitura
     cartData = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
 
     if (cartData.length === 0) {
@@ -28,7 +21,6 @@ function renderCart() {
     }
 
     cartContainer.innerHTML = cartData.map(item => {
-        // Garante preço numérico para exibição
         const precoNumerico = limparPreco(item.price);
 
         return `
@@ -55,11 +47,9 @@ function renderCart() {
     updateTotal();
 }
 
-// 3. ATUALIZAR TOTAIS (CORRIGIDO PARA APARECER SEMPRE)
 function updateTotal() {
     let subtotal = 0;
 
-    // Soma item a item com segurança
     cartData.forEach(item => {
         const preco = limparPreco(item.price);
         const qtd = parseInt(item.quantity) || 1;
@@ -67,10 +57,6 @@ function updateTotal() {
     });
 
     const total = subtotal + shippingCost;
-
-    console.log("Subtotal calculado:", subtotal); // Debug
-
-    // Injeta no HTML
     const elSub = document.getElementById('subtotalPrice');
     const elShip = document.getElementById('shippingPrice');
     const elTotal = document.getElementById('totalPrice');
@@ -80,7 +66,6 @@ function updateTotal() {
     if (elTotal) elTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// 4. Mudar Quantidade
 function changeQuantity(id, delta) {
     const index = cartData.findIndex(i => i.id === id);
     if (index > -1) {
@@ -92,7 +77,6 @@ function changeQuantity(id, delta) {
     }
 }
 
-// 5. Remover
 function removeItem(id) {
     if (confirm("Remover item?")) {
         cartData = cartData.filter(i => i.id !== id);
@@ -101,12 +85,9 @@ function removeItem(id) {
     }
 }
 
-// 6. Calcular Frete
 function calculateShipping() {
     const cepInput = document.getElementById('cepInput');
     const optionsDiv = document.getElementById('shippingOptions');
-
-    // Remove tudo que não for número
     const cep = cepInput.value.replace(/\D/g, '');
 
     if (cep.length === 8) {
@@ -127,21 +108,18 @@ function calculateShipping() {
 function selectShipping(valor, element) {
     shippingCost = valor;
 
-    // Limpa seleção visual anterior
     const allOptions = document.getElementById('shippingOptions').children;
     for (let div of allOptions) {
         div.style.borderColor = '#ddd';
         div.style.backgroundColor = 'white';
     }
 
-    // Marca o novo
     element.style.borderColor = '#1800ad';
     element.style.backgroundColor = '#eef0ff';
 
     updateTotal();
 }
 
-// 7. Finalizar (Baixa Estoque)
 async function realizarPagamento() {
     if (cartData.length === 0) return alert("Seu carrinho está vazio!");
 
@@ -155,8 +133,8 @@ async function realizarPagamento() {
     if (!confirm("Confirmar compra?")) return;
 
     try {
-        const response = await fetch('http://localhost:3000/produtos/baixa-estoque', {
-            method: 'PUT',
+        const response = await fetch('http://localhost:3000/compras', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -172,13 +150,12 @@ async function realizarPagamento() {
             renderCart();
         } else {
             const erro = await response.json();
-            alert("Erro: " + erro.message);
+            alert("Erro ao comprar: " + erro.message);
         }
     } catch (error) {
-        console.error(error);
-        alert("Erro de conexão.");
+        console.error("Erro ao finalizar compra:", error);
+        alert("Erro ao processar a compra.");
     }
 }
 
-// Inicializa
 window.addEventListener('load', renderCart);

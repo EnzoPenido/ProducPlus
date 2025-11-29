@@ -132,11 +132,10 @@
                     <div class="summary-card">
                         <div class="summary-title">Frete</div>
                         <div class="shipping-input">
-                            <input type="text" id="cepInput" placeholder="Digite o CEP" maxlength="9">
-                            <button onclick="calcularFrete()">Calcular</button>
+                            <input type="text" id="cepInput" class="form-control" placeholder="00000-000" maxlength="9">
+                            <button class="btn btn-secondary" onclick="calculateShipping()">OK</button>
                         </div>
                         <div class="shipping-options" id="shippingOptions" style="display: none;">
-                            <!-- Opções de frete aparecerão aqui -->
                         </div>
                     </div>
 
@@ -145,16 +144,16 @@
                         <div class="price-breakdown">
                             <div class="price-item">
                                 <span class="price-label">Subtotal</span>
-                                <span class="price-amount" id="subtotalValue">R$0,00</span>
+                                <span class="price-amount" id="subtotalPrice">R$0,00</span>
                             </div>
                             <div class="price-item">
                                 <span class="price-label">Frete</span>
-                                <span class="price-amount" id="shippingValue">R$0,00</span>
+                                <span class="price-amount" id="shippingPrice">R$0,00</span>
                             </div>
                         </div>
                         <div class="total-section">
                             <div class="total-label">Total</div>
-                            <div class="total-value" id="totalValue">R$0,00</div>
+                            <div class="total-value" id="totalPrice">R$0,00</div>
                             <button class="payment-button" onclick="realizarPagamento()">Pagamento</button>
                         </div>
                     </div>

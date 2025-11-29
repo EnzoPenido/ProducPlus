@@ -1,26 +1,29 @@
 import express from "express";
-import { autenticarJWT } from "../middlewares/authMiddleware.js";
-import { permitirRoles } from "../middlewares/roleMiddleware.js";
 import {
     listarProdutos,
-    listarProdutosPorCategoria,
-    listarProdutosPorSecao,
     buscarProduto,
     criarProduto,
     atualizarProduto,
     excluirProduto,
-    baixarEstoque
+    baixarEstoque,
+    ajustarEstoque
 } from "../controllers/produtoController.js";
+import { autenticarJWT } from "../middlewares/authMiddleware.js";
+import { permitirRoles } from "../middlewares/roleMiddleware.js";
 
 const router = express.Router();
 
+// --- ROTAS PÚBLICAS ---
 router.get("/", listarProdutos);
-router.get("/secao/:secao", listarProdutosPorSecao);
-router.get("/categoria/:idCategoria", listarProdutosPorCategoria);
 router.get("/:id", buscarProduto);
+
+// --- ROTA DE COMPRA ---
+router.put("/baixa-estoque", autenticarJWT, permitirRoles("CLIENTE", "ADMIN"), baixarEstoque);
+
+// --- ROTAS DE ADMIN ---
 router.post("/", autenticarJWT, permitirRoles("ADMIN"), criarProduto);
 router.put("/:id", autenticarJWT, permitirRoles("ADMIN"), atualizarProduto);
 router.delete("/:id", autenticarJWT, permitirRoles("ADMIN"), excluirProduto);
-router.put("/baixa-estoque", baixarEstoque);
+router.patch("/:id/estoque", autenticarJWT, permitirRoles("ADMIN"), ajustarEstoque);
 
 export default router;

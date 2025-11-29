@@ -68,23 +68,53 @@ export const excluirProduto = async (req, res) => {
 };
 
 export const baixarEstoque = async (req, res) => {
-    const itens = req.body; // Recebe o array do carrinho
+    const itens = req.body;
 
-    if (!itens || itens.length === 0) {
-        return res.status(400).json({ message: "Carrinho vazio." });
+    if (!itens || !Array.isArray(itens) || itens.length === 0) {
+        return res.status(400).json({ message: "Carrinho vazio ou formato inválido." });
     }
 
     try {
-        // Percorre cada item e subtrai do banco
-        for (const item of itens) {
-            await db.query(
-                "UPDATE Produto SET quantidadeEstoque = quantidadeEstoque - ? WHERE idProduto = ?",
-                [item.quantity, item.id]
-            );
-        }
+        await Produto.baixarEstoque(itens);
+
         res.status(200).json({ message: "Estoque atualizado com sucesso!" });
     } catch (err) {
-        console.error("Erro ao baixar estoque:", err);
-        res.status(500).json({ message: "Erro no servidor ao atualizar estoque." });
+        console.error("Erro no servidor (baixarEstoque):", err);
+        res.status(500).json({ message: "Erro ao processar compra no servidor." });
+    }
+};
+
+export const ajustarEstoque = async (req, res) => {
+    const { id } = req.params;
+    const { tipo, quantidade } = req.body;
+
+    if (!quantidade || quantidade <= 0) {
+        return res.status(400).json({ message: "Quantidade inválida." });
+    }
+
+    try {
+        // 1. Busca o produto para saber o estoque atual
+        const produto = await Produto.getById(id);
+        if (!produto) return res.status(404).json({ message: "Produto não encontrado." });
+
+        let novoEstoque = produto.quantidadeEstoque;
+
+        // 2. Calcula
+        if (tipo === 'entrada') {
+            novoEstoque += parseInt(quantidade);
+        } else if (tipo === 'saida') {
+            novoEstoque -= parseInt(quantidade);
+            if (novoEstoque < 0) novoEstoque = 0;
+        }
+
+        // 3. Salva no banco usando o Model
+        await Produto.atualizarEstoque(id, novoEstoque);
+
+        // Sucesso
+        res.json({ message: "Estoque atualizado com sucesso!", novoEstoque });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Erro no servidor: " + err.message });
     }
 };

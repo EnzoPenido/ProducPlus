@@ -118,27 +118,118 @@
             </div>
 
             <div class="dashboard-container">
-                <!-- Card Fornecedores -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title">FORNECEDORES</div>
-                        <div class="card-value">30</div>
-                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de fornecedores</div>
+                <div class="container mt-5 mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 style="color: #130188; font-weight: bold;">Controle de Estoque</h2>
+                        <button class="btn btn-outline-primary" onclick="carregarTabelaEstoque()">
+                            <i class="fa-solid fa-rotate"></i> Atualizar
+                        </button>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="suppliersChart"></canvas>
+
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead style="background-color: #f8f9fa;">
+                                        <tr>
+                                            <th class="ps-4">Produto</th>
+                                            <th class="text-center">Categoria</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Qtd. Atual</th>
+                                            <th class="text-end pe-4">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabela-estoque">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Card Estoque -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title">ESTOQUE</div>
-                        <div class="card-value">500</div>
-                        <div style="font-size: 10pt; color: #666; margin-top: 5px;">Total de produtos em estoque</div>
+                <div class="modal fade" id="modalEstoque" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #130188; color: white;">
+                                <h5 class="modal-title">Ajustar Estoque</h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="formEstoque">
+                                    <input type="hidden" id="estoqueProdId">
+
+                                    <h4 id="estoqueProdNome" class="text-center mb-4 font-weight-bold">Nome do Produto
+                                    </h4>
+
+                                    <div class="d-flex justify-content-center gap-3 mb-4">
+                                        <input type="radio" class="btn-check" name="tipoMovimento" id="entrada"
+                                            value="entrada" checked>
+                                        <label class="btn btn-outline-success" for="entrada">
+                                            <i class="fa-solid fa-arrow-up"></i> Entrada
+                                        </label>
+
+                                        <input type="radio" class="btn-check" name="tipoMovimento" id="saida"
+                                            value="saida">
+                                        <label class="btn btn-outline-danger" for="saida">
+                                            <i class="fa-solid fa-arrow-down"></i> Saída (Perda/Ajuste)
+                                        </label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Quantidade</label>
+                                        <input type="number" class="form-control" id="qtdMovimento" min="1" required
+                                            placeholder="Ex: 10">
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary"
+                                            style="background-color: #130188;">Confirmar Ajuste</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="chart-container" style="position: relative;">
-                        <canvas id="stockChart"></canvas>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalConfigAlertas" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #6c757d; color: white;">
+                            <h5 class="modal-title"><i class="fa-solid fa-gear"></i> Configurar Alertas</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formConfigAlertas">
+                                <input type="hidden" id="configProdId">
+                                <h5 id="configProdNome" class="text-center mb-4 text-muted">Produto</h5>
+
+                                <div class="alert alert-info" style="font-size: 0.9rem;">
+                                    Defina quando o sistema deve mudar a cor do status.
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="color: #ffc107;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> Estoque Baixo (Amarelo)
+                                    </label>
+                                    <input type="number" class="form-control" id="confMinimo" min="1" required>
+                                    <div class="form-text">Abaixo dessa quantidade, ficará amarelo.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="color: #dc3545;">
+                                        <i class="fa-solid fa-circle-exclamation"></i> Estoque Crítico (Vermelho)
+                                    </label>
+                                    <input type="number" class="form-control" id="confCritico" min="0" required>
+                                    <div class="form-text">Abaixo dessa quantidade, ficará vermelho.</div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-secondary">Salvar Configuração</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -300,102 +391,6 @@
 
     <script>
         const API_URL = 'http://localhost:3000';
-
-        // Gráfico de Fornecedores (Barras)
-        const suppliersCtx = document.getElementById('suppliersChart').getContext('2d');
-        const suppliersChart = new Chart(suppliersCtx, {
-            type: 'bar',
-            data: {
-                labels: ['', '', '', '', '', ''],
-                datasets: [{
-                    data: [8, 12, 15, 18, 13, 16],
-                    backgroundColor: '#1800ad',
-                    borderRadius: 5,
-                    barThickness: 40
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 20,
-                        ticks: {
-                            stepSize: 5,
-                            font: {
-                                size: 10
-                            }
-                        },
-                        grid: {
-                            display: true,
-                            color: '#e0e0e0'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Estoque (Donut)
-        const stockCtx = document.getElementById('stockChart').getContext('2d');
-        const stockChart = new Chart(stockCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Marca 1', 'Marca 2', 'Marca 3', 'Marca 4'],
-                datasets: [{
-                    data: [35, 25, 25, 15],
-                    backgroundColor: [
-                        '#1800ad',
-                        '#5964ff',
-                        '#8b94ff',
-                        '#b8bfff'
-                    ],
-                    borderWidth: 0,
-                    cutout: '70%'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 15,
-                            font: {
-                                size: 11
-                            }
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                        callbacks: {
-                            label: function (context) {
-                                return context.label + ': ' + context.parsed + '%';
-                            }
-                        }
-                    }
-                }
-            }
-        });
 
         // Autenticação
         function parseJwt(token) {
@@ -564,8 +559,6 @@
             document.getElementById('formTitle').textContent = 'Editar Categoria';
             document.getElementById('btnSubmitText').textContent = 'Atualizar';
             document.getElementById('btnCancelEdit').style.display = 'inline-block';
-
-            // Scroll para o formulário
             document.querySelector('.category-form').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -594,7 +587,6 @@
                 const data = await response.json();
 
                 if (response.status === 409 && data.hasProducts) {
-                    // Mostrar modal com produtos vinculados
                     showDeleteConfirmation(id, nome, data.products);
                 } else if (response.ok) {
                     showAlert('Categoria excluída com sucesso!', 'success');
@@ -610,7 +602,6 @@
 
         // Mostrar confirmação com produtos vinculados
         function showDeleteConfirmation(categoryId, categoryName, products) {
-            // Criar modal
             const modalHtml = `
                 <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
                     <div class="modal-dialog modal-lg">
@@ -797,7 +788,7 @@
 
                 const subcategories = await response.json();
                 const select = document.getElementById('productSubcategory');
-                
+
                 if (select) {
                     select.innerHTML = '<option value="">Selecione uma subcategoria</option>';
                     subcategories.forEach(sub => {
@@ -964,9 +955,155 @@
             }
         });
 
-        // --- CARREGAR SUBCATEGORIAS AO ABRIR A PÁGINA ---
+        // --- LÓGICA DE CONTROLE DE ESTOQUE ---
+
+        async function carregarTabelaEstoque() {
+            const token = localStorage.getItem('token');
+            const tbody = document.getElementById('tabela-estoque');
+
+            if (!tbody) return;
+
+            try {
+                const response = await fetch('http://localhost:3000/produtos', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const produtos = await response.json();
+
+                tbody.innerHTML = produtos.map(prod => {
+                    const limiteAmarelo = prod.estoqueMinimo || 20;
+                    const limiteVermelho = prod.estoqueCritico || 5;
+
+                    let statusBadge = '';
+                    let classeLinha = '';
+
+                    if (prod.quantidadeEstoque <= limiteVermelho) {
+                        statusBadge = '<span class="badge bg-danger">Crítico</span>';
+                        classeLinha = 'border-start border-5 border-danger';
+                    } else if (prod.quantidadeEstoque <= limiteAmarelo) {
+                        statusBadge = '<span class="badge bg-warning text-dark">Baixo</span>';
+                        classeLinha = 'border-start border-5 border-warning';
+                    } else {
+                        statusBadge = '<span class="badge bg-success">Normal</span>';
+                        classeLinha = 'border-start border-5 border-success';
+                    }
+
+                    return `
+                    <tr class="${classeLinha}">
+                        <td class="ps-4">
+                            <div class="fw-bold">${prod.nome}</div>
+                            <small class="text-muted" style="font-size: 10px;">Alertas: <span class="text-warning">${limiteAmarelo}</span> / <span class="text-danger">${limiteVermelho}</span></small>
+                        </td>
+                        <td class="text-center text-muted">${prod.idCategoria}</td>
+                        <td class="text-center">${statusBadge}</td>
+                        <td class="text-center fs-5 fw-bold">${prod.quantidadeEstoque}</td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-outline-secondary me-1" onclick="abrirConfigAlertas(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}', ${limiteAmarelo}, ${limiteVermelho})" title="Configurar Alertas">
+                                <i class="fa-solid fa-gear"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEstoque(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}')" title="Movimentar Estoque">
+                                <i class="fa-solid fa-right-left"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                }).join('');
+
+            } catch (error) { console.error(error); }
+        }
+
+        window.abrirConfigAlertas = function (id, nome, min, crit) {
+            document.getElementById('configProdId').value = id;
+            document.getElementById('configProdNome').textContent = nome;
+            document.getElementById('confMinimo').value = min;
+            document.getElementById('confCritico').value = crit;
+
+            new bootstrap.Modal(document.getElementById('modalConfigAlertas')).show();
+        };
+
+        document.getElementById('formConfigAlertas')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('configProdId').value;
+            const minimo = document.getElementById('confMinimo').value;
+            const critico = document.getElementById('confCritico').value;
+            const token = localStorage.getItem('token');
+
+            if (parseInt(critico) >= parseInt(minimo)) {
+                alert("O nível crítico deve ser menor que o nível baixo.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        estoqueMinimo: minimo,
+                        estoqueCritico: critico
+                    })
+                });
+
+                if (response.ok) {
+                    alert("Configuração salva!");
+                    bootstrap.Modal.getInstance(document.getElementById('modalConfigAlertas')).hide();
+                    carregarTabelaEstoque();
+                } else {
+                    alert("Erro ao salvar configuração.");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        window.abrirModalEstoque = function (id, nome) {
+            document.getElementById('estoqueProdId').value = id;
+            document.getElementById('estoqueProdNome').textContent = nome;
+            document.getElementById('qtdMovimento').value = '';
+            new bootstrap.Modal(document.getElementById('modalEstoque')).show();
+        };
+
+        document.getElementById('formEstoque')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('estoqueProdId').value;
+            const qtd = document.getElementById('qtdMovimento').value;
+            const tipo = document.querySelector('input[name="tipoMovimento"]:checked').value;
+            const token = localStorage.getItem('token');
+
+            try {
+                const response = await fetch(`http://localhost:3000/produtos/${id}/estoque`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ tipo: tipo, quantidade: qtd })
+                });
+
+                if (response.ok) {
+                    alert("Estoque atualizado com sucesso!");
+
+                    const modalEl = document.getElementById('modalEstoque');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+
+                    carregarTabelaEstoque();
+                } else {
+                    const erro = await response.json();
+                    alert("Erro: " + (erro.message || erro.error || "Erro desconhecido"));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erro de conexão (Verifique o console).");
+            }
+        });
+
+        // --- CARREGAR AO ABRIR A PÁGINA ---
         window.addEventListener('load', () => {
             loadSubcategoriesIntoSelect();
+            carregarTabelaEstoque();
         });
 
         // --- SELECIONAR ARQUIVO E MOSTRAR NOME ---
