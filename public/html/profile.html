@@ -117,8 +117,8 @@
                 <img src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
             </div>
 
-            <div class="dashboard-container">
-                <div class="container mt-5 mb-5">
+            <div class="dashboard-container ">
+                <div class="container container-table-content mt-5 mb-5">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 style="color: #130188; font-weight: bold;">Controle de Estoque</h2>
                         <button class="btn btn-outline-primary" onclick="carregarTabelaEstoque()">
@@ -266,11 +266,11 @@
                             <label for="productSection">Seção do Catálogo *</label>
                             <select id="productSection" name="productSection" required>
                                 <option value="">Selecione a seção</option>
-                                <option value="material-section">INSUMOS</option>
-                                <option value="ferramentas-section">MATERIAIS</option>
-                                <option value="eletronica-section">FERRAMENTAS</option>
-                                <option value="mecanica-section">ELETRÔNICA</option>
-                                <option value="embalagem-section">MECÂNICA</option>
+                                <option value="insumos-section">INSUMOS</option>
+                                <option value="material-section">MATERIAIS</option>
+                                <option value="ferramentas-section">FERRAMENTAS</option>
+                                <option value="eletronica-section">ELETRÔNICA</option>
+                                <option value="mecanica-section">MECÂNICA</option>
                                 <option value="embalagem-section">EMBALAGEM</option>
                             </select>
                         </div>
@@ -996,11 +996,11 @@
                         <td class="text-center text-muted">${prod.idCategoria}</td>
                         <td class="text-center">${statusBadge}</td>
                         <td class="text-center fs-5 fw-bold">${prod.quantidadeEstoque}</td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-outline-secondary me-1" onclick="abrirConfigAlertas(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}', ${limiteAmarelo}, ${limiteVermelho})" title="Configurar Alertas">
+                        <td class="text-end ">
+                            <button class="btn btn-sm btn-outline-secondary m-0" onclick="abrirConfigAlertas(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}', ${limiteAmarelo}, ${limiteVermelho})" title="Configurar Alertas">
                                 <i class="fa-solid fa-gear"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEstoque(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}')" title="Movimentar Estoque">
+                            <button class="btn btn-sm btn-outline-primary m-0" onclick="abrirModalEstoque(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}')" title="Movimentar Estoque">
                                 <i class="fa-solid fa-right-left"></i>
                             </button>
                         </td>
