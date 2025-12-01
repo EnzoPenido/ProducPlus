@@ -978,13 +978,13 @@
 
                     if (prod.quantidadeEstoque <= limiteVermelho) {
                         statusBadge = '<span class="badge bg-danger">Crítico</span>';
-                        classeLinha = 'border-start border-5 border-danger';
+                        classeLinha = 'border-start border-3 ';
                     } else if (prod.quantidadeEstoque <= limiteAmarelo) {
                         statusBadge = '<span class="badge bg-warning text-dark">Baixo</span>';
-                        classeLinha = 'border-start border-5 border-warning';
+                        classeLinha = 'border-start border-3 ';
                     } else {
                         statusBadge = '<span class="badge bg-success">Normal</span>';
-                        classeLinha = 'border-start border-5 border-success';
+                        classeLinha = 'border-start border-3 ';
                     }
 
                     return `
