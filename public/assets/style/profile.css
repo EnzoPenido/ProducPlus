@@ -857,7 +857,7 @@ footer {
     display: flex;
     width: 100%;
     height: auto;
-
+    padding: 10px;
     background-color: #EEEEEE;
 
     justify-content: space-between;
@@ -871,12 +871,32 @@ footer {
 
 .img-profile-hero{
     padding: 30px !important;
+    
+}
+
+@media (max-width:1135px){
+    .img-profile-hero{
+        width: 500px;
+    padding: 30px !important;
+
+   
+}
+.svg-text-profile{
+    width: 100%;
+}
 }
 
 @media (max-width:725px){
     .img-profile-hero{
+
+        display: none;
         visibility: hidden;
     padding: 30px !important;
+
+   
+}
+.svg-text-profile{
+    width: 100%;
 }
 }
 
@@ -1443,3 +1463,35 @@ footer {
     }
 }
 /* Criar categoria*/
+
+.badge-produc{
+    padding: 0.85rem !important;
+    font-size: 1.0rem !important;
+
+}
+
+.badge{
+    --bs-badge-padding-x: 0.55rem !important;
+    --bs-badge-padding-y: 0.45rem !important;
+    --bs-badge-font-size: 0.90rem !important;
+    --bs-badge-font-weight: 700 !important;
+    --bs-badge-color: #fff;
+    --bs-badge-border-radius: var(--bs-border-radius);
+    display: inline-block;
+    padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+    font-size: var(--bs-badge-font-size);
+    font-weight: var(--bs-badge-font-weight);
+    line-height: 1;
+    color: var(--bs-badge-color);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--bs-badge-border-radius);
+
+}
+
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 100%;
+    }
+}

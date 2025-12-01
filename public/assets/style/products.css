@@ -1087,3 +1087,9 @@ footer {
 .dropdown-menu{
     --bs-dropdown-link-active-bg: #1811AC;
 }
+
+.product-list{
+    display: flex;
+    gap: 30px;
+}
+

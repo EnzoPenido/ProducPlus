@@ -20,7 +20,7 @@
       display: flex;
       width: auto;
       height: fit-content;
-      
+      min-height: 100dvh;
       justify-content: center;
       align-items: center;
 
@@ -682,3 +682,6 @@ footer {
 
 /*Footer*/
 
+.border-warning{
+    border-color: none;
+}
