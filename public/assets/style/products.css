@@ -80,6 +80,7 @@ body {
 
 main {
     display: flex;
+    min-height: 100dvh;
     width: auto;
     height: fit-content;
 
@@ -732,7 +733,7 @@ footer {
 
     background-color: #f5f5f500;
 
-    justify-content: center;
+    justify-content: left;
     align-items: start;
     flex-wrap: wrap;
     gap: 50px;
@@ -744,8 +745,9 @@ footer {
 }
 
 .container-products-item {
+
     display: flex;
-    width: 250px;
+    width: 100%;
     height: auto;
 
     background-color: white;
@@ -777,6 +779,7 @@ footer {
 .container-products-img-text {
     display: flex;
     width: 100% !important;
+    gap:20px;
     height: 260px;
 
     background-color: #ececec00;
@@ -1090,6 +1093,174 @@ footer {
 
 .product-list{
     display: flex;
-    gap: 30px;
+    
 }
 
+/* ===== CSS PARA SEÇÕES DE PRODUTOS SEPARADAS ===== */
+
+/* Transição suave para seções */
+.secao-categorias,
+.secao-categoria {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+/* Container de produtos com grid responsivo */
+.container-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    
+    width: 100%;
+    padding: 30px;
+    min-height: 200px; /* Altura mínima para seções vazias */
+}
+
+/* Container vazio - ajuste para centralizar mensagem */
+.container-products:empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Indicador visual de seção vazia */
+.empty-section-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    margin: 0;
+    width: 100%;
+}
+
+.empty-section-message i {
+    font-size: 48pt;
+    margin-bottom: 15px;
+    opacity: 0.5;
+    color: #ccc;
+}
+
+.empty-section-message p {
+    font-size: 14pt;
+    margin: 0;
+    color: #999;
+}
+
+/* Título de seção com destaque */
+.text-svg-catalog {
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.text-svg-catalog::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #1800ad, #5964ff);
+    border-radius: 2px;
+}
+
+/* Badge com contador de produtos por seção */
+.section-badge {
+    display: inline-block;
+    background-color: #1800ad;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10pt;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+/* Animação de entrada para produtos */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container-products-item {
+    animation: slideInUp 0.4s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Delay progressivo para criar efeito cascata */
+.container-products-item:nth-child(1) { animation-delay: 0.05s; }
+.container-products-item:nth-child(2) { animation-delay: 0.10s; }
+.container-products-item:nth-child(3) { animation-delay: 0.15s; }
+.container-products-item:nth-child(4) { animation-delay: 0.20s; }
+.container-products-item:nth-child(5) { animation-delay: 0.25s; }
+.container-products-item:nth-child(6) { animation-delay: 0.30s; }
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .container-products {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-products {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+    
+    .text-svg-catalog h1 {
+        font-size: 18pt;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-products {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 10px;
+    }
+}
+
+/* Melhoria visual: separador entre seções */
+.secao-categoria {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 40px;
+    margin-top: 40px;
+}
+
+.secao-categorias {
+    padding-top: 20px;
+}
+
+/* Hover effect nas seções */
+.text-button-catalog:hover .text-svg-catalog h1 {
+    color: #5964ff;
+    transition: color 0.3s ease;
+}
+
+/* Mensagem de carregamento */
+.loading-section {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.loading-section i {
+    font-size: 48pt;
+    margin-bottom: 20px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
