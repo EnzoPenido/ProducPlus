@@ -6,7 +6,11 @@ import {
     atualizarProduto,
     excluirProduto,
     baixarEstoque,
-    ajustarEstoque
+    ajustarEstoque,
+    buscarDescricaoProduto,
+    criarDescricaoProduto,
+    atualizarDescricaoProduto,
+    excluirDescricaoProduto
 } from "../controllers/produtoController.js";
 import { autenticarJWT } from "../middlewares/authMiddleware.js";
 import { permitirRoles } from "../middlewares/roleMiddleware.js";
@@ -16,6 +20,10 @@ const router = express.Router();
 // --- ROTAS PÚBLICAS ---
 router.get("/", listarProdutos);
 router.get("/:id", buscarProduto);
+router.get("/:id/descricao", buscarDescricaoProduto);
+router.post("/:id/descricao", autenticarJWT, permitirRoles("ADMIN"), criarDescricaoProduto);
+router.put("/:id/descricao", autenticarJWT, permitirRoles("ADMIN"), atualizarDescricaoProduto);
+router.delete("/:id/descricao", autenticarJWT, permitirRoles("ADMIN"), excluirDescricaoProduto);
 
 // --- ROTA DE COMPRA ---
 router.put("/baixa-estoque", autenticarJWT, permitirRoles("CLIENTE", "ADMIN"), baixarEstoque);
