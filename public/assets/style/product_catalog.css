@@ -974,6 +974,7 @@ footer {
     font-size: 14pt;
     color: rgba(0, 0, 0, 0.57);
     margin-bottom: 5px;
+    text-align: center;
 }
 
 .end-catalog-content a {
