@@ -309,7 +309,7 @@
         crossorigin="anonymous"></script>
 
     <script>
-        const API_URL = 'http://localhost:3000';
+        const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
         // Mapeamento de seções (normalizado para comparação)
         const SECTION_MAPPING = {

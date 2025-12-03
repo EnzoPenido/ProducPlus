@@ -198,7 +198,7 @@
         </script>
 
     <script>
-        const API_URL = 'http://localhost:3000';
+        const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }

@@ -390,7 +390,7 @@
     <script src="../assets/js/adicionar-produtos-slider.js"></script>
 
     <script>
-        const API_URL = 'http://localhost:3000';
+        const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
         // Autenticação
         function parseJwt(token) {
