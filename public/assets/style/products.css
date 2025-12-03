@@ -635,10 +635,11 @@ h3 {
 
 .blur {
     position: fixed;
-    width: 85%;
+    width: 89%;
     height: 150px;
 
     z-index: 100;
+    left: 30px;
 
     backdrop-filter: blur(11px) saturate(162%);
     -webkit-backdrop-filter: blur(11px) saturate(162%);
