@@ -1,4 +1,5 @@
 import Produto from "../models/produtoModel.js";
+import DescricaoProduto from "../models/descricaoProdutoModel.js";
 
 export const listarProdutos = async (req, res) => {
     try {
@@ -116,5 +117,102 @@ export const ajustarEstoque = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Erro no servidor: " + err.message });
+    }
+};
+
+export const buscarDescricaoProduto = async (req, res) => {
+    try {
+        const descricao = await DescricaoProduto.getByProdutoId(req.params.id);
+
+        if (!descricao) {
+            return res.status(404).json({ error: 'Descrição técnica não encontrada' });
+        }
+
+        res.json(descricao);
+    } catch (err) {
+        console.error('Erro ao buscar descrição:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const criarDescricaoProduto = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Verificar se o produto existe
+        const produto = await Produto.getById(id);
+        if (!produto) {
+            return res.status(404).json({ error: 'Produto não encontrado' });
+        }
+
+        // Verificar se já existe descrição
+        const descricaoExistente = await DescricaoProduto.getByProdutoId(id);
+        if (descricaoExistente) {
+            return res.status(409).json({
+                error: 'Descrição técnica já existe para este produto',
+                message: 'Use PUT para atualizar'
+            });
+        }
+
+        // Criar descrição técnica
+        const descricaoData = {
+            idProduto: id,
+            ...req.body
+        };
+
+        await DescricaoProduto.create(descricaoData);
+
+        res.status(201).json({
+            message: 'Descrição técnica criada com sucesso',
+            idProduto: id
+        });
+    } catch (err) {
+        console.error('Erro ao criar descrição:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const atualizarDescricaoProduto = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Verificar se a descrição existe
+        const descricaoExistente = await DescricaoProduto.getByProdutoId(id);
+        if (!descricaoExistente) {
+            return res.status(404).json({ error: 'Descrição técnica não encontrada' });
+        }
+
+        // Atualizar descrição técnica
+        await DescricaoProduto.update(id, req.body);
+
+        res.json({
+            message: 'Descrição técnica atualizada com sucesso',
+            idProduto: id
+        });
+    } catch (err) {
+        console.error('Erro ao atualizar descrição:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const excluirDescricaoProduto = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Verificar se a descrição existe
+        const descricaoExistente = await DescricaoProduto.getByProdutoId(id);
+        if (!descricaoExistente) {
+            return res.status(404).json({ error: 'Descrição técnica não encontrada' });
+        }
+
+        await DescricaoProduto.delete(id);
+
+        res.json({
+            message: 'Descrição técnica deletada com sucesso',
+            idProduto: id
+        });
+    } catch (err) {
+        console.error('Erro ao deletar descrição:', err);
+        res.status(500).json({ error: err.message });
     }
 };

@@ -127,7 +127,7 @@
                 </div>
             </section>
             <div class="separator"></div>
-            
+
             <!-- SEÇÃO: INSUMOS -->
             <div class="secao-categorias" id="secao-insumos">
                 <div class="text-button-catalog">
@@ -218,40 +218,40 @@
                 </section>
             </div>
 
-           
+
         </div>
     </main>
     <footer>
-            <div class="svg-footer-content">
-                <div class="svg-logo-footer">
-                    <img src="../assets/images/svg/logo_extensa_ProducPlus.svg" alt="">
-                </div>
-                <div class="svg-social-footer">
-                    <a href=""><img src="../assets/images/svg/github-142-svgrepo-com (1).svg" alt=""></a>
-                    <a href=""><img src="../assets/images/svg/instagram-svgrepo-com.svg" alt=""></a>
-                </div>
+        <div class="svg-footer-content">
+            <div class="svg-logo-footer">
+                <img src="../assets/images/svg/logo_extensa_ProducPlus.svg" alt="">
             </div>
-            <div class="link-footer">
-                <ul>
-                    <h1>Info</h1>
-                    <li> <a href="index.html">Home</a></li>
-                    <li> <a href="index.html#about">Sobre-nós</a></li>
-                    <li> <a href="contact.html">Contato</a></li>
-                    <li> <a href="login.html">Entrar</a></li>
-                    <li> <a href="contact.html">Ajuda</a></li>
-                </ul>
-                <ul>
-                    <h1>Insumos</h1>
-                    <li> <a href="products.html">Todos os produtos</a></li>
-                    <li> <a href="products.html#secao-material">Materiais</a></li>
-                    <li> <a href="products.html#secao-ferramentas">Ferramentas</a></li>
-                    <li> <a href="products.html#secao-eletronica">Eletrônica</a></li>
-                    <li> <a href="products.html#secao-mecanica">Mecânica</a></li>
-                    <li> <a href="products.html#secao-embalagem">Embalagem</a></li>
-                </ul>
+            <div class="svg-social-footer">
+                <a href=""><img src="../assets/images/svg/github-142-svgrepo-com (1).svg" alt=""></a>
+                <a href=""><img src="../assets/images/svg/instagram-svgrepo-com.svg" alt=""></a>
+            </div>
+        </div>
+        <div class="link-footer">
+            <ul>
+                <h1>Info</h1>
+                <li> <a href="index.html">Home</a></li>
+                <li> <a href="index.html#about">Sobre-nós</a></li>
+                <li> <a href="contact.html">Contato</a></li>
+                <li> <a href="login.html">Entrar</a></li>
+                <li> <a href="contact.html">Ajuda</a></li>
+            </ul>
+            <ul>
+                <h1>Insumos</h1>
+                <li> <a href="products.html">Todos os produtos</a></li>
+                <li> <a href="products.html#secao-material">Materiais</a></li>
+                <li> <a href="products.html#secao-ferramentas">Ferramentas</a></li>
+                <li> <a href="products.html#secao-eletronica">Eletrônica</a></li>
+                <li> <a href="products.html#secao-mecanica">Mecânica</a></li>
+                <li> <a href="products.html#secao-embalagem">Embalagem</a></li>
+            </ul>
 
-            </div>
-        </footer>
+        </div>
+    </footer>
 
     <!-- Modal de Edição de Produto -->
     <div class="modal fade" id="modalEditarProduto" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -321,6 +321,9 @@
             'embalagem': ['embalagem', 'embalagens']
         };
 
+        // Cache de categorias para melhor performance
+        let categoriasCache = {};
+
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
         }
@@ -333,14 +336,14 @@
         // Determina em qual seção o produto deve aparecer baseado na sua seção/categoria
         function determinarSecao(product) {
             const secaoNormalizada = normalizarTexto(product.secao || '');
-            
+
             // Verifica em qual categoria o produto se encaixa
             for (const [secao, palavrasChave] of Object.entries(SECTION_MAPPING)) {
                 if (palavrasChave.some(palavra => secaoNormalizada.includes(palavra))) {
                     return secao;
                 }
             }
-            
+
             // Se não encontrar correspondência, coloca em "insumos" por padrão
             return 'insumos';
         }
@@ -351,16 +354,16 @@
 
             if (imagemSalva && containerIcone) {
                 containerIcone.innerHTML = `
-                <img src="${imagemSalva}" 
-                     alt="Perfil" 
-                     style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #1714A8;">
-            `;
+            <img src="${imagemSalva}" 
+                 alt="Perfil" 
+                 style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #1714A8;">
+        `;
             }
         }
 
         function addToCart(id, nome, preco) {
             let carrinho = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
-            
+
             const itemExistente = carrinho.find(item => item.id === id);
 
             if (itemExistente) {
@@ -373,6 +376,25 @@
             localStorage.setItem('carrinhoProducPlus', JSON.stringify(carrinho));
         }
 
+        // NOVA FUNÇÃO: Carregar todas as categorias e criar cache
+        async function carregarCategorias() {
+            try {
+                const response = await fetch(`${API_URL}/categorias`);
+                const categorias = await response.json();
+
+                // Criar cache de categorias por ID
+                categorias.forEach(cat => {
+                    categoriasCache[cat.idCategoria] = cat.nome;
+                });
+
+                console.log('Categorias carregadas:', categoriasCache);
+                return categoriasCache;
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+                return {};
+            }
+        }
+
         // FUNÇÃO ATUALIZADA: Carrega produtos separados por seção
         async function loadAllProducts() {
             const token = localStorage.getItem('token');
@@ -381,13 +403,17 @@
                 try {
                     const user = JSON.parse(atob(token.split('.')[1]));
                     if (user.tipo === 'ADMIN') isAdmin = true;
-                } catch (e) {}
+                } catch (e) { }
             }
 
             try {
-                const response = await fetch('http://localhost:3000/produtos');
+                // Primeiro carrega as categorias
+                await carregarCategorias();
+
+                // Depois carrega os produtos
+                const response = await fetch(`${API_URL}/produtos`);
                 const products = await response.json();
-                
+
                 // Agrupa produtos por seção
                 const produtosPorSecao = {
                     insumos: [],
@@ -413,83 +439,86 @@
 
                     if (produtos.length === 0) {
                         container.innerHTML = `
-                            <div style="width: 100%; text-align: center; padding: 60px 20px; background-color: #f8f9fa; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <i class="fa-solid fa-box-open" style="font-size: 48pt; margin-bottom: 15px; opacity: 0.5; color: #ccc; display: block;"></i>
-                                <p style="font-size: 14pt; margin: 0; color: #999;">Nenhum produto nesta categoria ainda</p>
-                                <p style="font-size: 11pt; margin-top: 10px; color: #bbb;">Em breve novos produtos serão adicionados</p>
-                            </div>
-                        `;
+                    <div style="width: 100%; text-align: center; padding: 60px 20px; background-color: #f8f9fa; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-box-open" style="font-size: 48pt; margin-bottom: 15px; opacity: 0.5; color: #ccc; display: block;"></i>
+                        <p style="font-size: 14pt; margin: 0; color: #999;">Nenhum produto nesta categoria ainda</p>
+                        <p style="font-size: 11pt; margin-top: 10px; color: #bbb;">Em breve novos produtos serão adicionados</p>
+                    </div>
+                `;
                         continue;
                     }
 
                     produtos.forEach(product => {
                         const preco = parseFloat(product.preco_unitario);
                         const precoFormatado = preco.toFixed(2).replace('.', ',');
-                        const nomeSeguro = product.nome.replace(/'/g, "\\'"); 
+                        const nomeSeguro = product.nome.replace(/'/g, "\\'");
+
+                        // ATUALIZADO: Busca o nome da subcategoria
+                        const nomeSubcategoria = categoriasCache[product.idCategoria] || 'Geral';
 
                         let imagemHTML = '';
                         if (product.url_imagem) {
-                             const src = product.url_imagem.startsWith('http') ? product.url_imagem : `http://localhost:3000${product.url_imagem}`;
-                             imagemHTML = `<img src="${src}" alt="${product.nome}" style="width: 100%; height: 150px; object-fit: contain;">`;
+                            const src = product.url_imagem.startsWith('http') ? product.url_imagem : `${API_URL}${product.url_imagem}`;
+                            imagemHTML = `<img src="${src}" alt="${product.nome}" style="width: 100%; height: 150px; object-fit: contain;">`;
                         } else {
-                             imagemHTML = `
-                                <div class="img-placeholder">
-                                    <i class="fa-solid fa-box-open" style="font-size: 40px; color: #ccc;"></i>
-                                </div>`;
+                            imagemHTML = `
+                        <div class="img-placeholder">
+                            <i class="fa-solid fa-box-open" style="font-size: 40px; color: #ccc;"></i>
+                        </div>`;
                         }
 
                         let botaoHTML = '';
                         if (isAdmin) {
                             botaoHTML = `
-                                <div class="action-buttons">
-                                    <button class="btn-edit-product" onclick="editProduct(${product.idProduto})">
-                                        Editar <img src="../assets/images/svg/edit-svgrepo-com.svg" alt="" width="16">
-                                    </button>
-                                    <button class="btn-delete-product" onclick="deleteProduct(${product.idProduto}, '${nomeSeguro}')">
-                                        Deletar <img src="../assets/images/svg/delete-1-svgrepo-com.svg" alt="" width="16">
-                                    </button>
-                                </div>
-                            `;
+                        <div class="action-buttons">
+                            <button class="btn-edit-product" onclick="editProduct(${product.idProduto})">
+                                Editar <img src="../assets/images/svg/edit-svgrepo-com.svg" alt="" width="16">
+                            </button>
+                            <button class="btn-delete-product" onclick="deleteProduct(${product.idProduto}, '${nomeSeguro}')">
+                                Deletar <img src="../assets/images/svg/delete-1-svgrepo-com.svg" alt="" width="16">
+                            </button>
+                        </div>
+                    `;
                         } else {
                             botaoHTML = `
-                                <button class="btn-buy-product" onclick="addToCart(${product.idProduto}, '${nomeSeguro}', ${preco})">
-                                    Comprar
-                                </button>
-                            `;
+                        <button class="btn-buy-product" onclick="addToCart(${product.idProduto}, '${nomeSeguro}', ${preco})">
+                            Comprar
+                        </button>
+                    `;
                         }
 
+                        // ATUALIZADO: Link redireciona para product.html com ID do produto
                         const cardHTML = `
-                            <div class="container-products-item" data-secao="${secao}">
-                                <a class="link-item" href="product.html?id=${product.idProduto}">
-                                    <div class="container-products-img-text">
-                                        ${imagemHTML}
-                                        <div class="container-products-text">
-                                            <h1>${product.nome}</h1>
-                                            <p>${product.secao || 'Geral'}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="container-products-item-desc-text">
-                                    <div class="container-products-item-desc-text-price">
-                                        <span>${product.descricao || 'Descrição do produto'}</span>
-                                        <h3 style="color: #1800ad;">R$ ${precoFormatado}</h3>
-                                    </div>
-                                    
-                                    ${botaoHTML}
-                                    
+                    <div class="container-products-item" data-secao="${secao}">
+                        <a class="link-item" href="product.html?id=${product.idProduto}">
+                            <div class="container-products-img-text">
+                                ${imagemHTML}
+                                <div class="container-products-text">
+                                    <h1>${product.nome}</h1>
+                                    <p>${nomeSubcategoria}</p>
                                 </div>
                             </div>
-                        `;
+                        </a>
+                        <div class="container-products-item-desc-text">
+                            <div class="container-products-item-desc-text-price">
+                                <span>${product.descricao || 'Descrição do produto'}</span>
+                                <h3 style="color: #1800ad;">R$ ${precoFormatado}</h3>
+                            </div>
+                            
+                            ${botaoHTML}
+                            
+                        </div>
+                    </div>
+                `;
                         container.innerHTML += cardHTML;
                     });
                 }
 
-            } catch (error) { 
-                console.error('Erro ao carregar produtos:', error); 
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
             }
         }
 
-        
         async function deleteProduct(idProduto, nomeProduto) {
             if (!confirm(`Deseja excluir o produto "${nomeProduto}"?`)) {
                 return;
@@ -527,7 +556,7 @@
             if (!token) return;
 
             try {
-                const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                const response = await fetch(`${API_URL}/produtos/${id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -560,7 +589,7 @@
             select.innerHTML = '<option value="" disabled selected>Carregando...</option>';
 
             try {
-                const res = await fetch('http://localhost:3000/categorias', {
+                const res = await fetch(`${API_URL}/categorias`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const categorias = await res.json();
@@ -596,7 +625,7 @@
                 };
 
                 try {
-                    const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                    const response = await fetch(`${API_URL}/produtos/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -618,7 +647,6 @@
                 }
             });
         }
-
 
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
