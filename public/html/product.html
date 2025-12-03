@@ -125,7 +125,9 @@
             </div>
 
             <section class="product-all-content">
-                <div class="product-img-content"></div>
+                <div class="resizer-all-content">
+                    <div class="product-img-content"></div>
+                </div>
                 <div class="product-txt-content">
                     <h1>Nome produto completo</h1>
                     <span>Marca</span>
@@ -341,6 +343,7 @@
                 imgContainer.style.backgroundSize = 'contain';
                 imgContainer.style.backgroundPosition = 'center';
                 imgContainer.style.backgroundRepeat = 'no-repeat';
+                imgContainer.style.backgroundColor = 'white';
             } else {
                 imgContainer.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc;">

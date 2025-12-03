@@ -1041,10 +1041,19 @@ span:hover {
 }
 
 .product-img-content {
-    width: 55%;
+    width: fit-content;
     height: 100%;
 
     background-color: #ECECEC;
+    border-radius: 10px;
+}
+
+.resizer-all-content{
+    width: auto;
+    height: auto;
+    padding: 40px;
+
+    background-color: white;
     border-radius: 10px;
 }
 
