@@ -1072,6 +1072,10 @@ footer {
         width: 97%;
     }
 
+    #btn-limpar-filtros-produtos{
+        display: none;
+    }
+
 }
 
 @media (max-width: 510px){
@@ -1239,12 +1243,6 @@ footer {
 
 .secao-categorias {
     padding-top: 20px;
-}
-
-/* Hover effect nas seções */
-.text-button-catalog:hover .text-svg-catalog h1 {
-    color: #5964ff;
-    transition: color 0.3s ease;
 }
 
 /* Mensagem de carregamento */
