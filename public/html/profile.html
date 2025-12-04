@@ -752,8 +752,8 @@
                         const data = await response.json();
 
                         if (response.ok) {
-                            const novaUrl = data.url;
-                            if (mainImage) mainImage.src = novaUrl;
+                            const novaUrl = `${API_URL}${data.url}`;
+                            mainImage.src = novaUrl;
                             localStorage.setItem('userProfileImage', novaUrl);
                             carregarFotoPerfilGlobal();
                             alert("Foto atualizada!");
@@ -1050,7 +1050,7 @@
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                const response = await fetch(`${API_URL}/produtos/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1090,7 +1090,7 @@
             const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
             try {
-                const response = await fetch(`http://localhost:3000/produtos/${id}/estoque`, {
+                const response = await fetch(`${API_URL}/produtos/${id}/estoque`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
