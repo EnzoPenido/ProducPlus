@@ -1038,6 +1038,8 @@ span:hover {
     background-color: #e1b0b000;
     padding-top: 8px;
     margin-bottom: 40px;
+
+    min-height: 20dvh;
 }
 
 .product-img-content {
@@ -1050,11 +1052,13 @@ span:hover {
 
 .resizer-all-content{
     width: 65%;
-    height: auto;
-    padding: 40px;
+    height: 100%;
 
     background-color: white;
     border-radius: 10px;
+
+    position: sticky;
+    top: 110px;
 }
 
 .product-txt-content {
@@ -1224,6 +1228,8 @@ main {
     height: auto;
     justify-content: center;
     padding-top: 80px;
+
+    min-height: 100dvh;
 }
 
 .container-filter {
@@ -1261,8 +1267,6 @@ main {
     background-color: #ECECEC;
     border-radius: 10px;
 
-    position: sticky;
-    top: 100px;
     align-self: flex-start;
 }
 
