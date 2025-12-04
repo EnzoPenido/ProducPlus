@@ -1492,6 +1492,12 @@ footer li a:hover {
     text-decoration: underline;
 }
 
+@media (max-width: 1365px) {
+    .specs-content{
+        display: block;
+    }
+}
+
 @media (max-width: 1200px) {
     .spec-item{
         display: flex;
