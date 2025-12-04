@@ -134,7 +134,7 @@
                                     <thead style="background-color: #f8f9fa;">
                                         <tr>
                                             <th class="ps-4">Produto</th>
-                                            <th class="text-center">Categoria</th>
+                                            <th class="text-center">Subcategoria</th>
                                             <th class="text-center">Status</th>
                                             <th class="text-center">Qtd. Atual</th>
                                             <th class="text-end pe-4">Ações</th>
@@ -959,57 +959,73 @@
         // --- LÓGICA DE CONTROLE DE ESTOQUE ---
 
         async function carregarTabelaEstoque() {
-            const token = localStorage.getItem('token');
+            // 1. Token Híbrido (segurança)
+            const token = sessionStorage.getItem('token') || localStorage.getItem('token');
             const tbody = document.getElementById('tabela-estoque');
 
             if (!tbody) return;
 
             try {
-                const response = await fetch('http://localhost:3000/produtos', {
+                // 2. Busca categorias para pegar os nomes
+                const resCategorias = await fetch(`${API_URL}/categorias`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const categoriasData = await resCategorias.json();
+
+                const nomesCategorias = {};
+                if (Array.isArray(categoriasData)) {
+                    categoriasData.forEach(cat => {
+                        nomesCategorias[cat.idCategoria] = cat.nome;
+                    });
+                }
+
+                // 3. Busca produtos
+                const response = await fetch(`${API_URL}/produtos`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const produtos = await response.json();
 
+                // 4. Monta a tabela (SEM AS BORDAS COLORIDAS)
                 tbody.innerHTML = produtos.map(prod => {
                     const limiteAmarelo = prod.estoqueMinimo || 20;
                     const limiteVermelho = prod.estoqueCritico || 5;
+                    const nomeCategoria = nomesCategorias[prod.idCategoria] || '---';
 
                     let statusBadge = '';
-                    let classeLinha = '';
 
+                    // Lógica apenas para o Badge (etiqueta), sem alterar a linha (tr)
                     if (prod.quantidadeEstoque <= limiteVermelho) {
                         statusBadge = '<span class="badge bg-danger">Crítico</span>';
-                        classeLinha = 'border-start border-3 ';
                     } else if (prod.quantidadeEstoque <= limiteAmarelo) {
                         statusBadge = '<span class="badge bg-warning text-dark">Baixo</span>';
-                        classeLinha = 'border-start border-3 ';
                     } else {
                         statusBadge = '<span class="badge bg-success">Normal</span>';
-                        classeLinha = 'border-start border-3 ';
                     }
 
                     return `
-                    <tr class="${classeLinha}">
-                        <td class="ps-4">
-                            <div class="fw-bold">${prod.nome}</div>
-                            <small class="text-muted" style="font-size: 10px;">Alertas: <span class="text-warning">${limiteAmarelo}</span> / <span class="text-danger">${limiteVermelho}</span></small>
-                        </td>
-                        <td class="text-center text-muted">${prod.idCategoria}</td>
-                        <td class="text-center">${statusBadge}</td>
-                        <td class="text-center fs-5 fw-bold">${prod.quantidadeEstoque}</td>
-                        <td class="text-end ">
-                            <button class="btn btn-sm btn-outline-secondary m-0" onclick="abrirConfigAlertas(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}', ${limiteAmarelo}, ${limiteVermelho})" title="Configurar Alertas">
-                                <i class="fa-solid fa-gear"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary m-0" onclick="abrirModalEstoque(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}')" title="Movimentar Estoque">
-                                <i class="fa-solid fa-right-left"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
+            <tr>
+                <td class="ps-4">
+                    <div class="fw-bold">${prod.nome}</div>
+                    <small class="text-muted" style="font-size: 10px;">Alertas: <span class="text-warning">${limiteAmarelo}</span> / <span class="text-danger">${limiteVermelho}</span></small>
+                </td>
+                <td class="text-center text-muted">${nomeCategoria}</td>
+                <td class="text-center">${statusBadge}</td>
+                <td class="text-center fs-5 fw-bold">${prod.quantidadeEstoque}</td>
+                <td class="text-end ">
+                    <button class="btn btn-sm btn-outline-secondary m-0" onclick="abrirConfigAlertas(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}', ${limiteAmarelo}, ${limiteVermelho})" title="Configurar Alertas">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary m-0" onclick="abrirModalEstoque(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}')" title="Movimentar Estoque">
+                        <i class="fa-solid fa-right-left"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
                 }).join('');
 
-            } catch (error) { console.error(error); }
+            } catch (error) {
+                console.error('Erro ao carregar tabela de estoque:', error);
+            }
         }
 
         window.abrirConfigAlertas = function (id, nome, min, crit) {
@@ -1026,7 +1042,7 @@
             const id = document.getElementById('configProdId').value;
             const minimo = document.getElementById('confMinimo').value;
             const critico = document.getElementById('confCritico').value;
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
             if (parseInt(critico) >= parseInt(minimo)) {
                 alert("O nível crítico deve ser menor que o nível baixo.");
@@ -1071,7 +1087,7 @@
             const id = document.getElementById('estoqueProdId').value;
             const qtd = document.getElementById('qtdMovimento').value;
             const tipo = document.querySelector('input[name="tipoMovimento"]:checked').value;
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
             try {
                 const response = await fetch(`http://localhost:3000/produtos/${id}/estoque`, {

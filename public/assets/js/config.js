@@ -14,16 +14,13 @@ function getAPIUrl() {
 // Exporta a URL da API como constante global
 window.API_CONFIG = {
     BASE_URL: getAPIUrl(),
-    TIMEOUT: 30000, // 30 segundos
+    TIMEOUT: 30000,
 
-    // Método auxiliar para construir URLs completas
     url(endpoint) {
-        // Remove barra inicial se existir para evitar duplicação
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
         return `${this.BASE_URL}${cleanEndpoint}`;
     },
 
-    // Método para fazer requisições com timeout
     async fetch(endpoint, options = {}) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT);
@@ -45,10 +42,8 @@ window.API_CONFIG = {
     }
 };
 
-// Para compatibilidade com código existente
 window.API_URL = window.API_CONFIG.BASE_URL;
 
-// Log da configuração (apenas em desenvolvimento)
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     console.log('🔧 API Configuration:', {
         baseUrl: window.API_CONFIG.BASE_URL,

@@ -158,8 +158,20 @@ export const listarMinhasCompras = async (req, res) => {
             return res.status(400).json({ message: "Usuário não identificado no token." });
         }
 
+        // 1. Busca as compras do cliente
         const compras = await Compra.getByCliente(idUsuario);
-        res.json(compras);
+
+        // 2. Para cada compra, busca os itens correspondentes
+        const comprasComItens = await Promise.all(compras.map(async (compra) => {
+            // Busca os itens desta compra específica
+            const itens = await ItemCompra.getByCompra(compra.idCompra);
+
+            // Retorna a compra original SOMADA aos itens
+            return { ...compra, itens: itens };
+        }));
+
+        res.json(comprasComItens);
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Erro ao buscar histórico." });

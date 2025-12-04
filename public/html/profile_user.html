@@ -160,6 +160,33 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="modalDetalhesPedido" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" style="color: #130188; font-weight: bold;">Detalhes do Pedido</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span id="modal-data" class="text-muted"></span>
+                                <span id="modal-status" class="badge bg-secondary"></span>
+                            </div>
+
+                            <h6 class="mb-2" style="font-weight: bold; color: #333;">Itens comprados:</h6>
+                            <ul id="modal-lista-itens" class="list-group list-group-flush mb-3">
+                            </ul>
+
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                <span style="font-size: 1.1rem;">Total do Pedido:</span>
+                                <span id="modal-total"
+                                    style="font-size: 1.5rem; font-weight: bold; color: #198754;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <footer>
                 <div class="svg-footer-content">
                     <div class="svg-logo-footer">
@@ -217,6 +244,8 @@
         }
 
         // --- FUNÇÃO PARA CARREGAR OS PEDIDOS ---
+        let listaPedidosGlobal = [];
+
         async function carregarMeusPedidos() {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             const container = document.getElementById('pedidos-container');
@@ -227,51 +256,117 @@
                 });
 
                 if (response.ok) {
-                    const compras = await response.json();
+                    let compras = await response.json();
+
+                    // Ordenar: Mais recente primeiro
+                    compras.sort((a, b) => new Date(b.dataCompra) - new Date(a.dataCompra));
+
+                    listaPedidosGlobal = compras;
 
                     if (compras.length === 0) {
-                        container.innerHTML = '<div style="text-align: center; padding: 20px; background: #f9f9f9; border-radius: 8px;">Você ainda não tem pedidos.</div>';
+                        container.innerHTML = '<div style="text-align: center; padding: 20px; background: #f9f9f9;">Você ainda não tem pedidos.</div>';
                         return;
                     }
 
                     container.innerHTML = '';
+                    const totalPedidos = compras.length;
 
-                    // Gera os cards
-                    compras.forEach(compra => {
+                    compras.forEach((compra, index) => {
                         const data = new Date(compra.dataCompra).toLocaleDateString('pt-BR');
                         const valor = parseFloat(compra.valorTotal).toFixed(2).replace('.', ',');
+                        const numeroVisual = totalPedidos - index;
 
                         let corStatus = '#ffc107';
                         if (compra.statusCompra === 'APROVADO') corStatus = '#198754';
                         if (compra.statusCompra === 'CANCELADO') corStatus = '#dc3545';
 
                         const cardHTML = `
-                            <div style="background: white; border: 1px solid #ddd; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <h4 style="margin: 0; color: #130188; font-weight: bold; font-size: 18px;">Pedido #${compra.idCompra}</h4>
-                                    <span style="color: #666; font-size: 14px;">Realizado em: ${data}</span>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div style="font-weight: bold; color: ${corStatus}; margin-bottom: 5px; text-transform: uppercase; font-size: 12px;">
-                                        ${compra.statusCompra}
-                                    </div>
-                                    <div style="font-size: 20px; font-weight: bold; color: #333;">
-                                        R$ ${valor}
-                                    </div>
-                                </div>
+                    <div style="background: white; border: 1px solid #ddd; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 15px;">
+                        <div>
+                            <h4 style="margin: 0; color: #130188; font-weight: bold; font-size: 18px;">Pedido #${numeroVisual}</h4>
+                            <span style="color: #666; font-size: 14px;">Realizado em: ${data}</span>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <div style="text-align: right;">
+                                <div style="font-weight: bold; color: ${corStatus}; font-size: 12px;">${compra.statusCompra}</div>
+                                <div style="font-size: 18px; font-weight: bold; color: #333;">R$ ${valor}</div>
                             </div>
-                        `;
+                            
+                            <button class="btn btn-outline-primary btn-sm" onclick="abrirModalDetalhes(${index}, ${numeroVisual})">
+                                <i class="fa-solid fa-eye"></i> Ver detalhes
+                            </button>
+                        </div>
+                    </div>
+                `;
                         container.innerHTML += cardHTML;
                     });
 
                 } else {
-                    console.error("Erro API:", response.status);
-                    container.innerHTML = '<p style="color: red; text-align: center;">Não foi possível carregar seus pedidos.</p>';
+                    container.innerHTML = '<p style="color: red; text-align: center;">Erro ao carregar pedidos.</p>';
                 }
             } catch (error) {
                 console.error("Erro Fetch:", error);
-                container.innerHTML = '<p style="color: red; text-align: center;">Erro de conexão com o servidor.</p>';
+                container.innerHTML = '<p style="color: red; text-align: center;">Erro de conexão.</p>';
             }
+        }
+
+        function abrirModalDetalhes(index, numeroVisual) {
+            const pedido = listaPedidosGlobal[index];
+
+            if (!pedido) return;
+
+            // 1. Preencher Cabeçalho
+            document.querySelector('#modalDetalhesPedido .modal-title').innerText = `Detalhes do Pedido #${numeroVisual}`;
+
+            const dataFormatada = new Date(pedido.dataCompra).toLocaleString('pt-BR');
+            document.getElementById('modal-data').innerText = dataFormatada;
+
+            const elStatus = document.getElementById('modal-status');
+            elStatus.innerText = pedido.statusCompra;
+
+            let classeStatus = 'bg-warning text-dark';
+            if (pedido.statusCompra === 'APROVADO') classeStatus = 'bg-success';
+            if (pedido.statusCompra === 'CANCELADO') classeStatus = 'bg-danger';
+            elStatus.className = 'badge ' + classeStatus;
+
+            // 2. Preencher Lista de Itens
+            const lista = document.getElementById('modal-lista-itens');
+            lista.innerHTML = '';
+
+            // Verifica se existem itens
+            const itens = pedido.itens || pedido.itensCompra || [];
+
+            if (itens.length > 0) {
+                itens.forEach(item => {
+                    const nome = item.nome || item.nomeProduto || `Produto cód. ${item.idProduto}`;
+                    const valorUnitario = parseFloat(item.preco_momento || item.price || 0);
+                    const qtd = item.quantidade;
+
+                    const precoFormatado = valorUnitario.toFixed(2).replace('.', ',');
+                    const totalItem = (qtd * valorUnitario).toFixed(2).replace('.', ',');
+
+                    lista.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <div style="font-weight: 500;">${nome}</div>
+                                <small class="text-muted">${qtd}x R$ ${precoFormatado}</small>
+                            </div>
+                            <span style="font-weight: bold;">R$ ${totalItem}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                lista.innerHTML = '<li class="list-group-item text-muted text-center">Nenhum item encontrado neste pedido.</li>';
+            }
+
+            // 3. Preencher Total Final
+            const total = parseFloat(pedido.valorTotal).toFixed(2).replace('.', ',');
+            document.getElementById('modal-total').innerText = `R$ ${total}`;
+
+            // 4. Abrir Modal
+            const modal = new bootstrap.Modal(document.getElementById('modalDetalhesPedido'));
+            modal.show();
         }
 
         window.addEventListener('load', () => {
