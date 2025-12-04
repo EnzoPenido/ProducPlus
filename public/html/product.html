@@ -148,81 +148,24 @@
 
                     <button class="btn-add-cart">Adicionar ao carrinho</button>
 
-                    <button class="specs-button" onclick="toggleSpecs()">
+                    <button class="specs-button" data-bs-toggle="collapse" data-bs-target="#collapseSpecs"
+                        aria-expanded="false" aria-controls="collapseSpecs">
                         <span>ESPECIFICAÇÕES TÉCNICAS</span>
                         <img class="specs-icon" src="../assets/images/svg/sign-plus-ProducPlus.svg" alt="">
                     </button>
 
-                    <div class="specs-container" id="specsContainer">
-                        <div class="specs-content">
-                            <div class="spec-group">
-                                <h4>Dimensões</h4>
-                                <div class="spec-item">
-                                    <span class="spec-label">Comprimento</span>
-                                    <span class="spec-value">250 mm</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Largura</span>
-                                    <span class="spec-value">150 mm</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Altura</span>
-                                    <span class="spec-value">100 mm</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Peso</span>
-                                    <span class="spec-value">2,5 kg</span>
-                                </div>
-                            </div>
+                    <div class="product-specs mt-5">
 
-                            <div class="spec-group">
-                                <h4>Material</h4>
-                                <div class="spec-item">
-                                    <span class="spec-label">Composição</span>
-                                    <span class="spec-value">Aço inoxidável 316</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Acabamento</span>
-                                    <span class="spec-value">Polido</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Resistência</span>
-                                    <span class="spec-value">Alta</span>
-                                </div>
-                            </div>
+                        <div class="collapse" id="collapseSpecs">
+                            <div class="card card-body border-0 shadow-sm">
 
-                            <div class="spec-group">
-                                <h4>Performance</h4>
-                                <div class="spec-item">
-                                    <span class="spec-label">Potência</span>
-                                    <span class="spec-value">1500W</span>
+                                <div class="specs-content">
+                                    <p class="text-muted">Carregando detalhes...</p>
                                 </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Voltagem</span>
-                                    <span class="spec-value">110-240V</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Frequência</span>
-                                    <span class="spec-value">50-60 Hz</span>
-                                </div>
-                            </div>
 
-                            <div class="spec-group">
-                                <h4>Certificações</h4>
-                                <div class="spec-item">
-                                    <span class="spec-label">Norma ISO</span>
-                                    <span class="spec-value">ISO 9001:2015</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Garantia</span>
-                                    <span class="spec-value">24 meses</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Aprovação</span>
-                                    <span class="spec-value">CE</span>
-                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -277,55 +220,32 @@
 
         // Função para carregar dados do produto
         async function carregarProduto() {
-            const produtoId = getProdutoIdFromURL();
+            const urlParams = new URLSearchParams(window.location.search);
+            const idProduto = urlParams.get('id');
 
-            if (!produtoId) {
-                alert('Produto não encontrado!');
+            if (!idProduto) {
                 window.location.href = 'products.html';
                 return;
             }
 
             try {
-                // Buscar dados do produto
-                const response = await fetch(`${API_URL}/produtos/${produtoId}`);
+                // Supondo que sua API retorne o produto COM a descrição técnica embutida ou em um campo separado
+                const response = await fetch(`${API_URL}/produtos/${idProduto}`);
+                if (!response.ok) throw new Error('Produto não encontrado');
 
-                if (!response.ok) {
-                    throw new Error('Produto não encontrado');
-                }
+                const data = await response.json();
 
-                const produto = await response.json();
-                produtoAtual = produto;
+                // Ajuste aqui conforme sua API retorna os dados. 
+                // Exemplo: data.produto e data.descricaoTecnica
+                const produto = data.produto || data;
+                const descricaoTecnica = data.descricaoTecnica || {}; // Pega a descrição do JSON
+                const categoria = data.categoria ? data.categoria.nome : 'Geral';
 
-                // Buscar descrição técnica do produto
-                let descricaoTecnica = null;
-                try {
-                    const descResponse = await fetch(`${API_URL}/produtos/${produtoId}/descricao`);
-                    if (descResponse.ok) {
-                        descricaoTecnica = await descResponse.json();
-                    }
-                } catch (error) {
-                    console.log('Produto sem descrição técnica:', error);
-                }
-
-                // Buscar nome da categoria
-                let nomeCategoria = 'Geral';
-                try {
-                    const catResponse = await fetch(`${API_URL}/categorias/${produto.idCategoria}`);
-                    if (catResponse.ok) {
-                        const categoria = await catResponse.json();
-                        nomeCategoria = categoria.nome;
-                    }
-                } catch (error) {
-                    console.log('Erro ao buscar categoria:', error);
-                }
-
-                // Renderizar dados na página
-                renderizarProduto(produto, descricaoTecnica, nomeCategoria);
+                renderizarProduto(produto, descricaoTecnica, categoria);
 
             } catch (error) {
-                console.error('Erro ao carregar produto:', error);
-                alert('Erro ao carregar informações do produto');
-                window.location.href = 'products.html';
+                console.error(error);
+                alert('Erro ao carregar produto.');
             }
         }
 
@@ -390,13 +310,70 @@
             const backLink = document.querySelector('.back-button a');
             backLink.href = 'products.html';
 
-            // Renderizar especificações técnicas
-            if (descricaoTecnica) {
-                renderizarEspecificacoes(descricaoTecnica);
-            } else {
-                // Esconder seção de especificações se não houver dados
-                document.querySelector('.specs-button').style.display = 'none';
+            // --- LÓGICA DAS ESPECIFICAÇÕES ---
+
+            // 1. Buscamos a div INTERNA do menu retrátil
+            const specsContainer = document.querySelector('.specs-content');
+
+            if (!specsContainer) return; // Segurança caso não ache o HTML
+
+            // 2. Verifica se tem descrição
+            const temDescricao = descricaoTecnica && Object.values(descricaoTecnica).some(v => v);
+
+            if (!temDescricao) {
+                specsContainer.innerHTML = '<p class="text-muted text-center py-3">Nenhuma informação técnica cadastrada para este produto.</p>';
+                return;
             }
+
+            let html = '';
+            const desc = descricaoTecnica;
+
+            // Função para criar a linha bonitinha
+            const criarLinha = (label, valor, unidade = '') => {
+                if (valor) {
+                    return `
+            <div class="row py-2 border-bottom">
+                <div class="col-6 text-secondary fw-bold">${label}</div>
+                <div class="col-6 text-end" style="color: #1800ad;">${valor}${unidade}</div>
+            </div>`;
+                }
+                return '';
+            };
+
+            // Monta os grupos
+            let conteudo = '';
+
+            // Grupo Dimensões
+            let dimensoes = '';
+            dimensoes += criarLinha('Comprimento', desc.comprimento, ' mm');
+            dimensoes += criarLinha('Largura', desc.largura, ' mm');
+            dimensoes += criarLinha('Altura', desc.altura, ' mm');
+            dimensoes += criarLinha('Peso', desc.peso, ' kg');
+            if (dimensoes) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Dimensões</h6>${dimensoes}</div>`;
+
+            // Grupo Material
+            let material = '';
+            material += criarLinha('Composição', desc.composicao);
+            material += criarLinha('Acabamento', desc.acabamento);
+            material += criarLinha('Resistência', desc.resistencia);
+            if (material) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Material</h6>${material}</div>`;
+
+            // Grupo Performance
+            let performance = '';
+            performance += criarLinha('Potência', desc.potencia);
+            performance += criarLinha('Voltagem', desc.voltagem);
+            performance += criarLinha('Frequência', desc.frequencia);
+            if (performance) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Elétrica / Performance</h6>${performance}</div>`;
+
+            // Grupo Outros
+            let outros = '';
+            outros += criarLinha('Norma ISO', desc.normaISO);
+            outros += criarLinha('Garantia', desc.garantia);
+            outros += criarLinha('Aprovação', desc.aprovacao);
+            if (outros) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Outros</h6>${outros}</div>`;
+
+            // Insere o conteúdo
+            specsContainer.innerHTML = conteudo;
         }
 
         // Função para renderizar especificações técnicas

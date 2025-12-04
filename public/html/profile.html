@@ -109,7 +109,7 @@
                     <input type="file" id="file-input-foto" accept="image/*" style="display: none;">
                     <a type="button" class="logout-btn">Sair</a>
                 </div>
-                <img class="img-profile-hero" src="../assets/images/svg/user_profile_hero_ProducPlus.svg" alt="">
+                <img class="img-profile-hero" src="../assets/images/svg/adm_profile_hero_ProducPlus.svg" alt="">
 
             </section>
 
@@ -289,6 +289,85 @@
                                 <input type="file" id="productImage" name="productImage" accept="image/*">
                                 <label for="productImage" class="file-input-label">Enviar imagem</label>
                                 <span class="file-name" id="fileName">Nenhum arquivo selecionado</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h5 class="text-primary mb-3">Especificações Técnicas</h5>
+
+                            <h6 class="text-secondary">Dimensões e Peso</h6>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="prodComprimento" class="form-label">Comprimento (mm)</label>
+                                    <input type="number" class="form-control" id="prodComprimento" step="0.01"
+                                        placeholder="0.00">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="prodLargura" class="form-label">Largura (mm)</label>
+                                    <input type="number" class="form-control" id="prodLargura" step="0.01"
+                                        placeholder="0.00">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="prodAltura" class="form-label">Altura (mm)</label>
+                                    <input type="number" class="form-control" id="prodAltura" step="0.01"
+                                        placeholder="0.00">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="prodPeso" class="form-label">Peso (kg)</label>
+                                    <input type="number" class="form-control" id="prodPeso" step="0.001"
+                                        placeholder="0.000">
+                                </div>
+                            </div>
+
+                            <h6 class="text-secondary mt-3">Material</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="prodComposicao" class="form-label">Composição</label>
+                                    <input type="text" class="form-control" id="prodComposicao"
+                                        placeholder="Ex: Aço Inox">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="prodAcabamento" class="form-label">Acabamento</label>
+                                    <input type="text" class="form-control" id="prodAcabamento"
+                                        placeholder="Ex: Polido">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="prodResistencia" class="form-label">Resistência</label>
+                                    <input type="text" class="form-control" id="prodResistencia"
+                                        placeholder="Ex: Alta corrosão">
+                                </div>
+                            </div>
+
+                            <h6 class="text-secondary mt-3">Performance / Elétrica</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="prodPotencia" class="form-label">Potência</label>
+                                    <input type="text" class="form-control" id="prodPotencia" placeholder="Ex: 1500W">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="prodVoltagem" class="form-label">Voltagem</label>
+                                    <input type="text" class="form-control" id="prodVoltagem" placeholder="Ex: 220V">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="prodFrequencia" class="form-label">Frequência</label>
+                                    <input type="text" class="form-control" id="prodFrequencia" placeholder="Ex: 60Hz">
+                                </div>
+                            </div>
+
+                            <h6 class="text-secondary mt-3">Outros</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label for="prodNorma" class="form-label">Norma ISO</label>
+                                    <input type="text" class="form-control" id="prodNorma">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="prodGarantia" class="form-label">Garantia</label>
+                                    <input type="text" class="form-control" id="prodGarantia">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="prodAprovacao" class="form-label">Aprovação</label>
+                                    <input type="text" class="form-control" id="prodAprovacao">
+                                </div>
                             </div>
                         </div>
 
@@ -752,8 +831,8 @@
                         const data = await response.json();
 
                         if (response.ok) {
-                            const novaUrl = data.url;
-                            if (mainImage) mainImage.src = novaUrl;
+                            const novaUrl = `${API_URL}${data.url}`;
+                            mainImage.src = novaUrl;
                             localStorage.setItem('userProfileImage', novaUrl);
                             carregarFotoPerfilGlobal();
                             alert("Foto atualizada!");
@@ -870,7 +949,22 @@
                     descricao: productDescription,
                     preco_unitario: parseFloat(productPrice),
                     quantidadeEstoque: parseInt(productQuantity),
-                    secao: productSection
+                    secao: productSection,
+                    descricaoTecnica: {
+                        comprimento: document.getElementById('prodComprimento').value || null,
+                        largura: document.getElementById('prodLargura').value || null,
+                        altura: document.getElementById('prodAltura').value || null,
+                        peso: document.getElementById('prodPeso').value || null,
+                        composicao: document.getElementById('prodComposicao').value || null,
+                        acabamento: document.getElementById('prodAcabamento').value || null,
+                        resistencia: document.getElementById('prodResistencia').value || null,
+                        potencia: document.getElementById('prodPotencia').value || null,
+                        voltagem: document.getElementById('prodVoltagem').value || null,
+                        frequencia: document.getElementById('prodFrequencia').value || null,
+                        normaISO: document.getElementById('prodNorma').value || null,
+                        garantia: document.getElementById('prodGarantia').value || null,
+                        aprovacao: document.getElementById('prodAprovacao').value || null
+                    }
                 };
 
                 // Adicionar subcategoria se foi preenchida
@@ -1050,7 +1144,7 @@
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/produtos/${id}`, {
+                const response = await fetch(`${API_URL}/produtos/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1090,7 +1184,7 @@
             const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
             try {
-                const response = await fetch(`http://localhost:3000/produtos/${id}/estoque`, {
+                const response = await fetch(`${API_URL}/produtos/${id}/estoque`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
