@@ -1530,5 +1530,7 @@ footer li a:hover {
 
     .resizer-all-content{
         width: 100%;
+        position: static;
+        top: 0;
     }
 }
