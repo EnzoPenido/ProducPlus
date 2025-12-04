@@ -32,7 +32,12 @@ export const buscarProduto = async (req, res) => {
     try {
         const produto = await Produto.getById(req.params.id);
         if (!produto) return res.status(404).json({ message: "Produto não encontrado" });
-        res.json(produto);
+        const descricaoTecnica = await DescricaoProduto.getByProdutoId(req.params.id);
+        res.json({
+            ...produto,
+            descricaoTecnica: descricaoTecnica || {}
+        });
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -40,20 +45,56 @@ export const buscarProduto = async (req, res) => {
 
 export const criarProduto = async (req, res) => {
     try {
-        console.log('POST /produtos body:', req.body);
-        const id = await Produto.create(req.body);
-        console.log('Produto criado no DB id:', id);
-        res.status(201).json({ message: "Produto criado", idProduto: id });
+        console.log("Recebendo dados para criar produto:", req.body); // Log para debug
+
+        const idProduto = await Produto.create(req.body);
+        console.log("Produto criado com ID:", idProduto);
+
+        if (req.body.descricaoTecnica) {
+            const dadosTecnicos = {
+                ...req.body.descricaoTecnica,
+                idProduto: idProduto
+            };
+            await DescricaoProduto.create(dadosTecnicos);
+        }
+
+        res.status(201).json({
+            message: "Produto criado com sucesso",
+            id: idProduto,
+            idProduto: idProduto,
+            produto: {
+                id: idProduto,
+                ...req.body
+            }
+        });
+
     } catch (err) {
-        console.error('Erro ao criar produto:', err);
+        console.error("Erro ao criar produto:", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const atualizarProduto = async (req, res) => {
+    const { id } = req.params;
     try {
-        await Produto.update(req.params.id, req.body);
-        res.json({ message: "Produto atualizado" });
+        // Atualiza os dados principais
+        await Produto.update(id, req.body);
+
+        // Atualiza ou cria a descrição técnica se foi enviada
+        if (req.body.descricaoTecnica) {
+            const existe = await DescricaoProduto.getByProdutoId(id);
+
+            if (existe) {
+                await DescricaoProduto.update(id, req.body.descricaoTecnica);
+            } else {
+                await DescricaoProduto.create({
+                    ...req.body.descricaoTecnica,
+                    idProduto: id
+                });
+            }
+        }
+
+        res.json({ message: "Produto atualizado com sucesso" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
