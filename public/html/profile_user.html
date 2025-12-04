@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../assets/js/config.js"></script>
     <script src="../assets/js/pedidos-slider.js"></script>
 </head>
 
@@ -198,7 +199,7 @@
         </script>
 
     <script>
-        const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
+        const API_URL = window.API_URL;
 
         function parseJwt(token) {
             try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
@@ -217,7 +218,7 @@
 
         // --- FUNÇÃO PARA CARREGAR OS PEDIDOS ---
         async function carregarMeusPedidos() {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             const container = document.getElementById('pedidos-container');
 
             try {
@@ -374,7 +375,7 @@
                 }
             });
             window.addEventListener('load', () => {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem('token') || sessionStorage.getItem('token');
                 const navEntrar = document.getElementById('nav-entrar');
                 const navPerfil = document.getElementById('nav-perfil');
 

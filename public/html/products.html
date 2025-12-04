@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <script src="../assets/js/config.js"></script>
 </head>
 
 <body>
@@ -309,7 +310,7 @@
         crossorigin="anonymous"></script>
 
     <script>
-        const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
+        const API_URL = window.API_URL;
 
         // Mapeamento de seções (normalizado para comparação)
         const SECTION_MAPPING = {

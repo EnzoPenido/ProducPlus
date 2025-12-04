@@ -123,7 +123,7 @@ function selectShipping(valor, element) {
 async function realizarPagamento() {
     if (cartData.length === 0) return alert("Seu carrinho está vazio!");
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     if (!token) {
         alert("Faça login para finalizar.");
         window.location.href = 'login.html';
@@ -133,7 +133,8 @@ async function realizarPagamento() {
     if (!confirm("Confirmar compra?")) return;
 
     try {
-        const response = await fetch('http://localhost:3000/compras', {
+        const baseUrl = window.API_URL || 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/compras`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

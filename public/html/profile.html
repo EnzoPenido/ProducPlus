@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../assets/js/config.js"></script>
 </head>
 
 <body>
@@ -390,7 +391,7 @@
     <script src="../assets/js/adicionar-produtos-slider.js"></script>
 
     <script>
-        const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
+        const API_URL = window.API_URL;
 
         // Autenticação
         function parseJwt(token) {

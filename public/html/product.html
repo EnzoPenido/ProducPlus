@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../assets/js/config.js"></script>
 
 </head>
 
@@ -265,7 +266,7 @@
         crossorigin="anonymous"></script>
 
     <script>
-        const API_URL = 'http://localhost:3000';
+        const API_URL = window.API_URL;
         let produtoAtual = null;
 
         // Função para pegar o ID do produto da URL
