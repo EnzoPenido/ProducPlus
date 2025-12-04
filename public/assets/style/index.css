@@ -1028,6 +1028,17 @@ footer {
   animation: scroll-x var(--duration) linear infinite;
 }
 
+.marquee__group img{
+    display: grid;
+  place-items: center;
+  width: 170px;
+  fill: var(--color-text);
+  background: rgba(155, 155, 155, 0.059);
+  aspect-ratio: 16/9;
+  padding: 20px;
+  border-radius: 0.3rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee__group {
     animation-play-state: paused;
