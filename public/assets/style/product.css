@@ -1079,7 +1079,8 @@ span:hover {
 
 .product-txt-content h3 {
     width: auto;
-    height: 140px;
+    max-height: 140px;
+    height: auto;
 
     margin-bottom: 15px;
 }
