@@ -761,6 +761,7 @@ footer {
 
     display: flex;
     width: 100%;
+    min-height: 481px;
     height: auto;
 
     background-color: white;
@@ -787,6 +788,15 @@ footer {
 .container-products-item-desc-text-price span{
     display: flex;
     height: auto;
+
+    min-height: 48px;
+}
+
+.img-placeholder{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 40%;
 }
 
 .container-products-img-text {
@@ -1239,6 +1249,8 @@ footer {
 
 @media (max-width: 768px) {
     .container-products {
+        display: flex;
+        justify-content: center;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 20px;
         padding: 15px;
@@ -1251,6 +1263,8 @@ footer {
 
 @media (max-width: 480px) {
     .container-products {
+        display: flex;
+        justify-content: center;
         grid-template-columns: 1fr;
         gap: 15px;
         padding: 10px;

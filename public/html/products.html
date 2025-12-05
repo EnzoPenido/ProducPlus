@@ -286,7 +286,7 @@
 
                         <div class="modal-footer px-0 pb-0">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary"
+                            <button type="button" class="btn btn-primary"
                                 style="background-color: #130188; border: none;" id="confirmarEdicao">Salvar
                                 Alterações</button>
                         </div>
@@ -455,7 +455,7 @@
 
                         let imagemHTML = product.url_imagem
                             ? `<img src="${product.url_imagem.startsWith('http') ? product.url_imagem : API_URL + product.url_imagem}" alt="${product.nome}" style="width: 100%; height: 150px; object-fit: contain;">`
-                            : `<div class="img-placeholder"><i class="fa-solid fa-box-open" style="font-size: 40px; color: #ccc;"></i></div>`;
+                            : `<div class="img-placeholder"><i class="fa-solid fa-box-open" style="font-size: 40px; color: #1811AB !important;"></i></div>`;
 
                         let botaoHTML = isAdmin
                             ? `<div class="action-buttons">
@@ -488,10 +488,30 @@
                         container.innerHTML += cardHTML;
                     });
                 }
+                const params = new URLSearchParams(window.location.search);
+                const sectionId = params.get('section');
+
+                if (sectionId) {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        // Rola suavemente
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        // Efeito visual de destaque
+                        element.style.transition = "background-color 1s";
+                        const originalBg = element.style.backgroundColor;
+                        element.style.backgroundColor = "#eef2ff"; // Azul bem claro
+                        setTimeout(() => {
+                            element.style.backgroundColor = originalBg || 'transparent';
+                        }, 1500);
+                    }
+                }
             } catch (error) {
                 console.error('Erro geral ao carregar produtos:', error);
             }
-        }
+
+        };
+
         // --- FUNÇÃO DE DELETAR PRODUTO ---
         async function deleteProduct(idProduto, nomeProduto) {
             if (!confirm(`Deseja excluir "${nomeProduto}"?`)) return;
@@ -588,28 +608,6 @@
                 document.body.style.cursor = 'default';
             }
         };
-
-        // Listener do Form de Edição
-        const formEdit = document.getElementById('formEditarProduto');
-        if (formEdit) {
-            formEdit.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const id = document.getElementById('editProdId').value;
-                const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-                const body = {
-                    nome: document.getElementById('editProdNome').value,
-                    preco_unitario: document.getElementById('editProdPreco').value,
-                    quantidadeEstoque: document.getElementById('editProdEstoque').value,
-                    idCategoria: document.getElementById('editProdCategoria').value
-                };
-                await fetch(`${API_URL}/produtos/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify(body)
-                });
-                alert('Atualizado!'); location.reload();
-            });
-        }
 
         window.addEventListener('load', () => {
             const token = sessionStorage.getItem('token') || localStorage.getItem('token');

@@ -350,7 +350,7 @@
                 imgContainer.style.backgroundRepeat = 'no-repeat';
                 imgContainer.style.backgroundColor = 'white';
             } else {
-                imgContainer.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc;"><i class="fa-solid fa-box-open" style="font-size: 80px;"></i></div>`;
+                imgContainer.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #1811AB !important;"><i class="fa-solid fa-box-open" style="font-size: 80px;"></i></div>`;
             }
 
             // Informações de texto
@@ -411,7 +411,7 @@
 
             // Se não tiver descrição e NÃO for admin, mostra mensagem vazio
             if (!temDescricao) {
-                specsContainer.innerHTML = '<p class="text-muted text-center py-3">Nenhuma informação técnica cadastrada.</p>';
+                specsContainer.innerHTML = '<p class="text-muted text-center py-3">Nenhuma informação técnica cadastrada.</p> <img src="../assets/images/svg/question-mark-cursor.svg" alt="Nenhum dado" style="display: block; margin: 0 auto; max-width: 150px;">';
                 return;
             }
 

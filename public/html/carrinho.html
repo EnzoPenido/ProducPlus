@@ -219,6 +219,20 @@
         window.addEventListener('load', () => {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
+            if (!token) {
+                alert("Você precisa estar logado para acessar o carrinho.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = parseJwt(token);
+
+            if (user.tipo !== 'CLIENTE') {
+                alert("Administradores não realizam compras. Acesse o painel administrativo.");
+                window.location.href = 'products.html';
+                return;
+            }
+
             // Elementos da tela
             const navEntrar = document.getElementById('nav-entrar');
             const navPerfil = document.getElementById('nav-perfil');
