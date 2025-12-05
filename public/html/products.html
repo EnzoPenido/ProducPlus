@@ -60,7 +60,7 @@
 
                                 <div class="dropdown-center me-1">
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="profile.html" id="link-meu-perfil">Meu
+                                        <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu
                                                 Perfil</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
@@ -123,7 +123,7 @@
                 <div class="filter-search-bar">
                     <img src="../assets/images/svg/cursor-svgrepo-com.svg" alt="">
                     <h1>Procure produtos</h1>
-                    <input class="search-bar" placeholder="Digite o nome do produto...">
+                    <input class="search-bar" placeholder="Nome ou subcategoria do produto...">
                     </input>
                 </div>
             </section>
@@ -287,7 +287,8 @@
                         <div class="modal-footer px-0 pb-0">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary"
-                                style="background-color: #130188; border: none;" id="confirmarEdicao">Salvar Alterações</button>
+                                style="background-color: #130188; border: none;" id="confirmarEdicao">Salvar
+                                Alterações</button>
                         </div>
                     </form>
                 </div>
@@ -615,6 +616,16 @@
             if (token) {
                 document.getElementById('nav-entrar')?.classList.add('d-none');
                 document.getElementById('nav-perfil')?.classList.remove('d-none');
+                const user = parseJwt(token);
+                const linkPerfil = document.getElementById('link-meu-perfil');
+
+                if (linkPerfil && user) {
+                    if (user.tipo === 'ADMIN') {
+                        linkPerfil.href = 'profile.html';
+                    } else {
+                        linkPerfil.href = 'profile_user.html';
+                    }
+                }
                 carregarFotoPerfilGlobal();
                 document.getElementById('btnSair')?.addEventListener('click', (e) => {
                     e.preventDefault();
