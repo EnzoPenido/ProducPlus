@@ -8,10 +8,6 @@ const categorias = {
         titulo: 'Todos os Produtos',
         palavrasChave: []
     },
-    'insumos': {
-        titulo: 'Insumos',
-        palavrasChave: ['insumo']
-    },
     'materiais': {
         titulo: 'Materiais',
         palavrasChave: ['material', 'materia']

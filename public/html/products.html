@@ -228,7 +228,6 @@
             </ul>
             <ul>
                 <h1>Insumos</h1>
-                <li> <a href="products.html">Todos os produtos</a></li>
                 <li> <a href="products.html#secao-material">Materiais</a></li>
                 <li> <a href="products.html#secao-ferramentas">Ferramentas</a></li>
                 <li> <a href="products.html#secao-eletronica">Eletrônica</a></li>
@@ -304,7 +303,6 @@
         const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
         const SECTION_MAPPING = {
-            'insumos': ['insumo', 'insumos'],
             'material': ['material', 'materiais', 'materia'],
             'ferramentas': ['ferramenta', 'ferramentas'],
             'eletronica': ['eletronica', 'eletrica', 'eletrônica', 'elétrica'],
@@ -412,7 +410,7 @@
                 console.log('📦 Produtos carregados (primeiro item):', products[0]); // Debug para ver estrutura
 
                 const produtosPorSecao = {
-                    insumos: [], material: [], ferramentas: [], eletronica: [], mecanica: [], embalagem: []
+                    material: [], ferramentas: [], eletronica: [], mecanica: [], embalagem: []
                 };
 
                 products.forEach(product => {
