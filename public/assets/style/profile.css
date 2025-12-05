@@ -200,6 +200,10 @@ li img:hover{
     .navbar-nav-alternative img {
         height: 20px;
     }
+
+    .logout-btn{
+        margin-left: 0px !important;
+    }
 }
 
 
@@ -1550,7 +1554,7 @@ footer {
 }
 
 .logout-btn{
-    margin-left: 15px !important;
+    margin-left: 15px;
 }
 @media (max-width: 585px){
     .btn-2{
