@@ -137,7 +137,7 @@
                 </div>
                 <div class="product-txt-content">
                     <h1>Nome produto completo</h1>
-                    <span>Marca</span>
+                    <span id="prodCategory">Carregando...</span>
                     <h3>Descrição do produto completa e detalhada, explicando os benefícios e características principais
                         do produto.</h3>
 
@@ -199,7 +199,6 @@
             </ul>
             <ul>
                 <h1>Insumos</h1>
-                <li> <a href="products.html">Todos os produtos</a></li>
                 <li> <a href="products.html#material-section">Materiais</a></li>
                 <li> <a href="products.html#ferramentas-section">Ferramentas</a></li>
                 <li> <a href="products.html#eletronica-section">Eletrônica</a></li>
@@ -209,6 +208,67 @@
 
         </div>
     </footer>
+
+    <div class="modal fade" id="modalEditarSpecs" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Especificações Técnicas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSpecs">
+                        <h6 class="text-primary border-bottom pb-2">Dimensões</h6>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><label>Comprimento (mm)</label><input type="text" class="form-control"
+                                    id="editComprimento"></div>
+                            <div class="col-md-3"><label>Largura (mm)</label><input type="text" class="form-control"
+                                    id="editLargura"></div>
+                            <div class="col-md-3"><label>Altura (mm)</label><input type="text" class="form-control"
+                                    id="editAltura"></div>
+                            <div class="col-md-3"><label>Peso (kg)</label><input type="text" class="form-control"
+                                    id="editPeso"></div>
+                        </div>
+
+                        <h6 class="text-primary border-bottom pb-2 mt-4">Material</h6>
+                        <div class="row mb-3">
+                            <div class="col-md-4"><label>Composição</label><input type="text" class="form-control"
+                                    id="editComposicao"></div>
+                            <div class="col-md-4"><label>Acabamento</label><input type="text" class="form-control"
+                                    id="editAcabamento"></div>
+                            <div class="col-md-4"><label>Resistência</label><input type="text" class="form-control"
+                                    id="editResistencia"></div>
+                        </div>
+
+                        <h6 class="text-primary border-bottom pb-2 mt-4">Performance/Elétrica</h6>
+                        <div class="row mb-3">
+                            <div class="col-md-4"><label>Potência</label><input type="text" class="form-control"
+                                    id="editPotencia"></div>
+                            <div class="col-md-4"><label>Voltagem</label><input type="text" class="form-control"
+                                    id="editVoltagem"></div>
+                            <div class="col-md-4"><label>Frequência</label><input type="text" class="form-control"
+                                    id="editFrequencia"></div>
+                        </div>
+
+                        <h6 class="text-primary border-bottom pb-2 mt-4">Outros</h6>
+                        <div class="row mb-3">
+                            <div class="col-md-4"><label>Norma ISO</label><input type="text" class="form-control"
+                                    id="editNormaISO"></div>
+                            <div class="col-md-4"><label>Garantia</label><input type="text" class="form-control"
+                                    id="editGarantia"></div>
+                            <div class="col-md-4"><label>Aprovação</label><input type="text" class="form-control"
+                                    id="editAprovacao"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarEspecificacoes()">Salvar
+                        Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
@@ -229,25 +289,49 @@
             const urlParams = new URLSearchParams(window.location.search);
             const idProduto = urlParams.get('id');
 
+            // Recupera o token salvo (se o usuário estiver logado)
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
             if (!idProduto) {
                 window.location.href = 'products.html';
                 return;
             }
 
             try {
-                // Supondo que sua API retorne o produto COM a descrição técnica embutida ou em um campo separado
+                // 1. Busca os dados do produto (Essa rota é pública, não precisa de token)
                 const response = await fetch(`${API_URL}/produtos/${idProduto}`);
                 if (!response.ok) throw new Error('Produto não encontrado');
 
                 const data = await response.json();
-
-                // Ajuste aqui conforme sua API retorna os dados. 
-                // Exemplo: data.produto e data.descricaoTecnica
                 const produto = data.produto || data;
-                const descricaoTecnica = data.descricaoTecnica || {}; // Pega a descrição do JSON
-                const categoria = data.categoria ? data.categoria.nome : 'Geral';
+                produtoAtual = produto;
+                const descricaoTecnica = data.descricaoTecnica || {};
 
-                renderizarProduto(produto, descricaoTecnica, categoria);
+                // 2. Lógica para buscar o NOME da categoria
+                let nomeCategoria = 'Geral';
+
+                // Só tenta buscar a categoria se tiver ID e se tiver TOKEN (pois a rota é protegida)
+                if (produto.idCategoria && token) {
+                    try {
+                        const resCat = await fetch(`${API_URL}/categorias/${produto.idCategoria}`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}` // <--- ADICIONADO AQUI
+                            }
+                        });
+
+                        if (resCat.ok) {
+                            const cat = await resCat.json();
+                            nomeCategoria = cat.nome;
+                        } else {
+                            console.warn("Não foi possível carregar o nome da categoria (401/403)");
+                        }
+                    } catch (e) {
+                        console.error('Erro ao buscar categoria:', e);
+                    }
+                }
+
+                // 3. Renderiza na tela
+                renderizarProduto(produto, descricaoTecnica, nomeCategoria);
 
             } catch (error) {
                 console.error(error);
@@ -257,49 +341,39 @@
 
         // Função para renderizar o produto na página
         function renderizarProduto(produto, descricaoTecnica, nomeCategoria) {
-            // Atualizar título da página
+            // Guarda as specs na variavel global para usar no modal depois
+            specsAtuaisGlobal = descricaoTecnica || {};
+
             document.title = `${produto.nome} - ProducPlus`;
 
-            // Atualizar imagem do produto
+            // ... (código da imagem igual ao original) ...
             const imgContainer = document.querySelector('.product-img-content');
             if (produto.url_imagem) {
-                const src = produto.url_imagem.startsWith('http')
-                    ? produto.url_imagem
-                    : `${API_URL}${produto.url_imagem}`;
+                const src = produto.url_imagem.startsWith('http') ? produto.url_imagem : `${API_URL}${produto.url_imagem}`;
                 imgContainer.style.backgroundImage = `url('${src}')`;
                 imgContainer.style.backgroundSize = 'contain';
                 imgContainer.style.backgroundPosition = 'center';
                 imgContainer.style.backgroundRepeat = 'no-repeat';
                 imgContainer.style.backgroundColor = 'white';
             } else {
-                imgContainer.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc;">
-                <i class="fa-solid fa-box-open" style="font-size: 80px;"></i>
-            </div>
-        `;
+                imgContainer.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc;"><i class="fa-solid fa-box-open" style="font-size: 80px;"></i></div>`;
             }
 
-            // Atualizar informações principais
+            // Informações de texto
             const txtContent = document.querySelector('.product-txt-content');
-
-            // Nome do produto
             txtContent.querySelector('h1').textContent = produto.nome;
 
-            // Categoria/Marca
-            txtContent.querySelector('span').textContent = nomeCategoria;
+            const catSpan = document.getElementById('prodCategory');
+            if (catSpan) catSpan.textContent = nomeCategoria;
 
-            // Descrição
             txtContent.querySelector('h3').textContent = produto.descricao || 'Descrição não disponível';
 
-            // Preço
             const preco = parseFloat(produto.preco_unitario);
-            const precoFormatado = preco.toFixed(2).replace('.', ',');
-            txtContent.querySelector('.price').textContent = `R$ ${precoFormatado}`;
+            txtContent.querySelector('.price').textContent = `R$ ${preco.toFixed(2).replace('.', ',')}`;
 
-            // Verificar estoque
+            // Estoque
             const quantidadeInput = document.getElementById('quantity');
             const btnAddCart = document.querySelector('.btn-add-cart');
-
             if (produto.quantidadeEstoque <= 0) {
                 btnAddCart.disabled = true;
                 btnAddCart.textContent = 'Produto Indisponível';
@@ -307,49 +381,60 @@
                 quantidadeInput.disabled = true;
             } else {
                 quantidadeInput.max = produto.quantidadeEstoque;
-
-                // Adicionar evento ao botão de adicionar ao carrinho
                 btnAddCart.onclick = () => adicionarAoCarrinho(produto);
             }
 
-            // Atualizar link de voltar
             const backLink = document.querySelector('.back-button a');
             backLink.href = 'products.html';
 
-            // --- LÓGICA DAS ESPECIFICAÇÕES ---
+            // --- LÓGICA DO BOTÃO DE EDITAR (ADMIN) ---
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            const user = token ? parseJwt(token) : null;
+            const specsButton = document.querySelector('.specs-button');
 
-            // 1. Buscamos a div INTERNA do menu retrátil
+            // Se for admin, adiciona botão de editar ao lado do título das specs
+            if (user && user.tipo === 'ADMIN') {
+                // Remove botão de editar anterior se existir para não duplicar
+                const btnEditExistente = document.getElementById('btnEditSpecs');
+                if (btnEditExistente) btnEditExistente.remove();
+
+                const btnEdit = document.createElement('button');
+                btnEdit.id = 'btnEditSpecs';
+                btnEdit.className = 'btn btn-sm btn-outline-primary ms-3';
+                btnEdit.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Specs';
+                btnEdit.onclick = (e) => {
+                    e.stopPropagation(); // Evita abrir/fechar o collapse ao clicar no editar
+                    abrirModalEdicao();
+                };
+                specsButton.appendChild(btnEdit);
+            }
+
+            // --- RENDERIZAÇÃO DAS SPECS ---
             const specsContainer = document.querySelector('.specs-content');
+            if (!specsContainer) return;
 
-            if (!specsContainer) return; // Segurança caso não ache o HTML
-
-            // 2. Verifica se tem descrição
             const temDescricao = descricaoTecnica && Object.values(descricaoTecnica).some(v => v);
 
+            // Se não tiver descrição e NÃO for admin, mostra mensagem vazio
             if (!temDescricao) {
-                specsContainer.innerHTML = '<p class="text-muted text-center py-3">Nenhuma informação técnica cadastrada para este produto.</p>';
+                specsContainer.innerHTML = '<p class="text-muted text-center py-3">Nenhuma informação técnica cadastrada.</p>';
                 return;
             }
 
-            let html = '';
-            const desc = descricaoTecnica;
-
-            // Função para criar a linha bonitinha
             const criarLinha = (label, valor, unidade = '') => {
                 if (valor) {
                     return `
-            <div class="row py-2 border-bottom">
-                <div class="col-6 text-secondary fw-bold">${label}</div>
-                <div class="col-6 text-end" style="color: #1800ad;">${valor}${unidade}</div>
-            </div>`;
+                <div class="row py-2 border-bottom">
+                    <div class="col-6 text-secondary fw-bold">${label}</div>
+                    <div class="col-6 text-end" style="color: #1800ad;">${valor}${unidade}</div>
+                </div>`;
                 }
                 return '';
             };
 
-            // Monta os grupos
             let conteudo = '';
+            const desc = descricaoTecnica || {};
 
-            // Grupo Dimensões
             let dimensoes = '';
             dimensoes += criarLinha('Comprimento', desc.comprimento, ' mm');
             dimensoes += criarLinha('Largura', desc.largura, ' mm');
@@ -357,156 +442,131 @@
             dimensoes += criarLinha('Peso', desc.peso, ' kg');
             if (dimensoes) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Dimensões</h6>${dimensoes}</div>`;
 
-            // Grupo Material
             let material = '';
             material += criarLinha('Composição', desc.composicao);
             material += criarLinha('Acabamento', desc.acabamento);
             material += criarLinha('Resistência', desc.resistencia);
             if (material) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Material</h6>${material}</div>`;
 
-            // Grupo Performance
             let performance = '';
             performance += criarLinha('Potência', desc.potencia);
             performance += criarLinha('Voltagem', desc.voltagem);
             performance += criarLinha('Frequência', desc.frequencia);
             if (performance) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Elétrica / Performance</h6>${performance}</div>`;
 
-            // Grupo Outros
             let outros = '';
             outros += criarLinha('Norma ISO', desc.normaISO);
             outros += criarLinha('Garantia', desc.garantia);
             outros += criarLinha('Aprovação', desc.aprovacao);
             if (outros) conteudo += `<div class="mb-3"><h6 class="text-uppercase text-muted small mt-3 mb-2">Outros</h6>${outros}</div>`;
 
-            // Insere o conteúdo
+            // Se estiver tudo vazio, mas for admin, mostra mensagem para editar
+            if (conteudo === '' && user && user.tipo === 'ADMIN') {
+                conteudo = '<p class="text-center py-3 text-primary">Clique em "Editar Specs" para adicionar informações.</p>';
+            }
+
             specsContainer.innerHTML = conteudo;
         }
 
-        // Função para renderizar especificações técnicas
-        function renderizarEspecificacoes(desc) {
-            const specsContent = document.querySelector('.specs-content');
+        // --- NOVAS FUNÇÕES ---
 
-            let html = '';
+        function abrirModalEdicao() {
+            // Preenche os inputs com os valores atuais
+            const d = specsAtuaisGlobal;
 
-            // Grupo 1: Dimensões
-            if (desc.comprimento || desc.largura || desc.altura || desc.peso) {
-                html += `
-            <div class="spec-group">
-                <h4>Dimensões</h4>
-                ${desc.comprimento ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Comprimento</span>
-                        <span class="spec-value">${desc.comprimento} mm</span>
-                    </div>
-                ` : ''}
-                ${desc.largura ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Largura</span>
-                        <span class="spec-value">${desc.largura} mm</span>
-                    </div>
-                ` : ''}
-                ${desc.altura ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Altura</span>
-                        <span class="spec-value">${desc.altura} mm</span>
-                    </div>
-                ` : ''}
-                ${desc.peso ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Peso</span>
-                        <span class="spec-value">${desc.peso} kg</span>
-                    </div>
-                ` : ''}
-            </div>
-        `;
+            document.getElementById('editComprimento').value = d.comprimento || '';
+            document.getElementById('editLargura').value = d.largura || '';
+            document.getElementById('editAltura').value = d.altura || '';
+            document.getElementById('editPeso').value = d.peso || '';
+
+            document.getElementById('editComposicao').value = d.composicao || '';
+            document.getElementById('editAcabamento').value = d.acabamento || '';
+            document.getElementById('editResistencia').value = d.resistencia || '';
+
+            document.getElementById('editPotencia').value = d.potencia || '';
+            document.getElementById('editVoltagem').value = d.voltagem || '';
+            document.getElementById('editFrequencia').value = d.frequencia || '';
+
+            document.getElementById('editNormaISO').value = d.normaISO || '';
+            document.getElementById('editGarantia').value = d.garantia || '';
+            document.getElementById('editAprovacao').value = d.aprovacao || '';
+
+            // Abre o modal usando Bootstrap
+            const modal = new bootstrap.Modal(document.getElementById('modalEditarSpecs'));
+            modal.show();
+        }
+
+        async function salvarEspecificacoes() {
+            const idProduto = getProdutoIdFromURL();
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            if (!token) {
+                alert('Você precisa estar logado.');
+                return;
             }
 
-            // Grupo 2: Material
-            if (desc.composicao || desc.acabamento || desc.resistencia) {
-                html += `
-            <div class="spec-group">
-                <h4>Material</h4>
-                ${desc.composicao ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Composição</span>
-                        <span class="spec-value">${desc.composicao}</span>
-                    </div>
-                ` : ''}
-                ${desc.acabamento ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Acabamento</span>
-                        <span class="spec-value">${desc.acabamento}</span>
-                    </div>
-                ` : ''}
-                ${desc.resistencia ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Resistência</span>
-                        <span class="spec-value">${desc.resistencia}</span>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-            }
+            // 1. Monta o objeto apenas com as specs do formulário
+            const specsFormulario = {
+                comprimento: document.getElementById('editComprimento').value,
+                largura: document.getElementById('editLargura').value,
+                altura: document.getElementById('editAltura').value,
+                peso: document.getElementById('editPeso').value,
+                composicao: document.getElementById('editComposicao').value,
+                acabamento: document.getElementById('editAcabamento').value,
+                resistencia: document.getElementById('editResistencia').value,
+                potencia: document.getElementById('editPotencia').value,
+                voltagem: document.getElementById('editVoltagem').value,
+                frequencia: document.getElementById('editFrequencia').value,
+                normaISO: document.getElementById('editNormaISO').value,
+                garantia: document.getElementById('editGarantia').value,
+                aprovacao: document.getElementById('editAprovacao').value
+            };
 
-            // Grupo 3: Performance
-            if (desc.potencia || desc.voltagem || desc.frequencia) {
-                html += `
-            <div class="spec-group">
-                <h4>Performance</h4>
-                ${desc.potencia ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Potência</span>
-                        <span class="spec-value">${desc.potencia}</span>
-                    </div>
-                ` : ''}
-                ${desc.voltagem ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Voltagem</span>
-                        <span class="spec-value">${desc.voltagem}</span>
-                    </div>
-                ` : ''}
-                ${desc.frequencia ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Frequência</span>
-                        <span class="spec-value">${desc.frequencia}</span>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-            }
+            // 2. Prepara o corpo da requisição.
+            // Tenta enviar o objeto completo do produto atualizado + a nova descrição técnica
+            // Isso previne que a API apague o nome/preço se ela for do tipo PUT estrito.
+            const payload = {
+                ...produtoAtual, // Mantém nome, preço, etc. antigos
+                descricaoTecnica: specsFormulario // Anexa/Substitui as specs novas
+            };
 
-            // Grupo 4: Certificações
-            if (desc.normaISO || desc.garantia || desc.aprovacao) {
-                html += `
-            <div class="spec-group">
-                <h4>Certificações</h4>
-                ${desc.normaISO ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Norma ISO</span>
-                        <span class="spec-value">${desc.normaISO}</span>
-                    </div>
-                ` : ''}
-                ${desc.garantia ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Garantia</span>
-                        <span class="spec-value">${desc.garantia}</span>
-                    </div>
-                ` : ''}
-                ${desc.aprovacao ? `
-                    <div class="spec-item">
-                        <span class="spec-label">Aprovação</span>
-                        <span class="spec-value">${desc.aprovacao}</span>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-            }
+            try {
+                // ALTERAÇÃO IMPORTANTE: Removemos o "/descricao-tecnica" da URL
+                // Usamos a rota padrão de update do produto
+                const response = await fetch(`${API_URL}/produtos/${idProduto}`, {
+                    method: 'PUT', // Se der erro, tente trocar para 'PATCH'
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-            if (html) {
-                specsContent.innerHTML = html;
-            } else {
-                // Se não houver nenhuma especificação, esconder o botão
-                document.querySelector('.specs-button').style.display = 'none';
+                if (response.ok) {
+                    alert('Especificações atualizadas com sucesso!');
+
+                    // Fecha o modal
+                    const modalEl = document.getElementById('modalEditarSpecs');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    modalInstance.hide();
+
+                    // Recarrega os dados na tela para ver a mudança
+                    carregarProduto();
+                } else {
+                    // Tenta ler o erro como JSON, se falhar, lê como texto
+                    let msgErro = 'Erro desconhecido';
+                    try {
+                        const erro = await response.json();
+                        msgErro = erro.message || JSON.stringify(erro);
+                    } catch (e) {
+                        msgErro = await response.text();
+                    }
+                    alert(`Erro ao salvar: ${msgErro}`);
+                    console.error('Erro API:', msgErro);
+                }
+            } catch (error) {
+                console.error('Erro de conexão:', error);
+                alert('Erro de conexão ao tentar salvar.');
             }
         }
 

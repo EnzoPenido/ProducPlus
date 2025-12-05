@@ -99,7 +99,7 @@ function gerenciarVisibilidadeSecoes(secoesComProdutos, termoBusca) {
     const secoes = document.querySelectorAll('.secao-categorias, .secao-categoria');
 
     secoes.forEach(secao => {
-        const secaoId = secao.id; // ex: "secao-insumos", "secao-material", etc
+        const secaoId = secao.id; // ex: "secao-material", etc
 
         // Extrai o nome da seção do ID (remove "secao-")
         const nomeSecao = secaoId.replace('secao-', '');

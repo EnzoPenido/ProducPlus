@@ -77,13 +77,20 @@ export const criarProduto = async (req, res) => {
 export const atualizarProduto = async (req, res) => {
     const { id } = req.params;
     try {
-        // Atualiza os dados principais
-        await Produto.update(id, req.body);
+        let dadosParaAtualizar = { ...req.body };
 
-        // Atualiza ou cria a descrição técnica se foi enviada
+        // LÓGICA DE ATUALIZAÇÃO DA IMAGEM
+        if (req.file) {
+            const caminhoImagem = `/uploads/produtos/${id}/${req.file.filename}`;
+
+            dadosParaAtualizar.url_imagem = caminhoImagem;
+        }
+
+        await Produto.update(id, dadosParaAtualizar);
+
         if (req.body.descricaoTecnica) {
-            const existe = await DescricaoProduto.getByProdutoId(id);
 
+            const existe = await DescricaoProduto.getByProdutoId(id);
             if (existe) {
                 await DescricaoProduto.update(id, req.body.descricaoTecnica);
             } else {
@@ -96,6 +103,7 @@ export const atualizarProduto = async (req, res) => {
 
         res.json({ message: "Produto atualizado com sucesso" });
     } catch (err) {
+        console.error("Erro ao atualizar produto:", err);
         res.status(500).json({ error: err.message });
     }
 };

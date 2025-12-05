@@ -60,7 +60,7 @@
 
                                 <div class="dropdown-center me-1">
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="profile.html" id="link-meu-perfil">Meu
+                                        <li><a class="dropdown-item" href="#" id="link-meu-perfil">Meu
                                                 Perfil</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
@@ -129,7 +129,7 @@
                 <div class="filter-search-bar">
                     <img src="../assets/images/svg/cursor-svgrepo-com.svg" alt="">
                     <h1>Procure produtos</h1>
-                    <input class="search-bar" placeholder="Digite o nome do produto...">
+                    <input class="search-bar" placeholder="Nome ou subcategoria do produto...">
                     </input>
                 </div>
             </section>
@@ -234,7 +234,6 @@
             </ul>
             <ul>
                 <h1>Insumos</h1>
-                <li> <a href="products.html">Todos os produtos</a></li>
                 <li> <a href="products.html#secao-material">Materiais</a></li>
                 <li> <a href="products.html#secao-ferramentas">Ferramentas</a></li>
                 <li> <a href="products.html#secao-eletronica">Eletrônica</a></li>
@@ -285,10 +284,17 @@
                             </select>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="editProdImagem" class="form-label">Alterar Imagem</label>
+                            <input type="file" class="form-control" id="editProdImagem" accept="image/*">
+                            <div class="form-text">Deixe vazio para manter a imagem atual.</div>
+                        </div>
+
                         <div class="modal-footer px-0 pb-0">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary"
-                                style="background-color: #130188; border: none;">Salvar Alterações</button>
+                                style="background-color: #130188; border: none;" id="confirmarEdicao">Salvar
+                                Alterações</button>
                         </div>
                     </form>
                 </div>
@@ -304,7 +310,6 @@
         const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
         const SECTION_MAPPING = {
-            'insumos': ['insumo', 'insumos'],
             'material': ['material', 'materiais', 'materia'],
             'ferramentas': ['ferramenta', 'ferramentas'],
             'eletronica': ['eletronica', 'eletrica', 'eletrônica', 'elétrica'],
@@ -412,7 +417,7 @@
                 console.log('📦 Produtos carregados (primeiro item):', products[0]); // Debug para ver estrutura
 
                 const produtosPorSecao = {
-                    insumos: [], material: [], ferramentas: [], eletronica: [], mecanica: [], embalagem: []
+                    material: [], ferramentas: [], eletronica: [], mecanica: [], embalagem: []
                 };
 
                 products.forEach(product => {
@@ -506,28 +511,88 @@
 
         window.editProduct = async function (id) {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            // Feedback visual
+            document.body.style.cursor = 'wait';
+
             try {
-                const res = await fetch(`${API_URL}/produtos/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                // 1. Busca dados do produto
+                const res = await fetch(`${API_URL}/produtos/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Erro ao buscar produto');
                 const prod = await res.json();
 
+                // 2. Busca categorias
+                const resCat = await fetch(`${API_URL}/categorias`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const cats = await resCat.json();
+
+                // 3. Preenche o Modal
                 document.getElementById('editProdId').value = prod.idProduto;
                 document.getElementById('editProdNome').value = prod.nome;
                 document.getElementById('editProdPreco').value = prod.preco_unitario;
                 document.getElementById('editProdEstoque').value = prod.quantidadeEstoque;
 
-                // Popula select
+                // Limpa o campo de arquivo para não enviar lixo de edições anteriores
+                const inputImagem = document.getElementById('editProdImagem');
+                if (inputImagem) inputImagem.value = '';
+
+                // 4. Preenche o select de categorias
                 const select = document.getElementById('editProdCategoria');
-                select.innerHTML = '<option>Carregando...</option>';
-                const resCat = await fetch(`${API_URL}/categorias`);
-                const cats = await resCat.json();
-                select.innerHTML = '<option value="" disabled>Selecione...</option>';
+                select.innerHTML = '';
                 cats.forEach(c => {
-                    const s = (c.idCategoria == prod.idCategoria) ? 'selected' : '';
-                    select.innerHTML += `<option value="${c.idCategoria}" ${s}>${c.nome}</option>`;
+                    const selected = (String(c.idCategoria) === String(prod.idCategoria)) ? 'selected' : '';
+                    select.innerHTML += `<option value="${c.idCategoria}" ${selected}>${c.nome}</option>`;
                 });
 
+                const btnSalvar = document.getElementById('confirmarEdicao');
+                const novoBtn = btnSalvar.cloneNode(true);
+                btnSalvar.parentNode.replaceChild(novoBtn, btnSalvar);
+
+                novoBtn.addEventListener('click', async () => {
+                    const idProd = document.getElementById('editProdId').value;
+                    const formData = new FormData();
+                    formData.append('nome', document.getElementById('editProdNome').value);
+                    formData.append('preco_unitario', document.getElementById('editProdPreco').value.replace(',', '.'));
+                    formData.append('quantidadeEstoque', document.getElementById('editProdEstoque').value);
+                    formData.append('idCategoria', document.getElementById('editProdCategoria').value);
+                    const fileInput = document.getElementById('editProdImagem');
+                    if (fileInput && fileInput.files[0]) {
+                        formData.append('imagem', fileInput.files[0]);
+                    }
+
+                    try {
+                        const response = await fetch(`${API_URL}/produtos/${idProd}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            const errorData = await response.json();
+                            alert('Erro ao atualizar: ' + (errorData.message || 'Erro desconhecido'));
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Erro de conexão ao salvar.');
+                    }
+                });
+
+                // 5. Exibe o Modal
                 new bootstrap.Modal(document.getElementById('modalEditarProduto')).show();
-            } catch (e) { console.error(e); }
+
+            } catch (e) {
+                console.error(e);
+                alert('Não foi possível carregar os dados.');
+            } finally {
+                document.body.style.cursor = 'default';
+            }
         };
 
         // Listener do Form de Edição
@@ -557,6 +622,16 @@
             if (token) {
                 document.getElementById('nav-entrar')?.classList.add('d-none');
                 document.getElementById('nav-perfil')?.classList.remove('d-none');
+                const user = parseJwt(token);
+                const linkPerfil = document.getElementById('link-meu-perfil');
+
+                if (linkPerfil && user) {
+                    if (user.tipo === 'ADMIN') {
+                        linkPerfil.href = 'profile.html';
+                    } else {
+                        linkPerfil.href = 'profile_user.html';
+                    }
+                }
                 carregarFotoPerfilGlobal();
                 document.getElementById('btnSair')?.addEventListener('click', (e) => {
                     e.preventDefault();
