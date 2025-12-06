@@ -481,7 +481,16 @@
     <script src="../assets/js/adicionar-produtos-slider.js"></script>
 
     <script>
-        const API_URL = window.API_URL;
+        const hostname = window.location.hostname;
+        const protocol = window.location.protocol;
+
+        const isLocal = hostname.includes('localhost') || hostname.includes('192.168');
+
+        const API_URL = isLocal
+            ? `${protocol}//${hostname}:3000`
+            : `${protocol}//${hostname}`;
+
+        console.log("Conectando na API:", API_URL);
 
         // Autenticação
         function parseJwt(token) {
