@@ -18,6 +18,17 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 dotenv.config();
 const app = express();
 
+app.use((req, res, next) => {
+    if (process.env.MANUTENCAO === 'true') {
+        if (req.path.startsWith('/assets') || req.path.includes('.css')) {
+            return next();
+        }
+        
+        return res.sendFile(path.join(process.cwd(), 'public', 'html', 'manutencao.html'));
+    }
+    next();
+});
+
 app.use(cors());
 app.options(/.*/, cors());
 app.use(express.json());
