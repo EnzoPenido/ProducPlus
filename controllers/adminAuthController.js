@@ -28,11 +28,15 @@ export const loginAdmin = async (req, res) => {
             nome: admin.nome,
             email: admin.email
         });
-        
+
+        const fotoUrl = admin.foto_perfil
+            ? `http://localhost:${process.env.PORT || 3000}${admin.foto_perfil}`
+            : null;
+
         res.json({
             message: "Login realizado!",
             token,
-            foto: admin.foto_perfil
+            foto: fotoUrl
         });
 
     } catch (err) {
