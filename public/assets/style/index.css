@@ -32,7 +32,7 @@
 .mobile-hero img{
     display: none;
     height: 100%;
-    width: 100%;
+    width: 0%;
 
     object-fit: contain;
 }
@@ -44,7 +44,13 @@ body {
 
 }
 
+html{
+    overflow-x: hidden;
+}
+
 main {
+    overflow-y: hidden;
+    overflow-x: hidden;
     padding-top: 130px;
     width: auto;
     height: fit-content;
@@ -507,7 +513,7 @@ spline-viewer {
     }
 
     .mobile-hero{
-        position: relative;
+        position: static;
         display: block;
         width: 100%;
         height: 400px;
@@ -517,6 +523,7 @@ spline-viewer {
     }
     
     .mobile-hero img{
+        position: static;
         display: block;
         height: 100%;
         width: 100%;
@@ -1108,9 +1115,14 @@ footer {
   max-width: 100vw;
 
   background-color: #ffffff;
+
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .wrapper--vertical {
+    overflow-x: hidden;
+    overflow-y: hidden;
   flex-direction: row;
   height: 100vh;
 }
