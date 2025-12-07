@@ -1222,7 +1222,13 @@ span:hover {
 
 
 /* */
+html{
+    overflow-x: hidden;
+}
+
 main {
+    overflow-y: hidden;
+    overflow-x: hidden;
     display: flex;
     width: auto;
     min-height: auto;

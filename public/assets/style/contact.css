@@ -15,8 +15,14 @@
       margin: 0;
   
   }
+
+  html{
+    overflow-x: hidden;
+  }
   
   main{
+    overflow-y: hidden;
+    overflow-x: hidden;
       display: flex;
       width: auto;
       height: fit-content;
