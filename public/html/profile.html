@@ -16,6 +16,7 @@
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="../assets/js/config.js"></script>
+    <script src="https://unpkg.com/imask"></script>
 </head>
 
 <body>
@@ -288,8 +289,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="productSubcategory">Subcategoria</label>
-                            <select id="productSubcategory" name="productSubcategory">
+                            <label for="productSubcategory">Subcategoria *</label>
+                            <select id="productSubcategory" name="productSubcategory" required>
                                 <option value="">Selecione uma subcategoria (opcional)</option>
                             </select>
                         </div>
@@ -894,172 +895,7 @@
             }
         }
 
-        // --- CRIAR PRODUTO ---
-        document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const token = checkAuth();
-            if (!token) return;
-
-            const user = parseJwt(token);
-            const productName = document.getElementById('productName').value.trim();
-            const productPrice = document.getElementById('productPrice').value.trim();
-            const productDescription = document.getElementById('productDescription').value.trim();
-            const productQuantity = document.getElementById('productQuantity').value.trim();
-            const productSection = document.getElementById('productSection').value.trim();
-            const productSubcategory = document.getElementById('productSubcategory').value.trim();
-            const productImage = document.getElementById('productImage').files[0];
-
-            console.log('Dados do formulário:', {
-                productName,
-                productPrice,
-                productDescription,
-                productQuantity,
-                productSection,
-                productImage
-            });
-
-            if (!productName) {
-                showAlert('Por favor, preencha o nome do produto', 'danger');
-                return;
-            }
-
-            if (!productPrice || parseFloat(productPrice) <= 0) {
-                showAlert('Por favor, preencha um preço válido', 'danger');
-                return;
-            }
-
-            if (!productDescription) {
-                showAlert('Por favor, preencha a descrição', 'danger');
-                return;
-            }
-
-            if (!productQuantity || parseInt(productQuantity) < 0) {
-                showAlert('Por favor, preencha uma quantidade válida', 'danger');
-                return;
-            }
-
-            if (!productSection) {
-                showAlert('Por favor, selecione uma seção do catálogo', 'danger');
-                return;
-            }
-
-            if (!productImage) {
-                showAlert('Por favor, selecione uma imagem', 'danger');
-                return;
-            }
-
-            if (productImage.size > 5 * 1024 * 1024) {
-                showAlert('Imagem muito grande. Máximo 5MB.', 'danger');
-                return;
-            }
-
-            try {
-                // Primeiro, criar o produto
-                const productBody = {
-                    nome: productName,
-                    descricao: productDescription,
-                    preco_unitario: parseFloat(productPrice),
-                    quantidadeEstoque: parseInt(productQuantity),
-                    secao: productSection,
-                    descricaoTecnica: {
-                        comprimento: document.getElementById('prodComprimento').value || null,
-                        largura: document.getElementById('prodLargura').value || null,
-                        altura: document.getElementById('prodAltura').value || null,
-                        peso: document.getElementById('prodPeso').value || null,
-                        composicao: document.getElementById('prodComposicao').value || null,
-                        acabamento: document.getElementById('prodAcabamento').value || null,
-                        resistencia: document.getElementById('prodResistencia').value || null,
-                        potencia: document.getElementById('prodPotencia').value || null,
-                        voltagem: document.getElementById('prodVoltagem').value || null,
-                        frequencia: document.getElementById('prodFrequencia').value || null,
-                        normaISO: document.getElementById('prodNorma').value || null,
-                        garantia: document.getElementById('prodGarantia').value || null,
-                        aprovacao: document.getElementById('prodAprovacao').value || null
-                    }
-                };
-
-                // Adicionar subcategoria se foi preenchida
-                if (productSubcategory) {
-                    productBody.idCategoria = parseInt(productSubcategory);
-                }
-
-                console.log('Enviando produto:', productBody);
-
-                const createResponse = await fetch(`${API_URL}/produtos`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(productBody)
-                });
-
-                console.log('Resposta da criação:', createResponse.status);
-                const createData = await createResponse.json();
-                console.log('Dados da criação:', createData);
-
-                if (!createResponse.ok) {
-                    throw new Error(createData.message || createData.error || 'Erro ao criar produto');
-                }
-
-                const idProduto = createData.idProduto;
-
-                if (!idProduto) {
-                    throw new Error('ID do produto não foi retornado');
-                }
-
-                console.log('Produto criado com ID:', idProduto);
-
-                // Depois, fazer upload da imagem
-                const formData = new FormData();
-                formData.append('tipo', 'PRODUTO');
-                formData.append('id', idProduto);
-                formData.append('foto', productImage);
-
-                console.log('Fazendo upload de imagem...');
-
-                const uploadResponse = await fetch(`${API_URL}/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                console.log('Resposta do upload:', uploadResponse.status);
-                const uploadData = await uploadResponse.json();
-                console.log('Dados do upload:', uploadData);
-
-                if (!uploadResponse.ok) {
-                    throw new Error(uploadData.message || uploadData.error || 'Erro ao fazer upload da imagem');
-                }
-
-                const imageUrl = uploadData.url;
-
-                // Atualizar o produto com a URL da imagem
-                const updateResponse = await fetch(`${API_URL}/produtos/${idProduto}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        url_imagem: imageUrl
-                    })
-                });
-
-                if (!updateResponse.ok) {
-                    const updateData = await updateResponse.json();
-                    throw new Error(updateData.message || updateData.error || 'Erro ao atualizar URL da imagem');
-                }
-
-                showAlert('Produto criado com sucesso!', 'success');
-                document.getElementById('addProductForm').reset();
-                document.getElementById('fileName').textContent = 'Nenhum arquivo selecionado';
-                loadSubcategoriesIntoSelect();
-
-            } catch (error) {
-                console.error('Erro completo:', error);
-                showAlert(error.message || 'Erro ao criar produto', 'danger');
-            }
-        });
+        
 
         // --- LÓGICA DE CONTROLE DE ESTOQUE ---
 
@@ -1228,10 +1064,394 @@
             carregarTabelaEstoque();
         });
 
-        // --- SELECIONAR ARQUIVO E MOSTRAR NOME ---
-        document.getElementById('productImage')?.addEventListener('change', (e) => {
-            const fileName = e.target.files[0]?.name || 'Nenhum arquivo selecionado';
-            document.getElementById('fileName').textContent = fileName;
+
+        function inicializarMascaras() {
+
+            // Máscaras para Dimensões (999.99)
+            const camposDimensoes = ['prodComprimento', 'prodLargura', 'prodAltura', 'prodPeso'];
+            camposDimensoes.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    IMask(input, {
+                        mask: Number,
+                        scale: 2,
+                        radix: ',',
+                        mapToRadix: ['.'],
+                        min: 0,
+                        max: 9999.99
+                    });
+                }
+            });
+
+            // Máscara para Quantidade (apenas números inteiros)
+            const qtdInput = document.getElementById('productQuantity');
+            if (qtdInput) {
+                IMask(qtdInput, {
+                    mask: Number,
+                    scale: 0,
+                    min: 0,
+                    max: 999999
+                });
+            }
+        }
+
+        // 2. VALIDAÇÃO APRIMORADA DO FORMULÁRIO
+        function validarFormularioProduto() {
+            const productName = document.getElementById('productName').value.trim();
+            const productPrice = document.getElementById('productPrice').value.trim();
+            const productDescription = document.getElementById('productDescription').value.trim();
+            const productQuantity = document.getElementById('productQuantity').value.trim();
+            const productSection = document.getElementById('productSection').value.trim();
+            const productImage = document.getElementById('productImage').files[0];
+
+            const erros = [];
+
+            // Validações
+            if (!productName) erros.push('• Nome do produto é obrigatório');
+            if (productName.length < 3) erros.push('• Nome deve ter pelo menos 3 caracteres');
+
+            if (!productPrice) erros.push('• Preço é obrigatório');
+            const preco = parseFloat(productPrice.replace(/\./g, '').replace(',', '.'));
+            if (preco <= 0) erros.push('• Preço deve ser maior que zero');
+
+            if (!productDescription) erros.push('• Descrição é obrigatória');
+            if (productDescription.length < 10) erros.push('• Descrição deve ter pelo menos 10 caracteres');
+
+            if (!productQuantity) erros.push('• Quantidade é obrigatória');
+            const qtd = parseInt(productQuantity);
+            if (qtd < 0) erros.push('• Quantidade não pode ser negativa');
+
+            if (!productSection) erros.push('• Seção do catálogo é obrigatória');
+
+            if (!productImage) erros.push('• Imagem do produto é obrigatória');
+            if (productImage && productImage.size > 5 * 1024 * 1024) {
+                erros.push('• Imagem muito grande (máximo 5MB)');
+            }
+
+            return erros;
+        }
+
+        // 3. FEEDBACK VISUAL MELHORADO
+        function mostrarErrosValidacao(erros) {
+            const alertaExistente = document.querySelector('.alert-validacao');
+            if (alertaExistente) alertaExistente.remove();
+
+            if (erros.length === 0) return;
+
+            // Cria alerta de erro
+            const alerta = document.createElement('div');
+            alerta.className = 'alert alert-danger alert-dismissible fade show alert-validacao';
+            alerta.style.cssText = 'margin-bottom: 20px; animation: slideDown 0.3s ease;';
+            alerta.innerHTML = `
+        <h5 class="alert-heading"><i class="fa-solid fa-circle-exclamation"></i> Corrija os seguintes erros:</h5>
+        <ul style="margin-bottom: 0; padding-left: 20px;">
+            ${erros.map(erro => `<li>${erro}</li>`).join('')}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+            const form = document.getElementById('addProductForm');
+            form.insertBefore(alerta, form.firstChild);
+
+            // Scroll suave até o alerta
+            alerta.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 4. INDICADORES DE CAMPOS OBRIGATÓRIOS
+        function marcarCamposObrigatorios() {
+            const camposObrigatorios = [
+                'productName', 'productPrice', 'productDescription',
+                'productQuantity', 'productSection', 'productImage'
+            ];
+
+            camposObrigatorios.forEach(id => {
+                const campo = document.getElementById(id);
+                if (campo) {
+                    const label = document.querySelector(`label[for="${id}"]`);
+                    if (label && !label.querySelector('.campo-obrigatorio')) {
+                        label.innerHTML += ' <span class="campo-obrigatorio" style="color: red;">*</span>';
+                    }
+                }
+            });
+        }
+
+        // 5. PREVIEW DA IMAGEM ANTES DO UPLOAD
+        function setupImagePreview() {
+            const imageInput = document.getElementById('productImage');
+            const fileName = document.getElementById('fileName');
+
+            if (!imageInput) return;
+
+            imageInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+
+                if (file) {
+                    // Atualiza nome do arquivo
+                    fileName.textContent = file.name;
+                    fileName.style.color = '#198754';
+
+                    // Remove preview anterior
+                    const previewAntigo = document.querySelector('.image-preview');
+                    if (previewAntigo) previewAntigo.remove();
+
+                    // Cria preview
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const preview = document.createElement('div');
+                        preview.className = 'image-preview';
+                        preview.style.cssText = 'margin-top: 10px; text-align: center;';
+                        preview.innerHTML = `
+                    <img src="${e.target.result}" 
+                         alt="Preview" 
+                         style="max-width: 200px; max-height: 200px; border: 2px solid #1800ad; border-radius: 8px; object-fit: contain;">
+                    <p style="margin-top: 5px; font-size: 0.9em; color: #666;">
+                        <i class="fa-solid fa-check-circle" style="color: #198754;"></i> Imagem pronta para envio
+                    </p>
+                `;
+
+                        imageInput.parentElement.appendChild(preview);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    fileName.textContent = 'Nenhum arquivo selecionado';
+                    fileName.style.color = '';
+                }
+            });
+        }
+
+        // 6. CONTADOR DE CARACTERES PARA DESCRIÇÃO
+        function setupDescriptionCounter() {
+            const descInput = document.getElementById('productDescription');
+            if (!descInput) return;
+
+            const counter = document.createElement('div');
+            counter.id = 'desc-counter';
+            counter.style.cssText = 'text-align: right; font-size: 0.85em; color: #666; margin-top: 5px;';
+            descInput.parentElement.appendChild(counter);
+
+            function updateCounter() {
+                const length = descInput.value.length;
+                const min = 10;
+                const color = length < min ? '#dc3545' : '#198754';
+                counter.innerHTML = `
+            <i class="fa-solid fa-pen-to-square"></i> 
+            ${length} caracteres ${length < min ? `(mínimo ${min})` : ''}
+        `;
+                counter.style.color = color;
+            }
+
+            descInput.addEventListener('input', updateCounter);
+            updateCounter();
+        }
+
+        // 7. FORMULÁRIO APRIMORADO COM VALIDAÇÃO
+        document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Remove alertas anteriores
+            document.querySelectorAll('.alert-validacao').forEach(a => a.remove());
+
+            // Validação
+            const erros = validarFormularioProduto();
+            if (erros.length > 0) {
+                mostrarErrosValidacao(erros);
+                return;
+            }
+
+            const token = checkAuth();
+            if (!token) return;
+
+            // Desabilita botão durante envio
+            const btnSubmit = document.querySelector('.btn-submit');
+            const textoOriginal = btnSubmit.textContent;
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                // Coleta dados
+                const productBody = {
+                    nome: document.getElementById('productName').value.trim(),
+                    descricao: document.getElementById('productDescription').value.trim(),
+                    preco_unitario: parseFloat(document.getElementById('productPrice').value.replace(/\./g, '').replace(',', '.')),
+                    quantidadeEstoque: parseInt(document.getElementById('productQuantity').value),
+                    secao: document.getElementById('productSection').value.trim(),
+                    descricaoTecnica: {
+                        comprimento: document.getElementById('prodComprimento').value || null,
+                        largura: document.getElementById('prodLargura').value || null,
+                        altura: document.getElementById('prodAltura').value || null,
+                        peso: document.getElementById('prodPeso').value || null,
+                        composicao: document.getElementById('prodComposicao').value || null,
+                        acabamento: document.getElementById('prodAcabamento').value || null,
+                        resistencia: document.getElementById('prodResistencia').value || null,
+                        potencia: document.getElementById('prodPotencia').value || null,
+                        voltagem: document.getElementById('prodVoltagem').value || null,
+                        frequencia: document.getElementById('prodFrequencia').value || null,
+                        normaISO: document.getElementById('prodNorma').value || null,
+                        garantia: document.getElementById('prodGarantia').value || null,
+                        aprovacao: document.getElementById('prodAprovacao').value || null
+                    }
+                };
+
+                // CORREÇÃO: Subcategoria agora é opcional
+                const productSubcategory = document.getElementById('productSubcategory').value.trim();
+                if (productSubcategory) {
+                    productBody.idCategoria = parseInt(productSubcategory);
+                } else {
+                    // Se não tiver subcategoria, usa categoria padrão (id 1 = "Geral")
+                    productBody.idCategoria = 1;
+                }
+
+                console.log('Criando produto:', productBody);
+
+                // 1. Cria produto
+                const createResponse = await fetch(`${API_URL}/produtos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(productBody)
+                });
+
+                const createData = await createResponse.json();
+
+                if (!createResponse.ok) {
+                    throw new Error(createData.message || createData.error || 'Erro ao criar produto');
+                }
+
+                const idProduto = createData.idProduto;
+                console.log('Produto criado com ID:', idProduto);
+
+                // 2. Upload da imagem
+                const productImage = document.getElementById('productImage').files[0];
+                const formData = new FormData();
+                formData.append('tipo', 'PRODUTO');
+                formData.append('id', idProduto);
+                formData.append('foto', productImage);
+
+                const uploadResponse = await fetch(`${API_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const uploadData = await uploadResponse.json();
+
+                if (!uploadResponse.ok) {
+                    throw new Error(uploadData.message || 'Erro ao fazer upload da imagem');
+                }
+
+                // 3. Atualiza produto com URL da imagem
+                const imageUrl = uploadData.url;
+                const updateResponse = await fetch(`${API_URL}/produtos/${idProduto}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ url_imagem: imageUrl })
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Erro ao atualizar URL da imagem');
+                }
+
+                // SUCESSO!
+                showAlert('✅ Produto criado com sucesso!', 'success');
+
+                // Limpa formulário
+                document.getElementById('addProductForm').reset();
+                document.getElementById('fileName').textContent = 'Nenhum arquivo selecionado';
+                document.querySelector('.image-preview')?.remove();
+
+                // Atualiza lista de subcategorias
+                loadSubcategoriesIntoSelect();
+
+                // Scroll para o topo
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Erro completo:', error);
+                showAlert('❌ ' + error.message, 'danger');
+            } finally {
+                // Reabilita botão
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            }
+        });
+
+        // 8. RECARREGAR PÁGINA AO CRIAR SUBCATEGORIA
+        document.getElementById('categoryForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = checkAuth();
+            if (!token) return;
+
+            const categoryId = document.getElementById('categoryId').value;
+            const categoryName = document.getElementById('categoryName').value.trim();
+
+            if (!categoryName) {
+                showAlert('Por favor, preencha o nome da categoria.', 'warning');
+                return;
+            }
+
+            try {
+                const url = categoryId
+                    ? `${API_URL}/categorias/${categoryId}`
+                    : `${API_URL}/categorias`;
+
+                const method = categoryId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nome: categoryName })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Erro ao salvar categoria');
+                }
+
+                showAlert(
+                    categoryId
+                        ? '✅ Categoria atualizada com sucesso!'
+                        : '✅ Categoria criada com sucesso!',
+                    'success'
+                );
+
+                document.getElementById('categoryForm').reset();
+                cancelEdit();
+                loadCategories();
+
+                // Recarrega subcategorias no select de produtos
+                loadSubcategoriesIntoSelect();
+
+                // Scroll suave até a seção de produtos
+                setTimeout(() => {
+                    const addProductSection = document.querySelector('.add-products-section');
+                    if (addProductSection) {
+                        addProductSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 500);
+
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert(error.message || 'Erro ao salvar categoria.', 'danger');
+            }
+        });
+
+        // 9. INICIALIZAÇÃO
+        window.addEventListener('load', () => {
+            if (document.getElementById('addProductForm')) {
+                inicializarMascaras();
+                marcarCamposObrigatorios();
+                setupImagePreview();
+                setupDescriptionCounter();
+
+                console.log('✅ Melhorias do formulário de produtos carregadas');
+            }
         });
     </script>
 </body>

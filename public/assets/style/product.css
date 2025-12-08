@@ -1227,8 +1227,6 @@ html{
 }
 
 main {
-    overflow-y: hidden;
-    overflow-x: hidden;
     display: flex;
     width: auto;
     min-height: auto;
