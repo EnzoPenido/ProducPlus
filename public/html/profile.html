@@ -142,6 +142,15 @@
 
                     <div class="card shadow-sm border-0">
                         <div class="card-body p-0">
+                            <div class="d-flex justify-content-end mb-3 align-items-center">
+                                <label for="filtroEstoque" class="me-2 fw-bold">Filtrar por Status:</label>
+                                <select id="filtroEstoque" class="form-select w-auto" onchange="aplicarFiltroEstoque()">
+                                    <option value="todos">📋 Ver Todos</option>
+                                    <option value="normal">✅ Estoque Normal</option>
+                                    <option value="baixo">⚠️ Estoque Baixo (5 a 15)</option>
+                                    <option value="critico">🚨 Estoque Crítico (Menos de 5)</option>
+                                </select>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-hover align-middle mb-0">
                                     <thead style="background-color: #f8f9fa;">
@@ -905,74 +914,128 @@
 
         // --- LÓGICA DE CONTROLE DE ESTOQUE ---
 
-        async function carregarTabelaEstoque() {
-            // 1. Token Híbrido (segurança)
-            const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-            const tbody = document.getElementById('tabela-estoque');
+        // --- VARIÁVEIS GLOBAIS PARA O FILTRO ---
+        let produtosGlobal = [];
+        let categoriasMap = {};
 
-            if (!tbody) return;
+        // 1. Função que busca os dados no Backend (Executa ao carregar a página ou clicar em Atualizar)
+        async function carregarTabelaEstoque() {
+            const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+
+            // Feedback visual de carregamento
+            const tbody = document.getElementById('tabela-estoque');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br>Carregando estoque...</td></tr>';
 
             try {
-                // 2. Busca categorias para pegar os nomes
+                // A. Busca Categorias (para ter os nomes salvos)
                 const resCategorias = await fetch(`${API_URL}/categorias`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const categoriasData = await resCategorias.json();
 
-                const nomesCategorias = {};
+                // Mapeia ID -> Nome para uso rápido
+                categoriasMap = {};
                 if (Array.isArray(categoriasData)) {
                     categoriasData.forEach(cat => {
-                        nomesCategorias[cat.idCategoria] = cat.nome;
+                        categoriasMap[cat.idCategoria] = cat.nome;
                     });
                 }
 
-                // 3. Busca produtos
+                // B. Busca Produtos
                 const response = await fetch(`${API_URL}/produtos`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                const produtos = await response.json();
 
-                // 4. Monta a tabela (SEM AS BORDAS COLORIDAS)
-                tbody.innerHTML = produtos.map(prod => {
-                    const limiteAmarelo = prod.estoqueMinimo || 20;
-                    const limiteVermelho = prod.estoqueCritico || 5;
-                    const nomeCategoria = nomesCategorias[prod.idCategoria] || '---';
+                if (response.ok) {
+                    produtosGlobal = await response.json(); // Salva na variável global
+                    aplicarFiltroEstoque(); // Chama a função que desenha a tabela
+                } else {
+                    if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro ao buscar produtos.</td></tr>';
+                }
 
-                    let statusBadge = '';
+            } catch (error) {
+                console.error('Erro ao carregar tabela de estoque:', error);
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro de conexão.</td></tr>';
+            }
+        }
 
-                    // Lógica apenas para o Badge (etiqueta), sem alterar a linha (tr)
-                    if (prod.quantidadeEstoque <= limiteVermelho) {
-                        statusBadge = '<span class="badge bg-danger">Crítico</span>';
-                    } else if (prod.quantidadeEstoque <= limiteAmarelo) {
-                        statusBadge = '<span class="badge bg-warning text-dark">Baixo</span>';
-                    } else {
-                        statusBadge = '<span class="badge bg-success">Normal</span>';
-                    }
+        // 2. Função que Filtra e Gera o HTML (Executa ao mudar o Select)
+        function aplicarFiltroEstoque() {
+            const filtroEl = document.getElementById('filtroEstoque');
+            // Se o HTML do select ainda não existir, assume 'todos'
+            const tipoFiltro = filtroEl ? filtroEl.value : 'todos';
 
-                    return `
+            const tbody = document.getElementById('tabela-estoque');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            // Filtra o array global
+            const produtosFiltrados = produtosGlobal.filter(prod => {
+                // Usa os valores configurados no produto ou o padrão (20 e 5)
+                const limiteAmarelo = prod.estoqueMinimo || 20;
+                const limiteVermelho = prod.estoqueCritico || 5;
+                const qtd = prod.quantidadeEstoque;
+
+                if (tipoFiltro === 'todos') return true;
+
+                if (tipoFiltro === 'critico') return qtd <= limiteVermelho;
+                if (tipoFiltro === 'baixo') return qtd > limiteVermelho && qtd <= limiteAmarelo;
+                if (tipoFiltro === 'normal') return qtd > limiteAmarelo;
+
+                return true;
+            });
+
+            // Mensagem se não houver produtos no filtro
+            if (produtosFiltrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">Nenhum produto encontrado com este status.</td></tr>';
+                return;
+            }
+
+            // Gera as linhas da tabela
+            tbody.innerHTML = produtosFiltrados.map(prod => {
+                const limiteAmarelo = prod.estoqueMinimo || 20;
+                const limiteVermelho = prod.estoqueCritico || 5;
+                const nomeCategoria = categoriasMap[prod.idCategoria] || '---';
+
+                let statusBadge = '';
+                if (prod.quantidadeEstoque <= limiteVermelho) {
+                    statusBadge = '<span class="badge bg-danger">Crítico</span>';
+                } else if (prod.quantidadeEstoque <= limiteAmarelo) {
+                    statusBadge = '<span class="badge bg-warning text-dark">Baixo</span>';
+                } else {
+                    statusBadge = '<span class="badge bg-success">Normal</span>';
+                }
+
+                // Função auxiliar para escapar aspas simples nos nomes (evita bugs no onclick)
+                const nomeSafe = prod.nome.replace(/'/g, "\\'");
+
+                return `
             <tr>
                 <td class="ps-4">
                     <div class="fw-bold">${prod.nome}</div>
-                    <small class="text-muted" style="font-size: 10px;">Alertas: <span class="text-warning">${limiteAmarelo}</span> / <span class="text-danger">${limiteVermelho}</span></small>
+                    <small class="text-muted" style="font-size: 10px;">
+                        Alertas: <span class="text-warning">${limiteAmarelo}</span> / <span class="text-danger">${limiteVermelho}</span>
+                    </small>
                 </td>
                 <td class="text-center text-muted">${nomeCategoria}</td>
                 <td class="text-center">${statusBadge}</td>
                 <td class="text-center fs-5 fw-bold">${prod.quantidadeEstoque}</td>
-                <td class="text-end ">
-                    <button class="btn btn-sm btn-outline-secondary m-0" onclick="abrirConfigAlertas(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}', ${limiteAmarelo}, ${limiteVermelho})" title="Configurar Alertas">
+                <td class="text-end pe-4">
+                    <button class="btn btn-sm btn-outline-secondary m-0" 
+                        onclick="abrirConfigAlertas(${prod.idProduto}, '${nomeSafe}', ${limiteAmarelo}, ${limiteVermelho})" 
+                        title="Configurar Alertas">
                         <i class="fa-solid fa-gear"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-primary m-0" onclick="abrirModalEstoque(${prod.idProduto}, '${prod.nome.replace(/'/g, "\\'")}')" title="Movimentar Estoque">
+                    <button class="btn btn-sm btn-outline-primary m-0" 
+                        onclick="abrirModalEstoque(${prod.idProduto}, '${nomeSafe}')" 
+                        title="Movimentar Estoque">
                         <i class="fa-solid fa-right-left"></i>
                     </button>
                 </td>
             </tr>
         `;
-                }).join('');
-
-            } catch (error) {
-                console.error('Erro ao carregar tabela de estoque:', error);
-            }
+            }).join('');
         }
 
         window.abrirConfigAlertas = function (id, nome, min, crit) {
