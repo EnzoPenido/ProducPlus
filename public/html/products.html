@@ -212,6 +212,7 @@
 
 
         </div>
+
     </main>
     <footer>
         <div class="svg-footer-content">
@@ -301,6 +302,19 @@
             </div>
         </div>
     </div>
+    <!-- Toast ao carrinho) -->
+    <div class="toast-container position-fixed p-3 top-0 end-0 translate-middle-y" style="z-index: 9999;">
+        <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="toastMessage"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
@@ -341,14 +355,54 @@
         function addToCart(id, nome, preco) {
             let carrinho = JSON.parse(localStorage.getItem('carrinhoProducPlus')) || [];
             const itemExistente = carrinho.find(item => item.id === id);
+
+            let mensagem = '';
             if (itemExistente) {
                 itemExistente.quantity += 1;
-                alert(`+1 unidade de "${nome}" adicionada!`);
+                mensagem = `+1 unidade de "${nome}" adicionada!`;
             } else {
                 carrinho.push({ id: id, name: nome, price: parseFloat(preco), quantity: 1 });
-                alert(`"${nome}" adicionado ao carrinho!`);
+                mensagem = `"${nome}" adicionado ao carrinho!`;
             }
+
             localStorage.setItem('carrinhoProducPlus', JSON.stringify(carrinho));
+
+            // Verifica se é usuário comum (não admin)
+            const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+            let isAdmin = false;
+
+            if (token) {
+                try {
+                    const user = JSON.parse(atob(token.split('.')[1]));
+                    if (user.tipo === 'ADMIN') isAdmin = true;
+                } catch (e) { }
+            }
+
+            // Mostra toast apenas para usuários comuns
+            if (!isAdmin) {
+                mostrarToast(mensagem);
+            } else {
+                // Para admin, mantém o alert
+                alert(mensagem);
+            }
+        }
+
+        // Função para mostrar o toast
+        function mostrarToast(mensagem) {
+            const toastElement = document.getElementById('cartToast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            if (toastElement && toastMessage) {
+                // Atualiza a mensagem com o ícone
+                toastMessage.innerHTML = `<i class="fa-solid fa-circle-check me-2"></i>${mensagem}`;
+
+                // Cria e mostra o toast com animação
+                const toast = new bootstrap.Toast(toastElement, {
+                    autohide: true,
+                });
+
+                toast.show();
+            }
         }
 
         function carregarFotoPerfilGlobal() {
