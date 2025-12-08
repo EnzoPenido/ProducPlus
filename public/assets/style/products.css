@@ -1305,3 +1305,47 @@ footer {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Adicione ao final do products.css */
+
+/* Toast customizado - Adicione ao products.css */
+
+/* Container do toast */
+.toast-container {
+    z-index: 9999 !important;
+}
+
+/* Estilo do toast */
+#cartToast {
+    min-width: 300px;
+    
+    border-radius: 8px;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    border: #1811AC 1px solid !important;
+}
+
+.btn-close-white{
+         --bs-btn-close-filter: invert(0) grayscale(100%) brightness(200%); 
+
+}
+
+.translate-middle-y{
+    transform: translateY(80%) !important;
+}
+
+#cartToast.text-bg-success {
+    background-color: rgb(236, 236, 236) !important;
+}
+
+#cartToast .toast-body {
+    font-family: 'Roboto', sans-serif;
+    color: #1800ad;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 16px;
+}
+
+#cartToast .toast-body i {
+    font-size: 18px;
+    vertical-align: middle;
+}
