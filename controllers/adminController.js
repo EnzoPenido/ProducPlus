@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import Admin from "../models/adminModel.js";
 
-// criação de admin - esta rota deve ser protegida (por ex. apenas ADMIN já existente) ou executar manualmente com SQL.
-// aqui deixamos uma rota que só ADMIN pode usar (evita bootstrap inseguro)
 export const criarAdmin = async (req, res) => {
     try {
         const { username, nome, email, senha } = req.body;

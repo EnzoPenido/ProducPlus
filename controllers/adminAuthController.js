@@ -3,6 +3,8 @@ import Admin from "../models/adminModel.js";
 import { gerarToken } from "../config/jwt.js";
 
 export const loginAdmin = async (req, res) => {
+    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+
     try {
         const { email, senha } = req.body;
 
@@ -29,14 +31,13 @@ export const loginAdmin = async (req, res) => {
             email: admin.email
         });
 
-        const fotoUrl = admin.foto_perfil
-            ? `http://localhost:${process.env.PORT || 3000}${admin.foto_perfil}`
-            : null;
+        // ✅ CORREÇÃO: Retornar URL completa ou null
+        const fotoUrl = admin.foto_perfil ? `${baseUrl}${admin.foto_perfil}` : null;
 
         res.json({
             message: "Login realizado!",
             token,
-            foto: fotoUrl
+            foto: fotoUrl  // ✅ Agora retorna URL completa
         });
 
     } catch (err) {

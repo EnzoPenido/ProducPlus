@@ -843,9 +843,15 @@
                         const data = await response.json();
 
                         if (response.ok) {
-                            const novaUrl = `${API_URL}${data.url}`;
-                            mainImage.src = novaUrl;
-                            localStorage.setItem('userProfileImage', novaUrl);
+                            let finalUrl = data.url;
+                            if (!finalUrl.startsWith('http')) {
+                                finalUrl = `${API_URL}${data.url}`;
+                            }
+
+                            mainImage.src = finalUrl + '?t=' + new Date().getTime();
+
+                            localStorage.setItem('userProfileImage', finalUrl);
+
                             carregarFotoPerfilGlobal();
                             alert("Foto atualizada!");
                         } else {
@@ -895,7 +901,7 @@
             }
         }
 
-        
+
 
         // --- LÓGICA DE CONTROLE DE ESTOQUE ---
 

@@ -182,6 +182,9 @@
                 // 2. Salva Token
                 if (checkbox.checked) {
                     localStorage.setItem('token', data.token);
+                    if (data.foto) {
+                        localStorage.setItem('userProfileImage', data.foto);
+                    }
                     localStorage.setItem('rememberedEmail', email);
                     sessionStorage.removeItem('token');
                 } else {
