@@ -147,8 +147,8 @@
                                 <select id="filtroEstoque" class="form-select w-auto" onchange="aplicarFiltroEstoque()">
                                     <option value="todos">📋 Ver Todos</option>
                                     <option value="normal">✅ Estoque Normal</option>
-                                    <option value="baixo">⚠️ Estoque Baixo (5 a 15)</option>
-                                    <option value="critico">🚨 Estoque Crítico (Menos de 5)</option>
+                                    <option value="baixo">⚠️ Estoque Baixo</option>
+                                    <option value="critico">🚨 Estoque Crítico</option>
                                 </select>
                             </div>
                             <div class="table-responsive">
@@ -636,13 +636,6 @@
                     const error = await response.json();
                     throw new Error(error.message || 'Erro ao salvar categoria');
                 }
-
-                showAlert(
-                    categoryId
-                        ? 'Categoria atualizada com sucesso!'
-                        : 'Categoria criada com sucesso!',
-                    'success'
-                );
 
                 document.getElementById('categoryForm').reset();
                 cancelEdit();
