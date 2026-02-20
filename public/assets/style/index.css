@@ -1047,9 +1047,6 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee__group {
-    animation-play-state: paused;
-  }
 }
 
 .marquee--vertical {
