@@ -147,8 +147,8 @@
                                 <select id="filtroEstoque" class="form-select w-auto" onchange="aplicarFiltroEstoque()">
                                     <option value="todos">📋 Ver Todos</option>
                                     <option value="normal">✅ Estoque Normal</option>
-                                    <option value="baixo">⚠️ Estoque Baixo (5 a 15)</option>
-                                    <option value="critico">🚨 Estoque Crítico (Menos de 5)</option>
+                                    <option value="baixo">⚠️ Estoque Baixo</option>
+                                    <option value="critico">🚨 Estoque Crítico</option>
                                 </select>
                             </div>
                             <div class="table-responsive">
@@ -601,57 +601,6 @@
                 </div>
             `).join('');
         }
-
-        // Criar ou atualizar categoria
-        document.getElementById('categoryForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const token = checkAuth();
-            if (!token) return;
-
-            const categoryId = document.getElementById('categoryId').value;
-            const categoryName = document.getElementById('categoryName').value.trim();
-
-            if (!categoryName) {
-                showAlert('Por favor, preencha o nome da categoria.', 'warning');
-                return;
-            }
-
-            try {
-                const url = categoryId
-                    ? `${API_URL}/categorias/${categoryId}`
-                    : `${API_URL}/categorias`;
-
-                const method = categoryId ? 'PUT' : 'POST';
-
-                const response = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ nome: categoryName })
-                });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Erro ao salvar categoria');
-                }
-
-                showAlert(
-                    categoryId
-                        ? 'Categoria atualizada com sucesso!'
-                        : 'Categoria criada com sucesso!',
-                    'success'
-                );
-
-                document.getElementById('categoryForm').reset();
-                cancelEdit();
-                loadCategories();
-            } catch (error) {
-                console.error('Erro:', error);
-                showAlert(error.message || 'Erro ao salvar categoria.', 'danger');
-            }
-        });
 
         // Editar categoria
         function editCategory(id, nome) {
