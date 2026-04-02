@@ -65,7 +65,7 @@ router.put("/baixa-estoque", autenticarJWT, permitirRoles("CLIENTE", "ADMIN"), b
 // --- ROTAS DE ADMIN ---
 router.post("/", autenticarJWT, permitirRoles("ADMIN"), criarProduto);
 
-// ATENÇÃO: Adicionado upload.single('imagem') aqui 👇
+// ATENÇÃO: Adicionado upload.single('imagem') aqui
 router.put("/:id", autenticarJWT, permitirRoles("ADMIN"), upload.single('imagem'), atualizarProduto);
 
 router.delete("/:id", autenticarJWT, permitirRoles("ADMIN"), excluirProduto);
